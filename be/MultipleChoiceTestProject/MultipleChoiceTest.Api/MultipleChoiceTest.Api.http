@@ -1,0 +1,6 @@
+@MultipleChoiceTest.Api_HostAddress = http://localhost:5113
+
+GET {{MultipleChoiceTest.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
