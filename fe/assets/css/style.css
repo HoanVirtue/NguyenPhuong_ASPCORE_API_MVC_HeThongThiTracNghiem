@@ -1,3 +1,8 @@
+
+@font-face {
+    font-family: 'ProximaSoft';
+    src: url(/assets/fonts/ProximaSoft-Blacklt.ttf);
+  }
 body {
     margin: 0;
     padding: 0;
@@ -5,6 +10,7 @@ body {
     font-size: 13px;
     user-select: none;
     line-height: 18px;
+    font-family: 'ProximaSoft';
 }
 
 .menu_header {

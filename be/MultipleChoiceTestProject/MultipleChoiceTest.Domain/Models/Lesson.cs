@@ -2,10 +2,10 @@
 
 public partial class Lesson : BaseEntity
 {
-
 	public string? LessonName { get; set; }
 
 	public int? SubjectId { get; set; }
+
 
 	public virtual ICollection<Exam> Exams { get; set; } = new List<Exam>();
 

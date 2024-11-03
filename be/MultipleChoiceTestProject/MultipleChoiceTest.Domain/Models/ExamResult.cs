@@ -2,6 +2,7 @@
 
 public partial class ExamResult : BaseEntity
 {
+
 	public int? ExamId { get; set; }
 
 	public int? UserId { get; set; }
@@ -17,6 +18,7 @@ public partial class ExamResult : BaseEntity
 	public decimal? Score { get; set; }
 
 	public string? Rank { get; set; }
+
 
 	public virtual Exam? Exam { get; set; }
 

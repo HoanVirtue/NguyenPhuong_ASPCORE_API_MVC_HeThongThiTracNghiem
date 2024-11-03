@@ -10,5 +10,6 @@ public partial class Session : BaseEntity
 
 	public bool? IsActive { get; set; }
 
+
 	public virtual User? User { get; set; }
 }

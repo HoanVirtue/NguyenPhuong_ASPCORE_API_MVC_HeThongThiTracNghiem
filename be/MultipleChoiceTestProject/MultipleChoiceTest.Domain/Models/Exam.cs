@@ -2,6 +2,7 @@
 
 public partial class Exam : BaseEntity
 {
+
 	public string? ExamName { get; set; }
 
 	public int? Duration { get; set; }
@@ -11,6 +12,7 @@ public partial class Exam : BaseEntity
 	public int? SubjectId { get; set; }
 
 	public int? LessonId { get; set; }
+
 
 	public virtual ICollection<ExamAttempt> ExamAttempts { get; set; } = new List<ExamAttempt>();
 

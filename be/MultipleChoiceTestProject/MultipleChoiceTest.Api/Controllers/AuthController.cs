@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using MultipleChoiceTest.Domain.ApiModel;
 using MultipleChoiceTest.Domain.Models;
+using MultipleChoiceTest.Domain.ModelViews;
+using MultipleChoiceTest.Repository.UnitOfWork;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -12,9 +15,48 @@ namespace MultipleChoiceTest.Api.Controllers
 	public class AuthController : ControllerBase
 	{
 		private IConfiguration _configuration;
-		public AuthController(IConfiguration configuration)
+		private IUnitOfWork _unit;
+		public AuthController(IConfiguration configuration, IUnitOfWork unitOfWork)
 		{
 			_configuration = configuration;
+			_unit = unitOfWork;
+		}
+
+		[Route("Login")]
+		[HttpPost]
+		public async Task<IActionResult> LoginAsync(Login model)
+		{
+			try
+			{
+				if (!ModelState.IsValid)
+				{
+					return BadRequest(ModelState);
+				}
+				User user = await _unit.UserRepository.CheckLogin(model);
+				if (user != null)
+				{
+					return Ok(new ApiResponse<LoginResponse>
+					{
+						Success = true,
+						Data = new LoginResponse()
+						{
+							AccessToken = GenerateTokenUser(user),
+							User = user
+						},
+						Message = "Login Successfully"
+					});
+				}
+
+				return Ok(new ApiResponse<LoginResponse>()
+				{
+					Success = false,
+					Message = "Login fail"
+				});
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
 		}
 
 
@@ -45,7 +87,7 @@ namespace MultipleChoiceTest.Api.Controllers
 					 new Claim(JwtRegisteredClaimNames.Aud,
 							   _configuration["JWT:Audience"]),
 					 new Claim("id", user.Id.ToString()),
-					 new Claim(ClaimTypes.Name, user.Email ?? "Auth")
+					 new Claim(ClaimTypes.Name, user.AccountName ?? "Auth")
 
 				}),
 				Expires = expirationUtc,

@@ -1,4 +1,4 @@
-﻿namespace MultipleChoiceTest.Web.Api
+﻿namespace MultipleChoiceTest.Domain.ApiModel
 {
 	// Class to hold the response
 	public class ApiResponse<T>

@@ -2,8 +2,8 @@
 
 public partial class Subject : BaseEntity
 {
-
 	public string? SubjectName { get; set; }
+
 
 	public virtual ICollection<Exam> Exams { get; set; } = new List<Exam>();
 

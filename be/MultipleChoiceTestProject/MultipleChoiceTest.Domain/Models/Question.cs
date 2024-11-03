@@ -13,6 +13,7 @@ public partial class Question : BaseEntity
 
 	public int? LessonId { get; set; }
 
+
 	public virtual ICollection<ExamAttempt> ExamAttempts { get; set; } = new List<ExamAttempt>();
 
 	public virtual Lesson? Lesson { get; set; }
