@@ -34,7 +34,7 @@ namespace MultipleChoiceTest.Web.Controllers.Guard
 			}
 			else
 			{
-				if (role != TypeUserConstant.TYPEUSER_ADMIN)
+				if (role != TypeUserConstant.Role.ADMIN.ToString())
 				{
 					context.Result = new RedirectToRouteResult(new RouteValueDictionary
 					{

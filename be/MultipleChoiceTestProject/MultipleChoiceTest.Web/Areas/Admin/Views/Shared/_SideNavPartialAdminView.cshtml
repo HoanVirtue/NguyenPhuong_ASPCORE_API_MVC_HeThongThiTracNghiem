@@ -1,0 +1,60 @@
+﻿<div class="side-nav">
+    <div class="side-nav-inner">
+        <ul class="side-nav-menu scrollable">
+            
+            <li class="nav-item">
+                <a asp-action="Index" asp-controller="Dashboard">
+                    <span class="icon-holder">
+                        <i class="anticon anticon-dashboard"></i>
+                    </span>
+                    <span class="title">Dashboard</span>
+                    <span class="arrow">
+                        <i class="arrow-icon"></i>
+                    </span>
+                </a>
+            </li>
+            <hr style="height:2px;border-width:0;color:gray;background-color:gray;margin:0 10px 0 0">
+            <li class="nav-item">
+                <a asp-controller="Cart" asp-action="Index">
+                    <span class="icon-holder">
+                        <i class="fa-solid fa-rectangle-list"></i>
+                    </span>
+                    <span class="title">Order Management</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-controller="Pays" asp-action="Index">
+                    <span class="icon-holder">
+                        <i class="fa-solid fa-money-bill"></i>
+                    </span>
+                    <span class="title">Sales Report</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a  asp-action="Index" asp-controller="Product">
+                    <span class="icon-holder">
+                        <i class="fa-solid fa-laptop"></i>
+                    </span>
+                    <span class="title">Product Management</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-controller="TypePhone" asp-action="Index">
+                    <span class="icon-holder">
+                        <i class="fa-solid fa-medal"></i>
+                    </span>
+                    <span class="title">Type Phone Management</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a asp-controller="User" asp-action="Index">
+                    <span class="icon-holder">
+                       <i class="fa-solid fa-user-check"></i>
+                    </span>
+                    <span class="title">User Management</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

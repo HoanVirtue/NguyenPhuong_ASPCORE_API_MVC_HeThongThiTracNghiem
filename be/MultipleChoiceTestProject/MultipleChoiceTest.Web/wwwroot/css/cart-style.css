@@ -1,0 +1,13 @@
+﻿.cart {
+    height: 100vh;
+}
+
+.cart-title {
+    height: 5%;
+}
+
+.cart-content {
+    height: 72%;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+}
