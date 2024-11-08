@@ -1,0 +1,111 @@
+﻿@model List<Subject>
+
+@{
+    ViewData["Title"] = "Môn học";
+    Layout = "~/Areas/Admin/Views/Shared/_GlobalLayout.cshtml";
+}
+<div class="page-header">
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-controller="Dashboard" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Trang chủ</a>
+            <span class="breadcrumb-item active">Môn học </span>
+        </nav>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <div class="row m-b-30">
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="input-affix m-v-10">
+                            <i class="prefix-icon anticon anticon-search opacity-04"></i>
+                            <input id="keyword" name="searchKey" value="@ViewBag.SearchKey" type="text" class="form-control" placeholder="Tìm kiếm...">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 text-right m-v-10">
+                <a class="btn btn-primary" asp-controller="Subjects" asp-action="Create"><i class="anticon anticon-plus-circle m-r-5"></i><span>Thêm mới</span></a>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover e-commerce-table">
+                <thead>
+                    <tr>
+                        <th class="text-center">Id</th>
+                        <th class="text-center">Tên môn</th>
+                        <th class="text-center">Ngày tạo</th>
+                        <th class="text-center">Người tạo</th>
+                        <th class="text-center">Ngày sửa</th>
+                        <th class="text-center">Người sửa</th>
+                        <th scope="col" class="text-center" style="width:300px;">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody id="records_table">
+                    @if (Model != null)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td scope="row" class="text-center">@item.Id</td>
+                                <td scope="row" class="text-center">@item.SubjectName</td>
+                                <td scope="row" class="text-center">@item.CreatedDate</td>
+                                <td scope="row" class="text-center">@item.CreatedBy</td>
+                                <td scope="row" class="text-center">@item.UpdatedDate</td>
+                                <td scope="row" class="text-center">@item.UpdatedBy</td>
+                                <td class="text-center" style="width:300px;">
+                                    <a class="btn btn-primary btn-tone m-r-5 fas fa-eye" asp-controller="Subjects" asp-action="Details" asp-route-id="@item.Id"></a>
+                                    <a class="btn btn-secondary btn-tone m-r-5 fas fa-edit" asp-controller="Subjects" asp-action="Edit" asp-route-id="@item.Id"></a>
+                                    <a class="btn btn-danger btn-tone m-r-5 far fa-trash-alt" asp-controller="Subjects" asp-action="Delete" asp-route-id="@item.Id"></a>
+                                </td>
+                            </tr>
+                        }
+                    }
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@* 
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            function performAjaxRequest() {
+                var strKeyword = $('#keyword').val();
+
+                $.ajax({
+                    url: '@Url.Action("Filter", "Subjects")', // URL tới action method trong controller
+                    type: 'GET',
+                    datatype: "json",
+                    data: { searchkey: strKeyword },
+                    async: true,
+                    success: function (result) {
+                        // Xử lý kết quả trả về từ server
+                        if (result.status === "success") {
+                            window.location.href = result.redirectUrl;
+                        } else {
+                            // Xử lý các trường hợp khác nếu có
+                            console.error("Unexpected status: " + result.status);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Xử lý lỗi nếu có
+                        console.error("Error: " + error);
+                    }
+                });
+            }
+            $('#keyword').on('keydown', function (event) {
+                if (event.keyCode === 13) { // Kiểm tra nếu phím được nhấn là Enter
+                    event.preventDefault(); // Ngăn chặn hành vi mặc định của nút "Enter"
+                    performAjaxRequest(); // Thực hiện AJAX để lọc dữ liệu
+                }
+            });
+        });
+    </script>
+}
+ *@

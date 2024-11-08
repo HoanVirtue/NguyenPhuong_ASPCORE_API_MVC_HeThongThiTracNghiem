@@ -47,13 +47,13 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
                     if (result.Data.User.IsAdmin == true)
                     {
                         LoginSuccess(result.Data);
-                        this._notyfService.Success("Logged in successfully");
+                        this._notyfService.Success("Đăng nhập thành công!");
                         return RedirectToAction("Index", "Dashboard");
                     }
-                    else
-                    {
-                        this._notyfService.Error("Login unsuccessful");
-                    }
+                }
+                else
+                {
+                    this._notyfService.Error("Sai tên đăng nhập hoặc mật khẩu");
                 }
             }
             else

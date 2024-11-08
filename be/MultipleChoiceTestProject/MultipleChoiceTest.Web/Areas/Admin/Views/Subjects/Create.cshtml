@@ -1,0 +1,52 @@
+﻿@model Subject
+
+@{
+    ViewData["Title"] = "Thêm mới Môn học";
+    Layout = "~/Areas/Admin/Views/Shared/_GlobalLayout.cshtml";
+}
+
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content my-2">
+        <form asp-action="Create">
+            <div class="page-header">
+                <div class="header-sub-title">
+                    <nav class="breadcrumb breadcrumb-dash">
+                        <a asp-controller="Dashboard" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Trang chủ</a>
+                        <a asp-controller="TypePhone" asp-action="Index" class="breadcrumb-item">Danh sách môn học</a>
+                        <span class="breadcrumb-item active">Thêm mới</span>
+                    </nav>
+                </div>
+            </div>
+            <!-- Default box -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class=" col-md-6">
+                        </div>
+                        <div class=" col-md-6 text-right">
+                            <a class=" btn btn-success fas fa-undo-alt" asp-action="Index"></a>
+                            <button class="btn btn-primary fas fa-plus-circle" type="submit"></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <label asp-for="SubjectName">Tên môn học</label>
+                            <input asp-for="SubjectName" class="form-control" is-valid placeholder="Type Name" required />
+                            <span asp-validation-for="SubjectName" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </form>
+    </section>
+    <!-- /.content -->
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

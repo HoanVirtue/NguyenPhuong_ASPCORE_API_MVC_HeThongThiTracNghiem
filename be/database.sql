@@ -2,28 +2,27 @@
 CREATE DATABASE MultipleChoiceTestDB;
 
 USE MultipleChoiceTestDB;
-Scaffold-DbContext "Data Source=.;Initial Catalog=MultipleChoiceTestDB;Integrated Security=True;Trust Server Certificate=True" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models
 
 -- Table Subject
 CREATE TABLE Subject (
     Id INT PRIMARY KEY IDENTITY(1,1),
-    SubjectName VARCHAR(255),
+    SubjectName NVARCHAR(255),
     CreatedDate DATE,
-    CreatedBy VARCHAR(100),
+    CreatedBy NVARCHAR(100),
     UpdatedDate DATE,
-    UpdatedBy VARCHAR(100),
+    UpdatedBy NVARCHAR(100),
     IsDeleted BIT DEFAULT 0 -- Cột IsDeleted
 );
 
 -- Table Lesson
 CREATE TABLE Lesson (
     Id INT PRIMARY KEY IDENTITY(1,1),
-    LessonName VARCHAR(255),
+    LessonName NVARCHAR(255),
     SubjectId INT, -- Foreign key linked to the Subject table
     CreatedDate DATE,
-    CreatedBy VARCHAR(100),
+    CreatedBy NVARCHAR(100),
     UpdatedDate DATE,
-    UpdatedBy VARCHAR(100),
+    UpdatedBy NVARCHAR(100),
     IsDeleted BIT DEFAULT 0, -- Cột IsDeleted
     FOREIGN KEY (SubjectId) REFERENCES Subject(Id)
 );
@@ -37,9 +36,9 @@ CREATE TABLE Question (
     SubjectId INT, -- Foreign key linked to the Subject table
     LessonId INT, -- Foreign key linked to the Lesson table
     CreatedDate DATE,
-    CreatedBy VARCHAR(100),
+    CreatedBy NVARCHAR(100),
     UpdatedDate DATE,
-    UpdatedBy VARCHAR(100),
+    UpdatedBy NVARCHAR(100),
     IsDeleted BIT DEFAULT 0, -- Cột IsDeleted
     FOREIGN KEY (SubjectId) REFERENCES Subject(Id),
     FOREIGN KEY (LessonId) REFERENCES Lesson(Id)
@@ -48,15 +47,15 @@ CREATE TABLE Question (
 -- Table Exam
 CREATE TABLE Exam (
     Id INT PRIMARY KEY IDENTITY(1,1),
-    ExamName VARCHAR(255),
+    ExamName NVARCHAR(255),
     Duration INT, -- Duration in minutes
     TotalQuestions INT,
     SubjectId INT, -- Foreign key linked to the Subject table
     LessonId INT, -- Foreign key linked to the Lesson table
     CreatedDate DATE,
-    CreatedBy VARCHAR(100),
+    CreatedBy NVARCHAR(100),
     UpdatedDate DATE,
-    UpdatedBy VARCHAR(100),
+    UpdatedBy NVARCHAR(100),
     IsDeleted BIT DEFAULT 0, -- Cột IsDeleted
     FOREIGN KEY (SubjectId) REFERENCES Subject(Id),
     FOREIGN KEY (LessonId) REFERENCES Lesson(Id)
@@ -65,19 +64,21 @@ CREATE TABLE Exam (
 -- Table User
 CREATE TABLE [User] (
     Id INT PRIMARY KEY IDENTITY(1,1),
-    UserName VARCHAR(255),
-    Email VARCHAR(255),
-    Gender VARCHAR(10),
+    UserName NVARCHAR(255),
+    Email NVARCHAR(255),
+    Gender NVARCHAR(10),
     DateOfBirth DATE,
-    Phone VARCHAR(15),
-    AccountName VARCHAR(50),
-    PasswordHash VARCHAR(255),
+    Phone NVARCHAR(15),
+    AccountName NVARCHAR(50),
+    PasswordHash NVARCHAR(255),
     CreatedDate DATE,
-    CreatedBy VARCHAR(100),
+    CreatedBy NVARCHAR(100),
     UpdatedDate DATE,
-    UpdatedBy VARCHAR(100),
-    IsDeleted BIT DEFAULT 0 -- Cột IsDeleted
+    UpdatedBy NVARCHAR(100),
+    IsDeleted BIT DEFAULT 0, -- Cột IsDeleted
+	IsAdmin BIT
 );
+
 
 -- Table ExamAttempt
 CREATE TABLE ExamAttempt (
@@ -88,9 +89,9 @@ CREATE TABLE ExamAttempt (
     Answer TEXT,
     IsCorrect BIT,
     CreatedDate DATE,
-    CreatedBy VARCHAR(100),
+    CreatedBy NVARCHAR(100),
     UpdatedDate DATE,
-    UpdatedBy VARCHAR(100),
+    UpdatedBy NVARCHAR(100),
     IsDeleted BIT DEFAULT 0, -- Cột IsDeleted
     FOREIGN KEY (UserId) REFERENCES [User](Id),
     FOREIGN KEY (ExamId) REFERENCES Exam(Id),
@@ -107,11 +108,11 @@ CREATE TABLE ExamResult (
     IncorrectAnswersCount INT,
     UnansweredQuestionsCount INT,
     Score DECIMAL(5, 2),
-    Rank VARCHAR(50),
+    Rank NVARCHAR(50),
     CreatedDate DATE,
-    CreatedBy VARCHAR(100),
+    CreatedBy NVARCHAR(100),
     UpdatedDate DATE,
-    UpdatedBy VARCHAR(100),
+    UpdatedBy NVARCHAR(100),
     IsDeleted BIT DEFAULT 0, -- Cột IsDeleted
     FOREIGN KEY (ExamId) REFERENCES Exam(Id),
     FOREIGN KEY (UserId) REFERENCES [User](Id)
@@ -125,9 +126,9 @@ CREATE TABLE Session (
     SessionEnd DATETIME,
     IsActive BIT,
     CreatedDate DATE,
-    CreatedBy VARCHAR(100),
+    CreatedBy NVARCHAR(100),
     UpdatedDate DATE,
-    UpdatedBy VARCHAR(100),
+    UpdatedBy NVARCHAR(100),
     IsDeleted BIT DEFAULT 0, -- Cột IsDeleted
     FOREIGN KEY (UserId) REFERENCES [User](Id)
 );
@@ -141,24 +142,24 @@ CREATE TABLE AccessStatistics (
     YearlyAccessCount INT,
     TotalAccessCount INT,
     CreatedDate DATE,
-    CreatedBy VARCHAR(100),
+    CreatedBy NVARCHAR(100),
     UpdatedDate DATE,
-    UpdatedBy VARCHAR(100),
+    UpdatedBy NVARCHAR(100),
     IsDeleted BIT DEFAULT 0 -- Cột IsDeleted
 );
 
 -- Table Feedback
 CREATE TABLE Feedback (
     Id INT PRIMARY KEY IDENTITY(1,1),
-    Title VARCHAR(255),
-    FullName VARCHAR(255),
-    Email VARCHAR(255),
-    Phone VARCHAR(15),
-    Address VARCHAR(255),
+    Title NVARCHAR(255),
+    FullName NVARCHAR(255),
+    Email NVARCHAR(255),
+    Phone NVARCHAR(15),
+    Address NVARCHAR(255),
     Content TEXT,
     CreatedDate DATE,
-    CreatedBy VARCHAR(100),
+    CreatedBy NVARCHAR(100),
     UpdatedDate DATE,
-    UpdatedBy VARCHAR(100),
+    UpdatedBy NVARCHAR(100),
     IsDeleted BIT DEFAULT 0 -- Cột IsDeleted
 );
