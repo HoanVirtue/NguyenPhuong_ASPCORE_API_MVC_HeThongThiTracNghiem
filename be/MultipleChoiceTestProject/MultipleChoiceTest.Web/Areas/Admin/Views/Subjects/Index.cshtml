@@ -18,10 +18,12 @@
             <div class="col-md-8">
                 <div class="row">
                     <div class="col-md-8">
-                        <div class="input-affix m-v-10">
-                            <i class="prefix-icon anticon anticon-search opacity-04"></i>
-                            <input id="keyword" name="searchKey" value="@ViewBag.SearchKey" type="text" class="form-control" placeholder="Tìm kiếm...">
-                        </div>
+                        <form asp-action="Index" asp-controller="Subjects" method="get">
+                            <div class="input-affix m-v-10">
+                                <i class="prefix-icon anticon anticon-search opacity-04"></i>
+                                <input id="keyword" name="searchKey" value="@ViewBag.SearchKey" type="text" class="form-control" placeholder="Tìm kiếm...">
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

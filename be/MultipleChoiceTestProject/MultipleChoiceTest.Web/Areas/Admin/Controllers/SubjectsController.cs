@@ -55,6 +55,10 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
                     _notyfService.Success("Thêm dữ liệu thành công");
                     return RedirectToAction("Index", "Subjects");
                 }
+                else
+                {
+                    _notyfService.Warning(createRs.Message);
+                }
                 _notyfService.Error("Thêm dữ liệu thất bại");
                 return View(subject);
             }
