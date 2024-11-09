@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using MultipleChoiceTest.Domain.AutoMappingConfig;
 using MultipleChoiceTest.Repository;
 using MultipleChoiceTest.Repository.Repository;
 using MultipleChoiceTest.Repository.UnitOfWork;
@@ -98,6 +99,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
 builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
 
+builder.Services.AddDomainMappings();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

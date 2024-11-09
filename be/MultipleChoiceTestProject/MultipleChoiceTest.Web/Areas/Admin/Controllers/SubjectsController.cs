@@ -1,4 +1,5 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using MultipleChoiceTest.Domain.Helpper;
 using MultipleChoiceTest.Domain.Models;
@@ -12,9 +13,10 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
     [Admin]
     public class SubjectsController : BaseController
     {
-        public SubjectsController(INotyfService notyfService, IHttpContextAccessor httpContextAccessor, ILogger<BaseController> logger) : base(notyfService, httpContextAccessor, logger)
+        public SubjectsController(INotyfService notyfService, IHttpContextAccessor httpContextAccessor, ILogger<BaseController> logger, IMapper mapper) : base(notyfService, httpContextAccessor, logger, mapper)
         {
         }
+
         [HttpGet]
         public async Task<IActionResult> Index(string searchKey = "")
         {
@@ -61,34 +63,38 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
         }
 
         // GET: Brand/Edit/Id
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(int id)
         {
             var detailRs = await ApiClient.GetAsync<Subject>(Request, $"Subjects/{id}");
+            var data = _mapper.Map<CUSubject>(detailRs.Data);
             if (detailRs.Success)
             {
-                return View(detailRs.Data);
+                return View(data);
             }
 
             _notyfService.Error("Subject not found");
-            return View(detailRs.Data);
+            return View(data);
         }
 
         // POST: Brand/Edit/Id
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Id,SubjectName")] CUSubject subject)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,SubjectName")] CUSubject subject)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var updRs = await ApiClient.PutAsync<Subject>(Request, $"Subjects", JsonConvert.SerializeObject(subject));
-                    if (updRs.Success)
+                    var updRs = await ApiClient.PutAsync<Subject>(Request, $"Subjects", JsonConvert.SerializeObject(_mapper.Map<Subject>(subject)));
+                    if (updRs != null && updRs.Success)
                     {
                         _notyfService.Success("Cập nhật dữ liệu thành công");
-                        return RedirectToAction("Index", "Subjects");
                     }
-
+                    else
+                    {
+                        _notyfService.Warning(updRs.Message);
+                    }
+                    return RedirectToAction("Index", "Subjects");
                 }
                 catch (Exception ex)
                 {
@@ -97,6 +103,32 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
                 }
             }
             return View(subject);
+        }
+
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            try
+            {
+                var delRs = await ApiClient.DeleteAsync<Subject>(Request, $"Subjects/{id}");
+                if (delRs.Success)
+                {
+                    _notyfService.Success("Xóa dữ liệu thành công");
+                }
+                else
+                {
+                    _notyfService.Error(delRs.Message);
+                }
+                return RedirectToAction("Index", "Subjects");
+
+            }
+            catch (Exception ex)
+            {
+                _notyfService.Error("Đã có lỗi xảy ra!");
+                return RedirectToAction("Delete", "Subjects");
+            }
         }
     }
 }

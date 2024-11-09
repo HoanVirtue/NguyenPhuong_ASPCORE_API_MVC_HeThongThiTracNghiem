@@ -1,4 +1,5 @@
 using AspNetCoreHero.ToastNotification;
+using MultipleChoiceTest.Domain.AutoMappingConfig;
 using MultipleChoiceTest.Web.Api;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +10,7 @@ builder.Services.AddNotyf(config => { config.DurationInSeconds = 10; config.IsDi
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddHttpContextAccessor();
 
+builder.Services.AddDomainMappings();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

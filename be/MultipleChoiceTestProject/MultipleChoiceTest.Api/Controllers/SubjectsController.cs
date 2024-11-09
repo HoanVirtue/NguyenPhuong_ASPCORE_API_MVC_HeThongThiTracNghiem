@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using MultipleChoiceTest.Domain.ApiModel;
 using MultipleChoiceTest.Domain.Models;
 using MultipleChoiceTest.Repository.UnitOfWork;
+using System.Security.Claims;
 
 namespace MultipleChoiceTest.Api.Controllers
 {
@@ -45,25 +46,26 @@ namespace MultipleChoiceTest.Api.Controllers
         }
 
         // PUT: api/Subjects/5
-        [HttpPut("{id}")]
-        public async Task<ActionResult<ApiResponse<Subject>>> PutSubject(int id, Subject Subject)
+        [HttpPut]
+        public async Task<ActionResult<ApiResponse<Subject>>> PutSubject([FromBody] Subject subject)
         {
-            if (id != Subject.Id)
+            if (await _unit.SubjectRepository.IsExistSubjectName(subject.SubjectName))
             {
-                return BadRequest(new ApiResponse<Subject>
+                return new ApiResponse<Subject>()
                 {
                     Success = false,
-                    Message = "ID mismatch"
-                });
+                    Message = "Tên môn học đã tồn tại"
+                };
             }
-
             try
             {
-                await _unit.SubjectRepository.UpdateAsync(Subject);
+                subject.UpdatedDate = DateTime.Now;
+                subject.UpdatedBy = User.FindFirst(ClaimTypes.Name)?.Value;
+                await _unit.SubjectRepository.UpdateAsync(subject);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!await SubjectExists(id))
+                if (!await SubjectExists(subject.Id))
                 {
                     return NotFound(new ApiResponse<Subject>
                     {
@@ -77,7 +79,12 @@ namespace MultipleChoiceTest.Api.Controllers
                 }
             }
 
-            return NoContent();
+            return new ApiResponse<Subject>()
+            {
+                Success = true,
+                Data = subject,
+                Message = "Cập nhật dữ liệu thành công"
+            };
         }
 
         // POST: api/Subjects
@@ -92,7 +99,8 @@ namespace MultipleChoiceTest.Api.Controllers
                     Message = "Tên môn học đã tồn tại"
                 };
             }
-
+            subject.CreatedDate = DateTime.Now;
+            subject.CreatedBy = User.FindFirst(ClaimTypes.Name)?.Value;
             await _unit.SubjectRepository.AddAsync(subject);
 
             return CreatedAtAction("GetSubject", new { id = subject.Id }, new ApiResponse<Subject>
@@ -113,7 +121,7 @@ namespace MultipleChoiceTest.Api.Controllers
                 return NotFound(new ApiResponse<Subject>
                 {
                     Success = false,
-                    Message = "Subject not found"
+                    Message = "Không tìm thấy dữ liệu"
                 });
             }
 
@@ -129,7 +137,7 @@ namespace MultipleChoiceTest.Api.Controllers
             return Ok(new ApiResponse<Subject>
             {
                 Success = true,
-                Message = "Subject deleted successfully"
+                Message = "Xóa dữ liệu thành công"
             });
         }
 

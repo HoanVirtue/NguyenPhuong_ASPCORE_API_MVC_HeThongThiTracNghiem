@@ -1,20 +1,20 @@
 ﻿@model CUSubject
 
 @{
-    ViewData["Title"] = "Thêm mới Môn học";
+    ViewData["Title"] = "Cập nhật Bài học";
     Layout = "~/Areas/Admin/Views/Shared/_GlobalLayout.cshtml";
 }
 
 <div class="content-wrapper">
     <!-- Main content -->
     <section class="content my-2">
-        <form asp-action="Create">
+        <form asp-action="Edit">
             <div class="page-header">
                 <div class="header-sub-title">
                     <nav class="breadcrumb breadcrumb-dash">
                         <a asp-controller="Dashboard" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Trang chủ</a>
-                        <a asp-controller="Subjects" asp-action="Index" class="breadcrumb-item">Danh sách môn học</a>
-                        <span class="breadcrumb-item active">Thêm mới</span>
+                        <a asp-controller="TypePhone" asp-action="Index" class="breadcrumb-item">Danh sách môn học</a>
+                        <span class="breadcrumb-item active">Cập nhật</span>
                     </nav>
                 </div>
             </div>
@@ -26,7 +26,7 @@
                         </div>
                         <div class=" col-md-6 text-right">
                             <a class=" btn btn-success fas fa-undo-alt" asp-action="Index"></a>
-                            <button class="btn btn-primary fas fa-plus-circle" type="submit"></button>
+                            <button class="btn btn-primary" type="submit"><i class="fas fas fa-save mr-1"></i>Xác nhận</button>
                         </div>
                     </div>
                 </div>
