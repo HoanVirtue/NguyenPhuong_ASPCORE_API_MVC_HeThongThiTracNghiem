@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MultipleChoiceTest.Domain.Models;
+using MultipleChoiceTest.Repository.Authorizations;
 
 namespace MultipleChoiceTest.Repository.Repository
 {
@@ -9,7 +10,7 @@ namespace MultipleChoiceTest.Repository.Repository
     }
     public class LessonRepository : GenericRepository<Lesson>, ILessonRepository
     {
-        public LessonRepository(MultipleChoiceTestDbContext dbContext) : base(dbContext)
+        public LessonRepository(MultipleChoiceTestDbContext dbContext, IUserContextService userContextService) : base(dbContext, userContextService)
         {
         }
 

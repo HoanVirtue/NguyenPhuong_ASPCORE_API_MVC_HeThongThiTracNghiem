@@ -77,7 +77,6 @@ namespace MultipleChoiceTest.Api.Controllers
                 }
                 lessonUpdate.LessonName = lesson.LessonName;
                 lessonUpdate.SubjectId = lesson.SubjectId;
-                lessonUpdate.UpdatedBy = User.FindFirst(ClaimTypes.Name)?.Value;
                 await _unitOfWork.LessonRepository.UpdateAsync(lessonUpdate);
             }
             catch (DbUpdateConcurrencyException)

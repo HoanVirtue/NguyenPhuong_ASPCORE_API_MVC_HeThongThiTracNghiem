@@ -1,15 +1,16 @@
 ﻿using MultipleChoiceTest.Domain.Models;
+using MultipleChoiceTest.Repository.Authorizations;
 
 namespace MultipleChoiceTest.Repository.Repository
 {
-	public interface IFeedbackRepository : IRepository<Feedback>
-	{
+    public interface IFeedbackRepository : IRepository<Feedback>
+    {
 
-	}
-	public class FeedbackRepository : GenericRepository<Feedback>, IFeedbackRepository
-	{
-		public FeedbackRepository(MultipleChoiceTestDbContext dbContext) : base(dbContext)
-		{
-		}
-	}
+    }
+    public class FeedbackRepository : GenericRepository<Feedback>, IFeedbackRepository
+    {
+        public FeedbackRepository(MultipleChoiceTestDbContext dbContext, IUserContextService userContextService) : base(dbContext, userContextService)
+        {
+        }
+    }
 }

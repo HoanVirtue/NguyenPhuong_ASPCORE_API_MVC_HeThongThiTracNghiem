@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MultipleChoiceTest.Domain.AutoMappingConfig;
 using MultipleChoiceTest.Repository;
+using MultipleChoiceTest.Repository.Authorizations;
 using MultipleChoiceTest.Repository.Repository;
 using MultipleChoiceTest.Repository.UnitOfWork;
 using System.Text;
@@ -98,8 +99,11 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
 builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped<IUserContextService, UserContextService>();
+
 
 builder.Services.AddDomainMappings();
+builder.Services.AddHttpContextAccessor();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

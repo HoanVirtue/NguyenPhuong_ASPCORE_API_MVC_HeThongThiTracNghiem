@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MultipleChoiceTest.Domain;
+using MultipleChoiceTest.Repository.Authorizations;
 using System.Linq.Expressions;
 
 namespace MultipleChoiceTest.Repository.Repository
@@ -28,11 +29,19 @@ namespace MultipleChoiceTest.Repository.Repository
     {
         protected MultipleChoiceTestDbContext _dbContext;
         protected DbSet<TEntity> _dbSet;
+        private MultipleChoiceTestDbContext dbContext;
+        private readonly IUserContextService _userContext;
+
+        public GenericRepository(MultipleChoiceTestDbContext dbContext, IUserContextService userContextService)
+        {
+            _dbContext = dbContext;
+            _userContext = userContextService;
+            _dbSet = _dbContext.Set<TEntity>();
+        }
 
         public GenericRepository(MultipleChoiceTestDbContext dbContext)
         {
-            _dbContext = dbContext;
-            _dbSet = _dbContext.Set<TEntity>();
+            this.dbContext = dbContext;
         }
 
         // Get all with filter, order by, include properties or not
@@ -97,6 +106,8 @@ namespace MultipleChoiceTest.Repository.Repository
         // Add entity
         public async Task AddAsync(TEntity entity)
         {
+            entity.CreatedDate = DateTime.Now;
+            entity.CreatedBy = _userContext.GetCurrentUsername();
             entity.IsDeleted = false;
             await _dbSet.AddAsync(entity);
             await _dbContext.SaveChangesAsync();
@@ -113,6 +124,7 @@ namespace MultipleChoiceTest.Repository.Repository
         public async Task UpdateAsync(TEntity entity)
         {
             entity.UpdatedDate = DateTime.Now;
+            entity.UpdatedBy = _userContext.GetCurrentUsername();
             _dbContext.Entry(entity).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
         }
