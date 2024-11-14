@@ -97,6 +97,7 @@ namespace MultipleChoiceTest.Repository.Repository
         // Add entity
         public async Task AddAsync(TEntity entity)
         {
+            entity.IsDeleted = false;
             await _dbSet.AddAsync(entity);
             await _dbContext.SaveChangesAsync();
         }
@@ -111,7 +112,8 @@ namespace MultipleChoiceTest.Repository.Repository
         // Update entity
         public async Task UpdateAsync(TEntity entity)
         {
-            _dbSet.Update(entity);
+            entity.UpdatedDate = DateTime.Now;
+            _dbContext.Entry(entity).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
         }
 

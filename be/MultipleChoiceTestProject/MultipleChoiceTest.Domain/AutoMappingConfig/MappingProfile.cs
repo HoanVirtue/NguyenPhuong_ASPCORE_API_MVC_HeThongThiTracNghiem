@@ -10,6 +10,11 @@ namespace MultipleChoiceTest.Domain.AutoMappingConfig
         {
             CreateMap<CUSubject, Subject>();
             CreateMap<Subject, CUSubject>();
+
+            CreateMap<CULesson, Lesson>();
+            CreateMap<Lesson, CULesson>();
+
+
         }
     }
 }

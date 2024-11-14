@@ -40,8 +40,7 @@ public partial class MultipleChoiceTestDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         var connectionString = _configuration.GetConnectionString("DefaultConnection");
-        optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=MultipleChoiceTestDB;Integrated Security=True;Trust Server Certificate=True");
-
+        optionsBuilder.UseSqlServer(connectionString);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

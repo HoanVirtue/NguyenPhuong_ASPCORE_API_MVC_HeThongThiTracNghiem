@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MultipleChoiceTest.Domain.ApiModel;
 using MultipleChoiceTest.Domain.Models;
+using MultipleChoiceTest.Domain.ModelViews;
 using MultipleChoiceTest.Repository.UnitOfWork;
 using System.Security.Claims;
 
@@ -9,25 +11,22 @@ namespace MultipleChoiceTest.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SubjectsController : ControllerBase
+    public class SubjectsController : BaseController
     {
-        private readonly IUnitOfWork _unit;
-
-        public SubjectsController(IUnitOfWork unitOfWork)
+        public SubjectsController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
         {
-            _unit = unitOfWork;
         }
 
         // GET: api/Subjects
         [HttpGet]
         public async Task<ActionResult<ApiResponse<IEnumerable<Subject>>>> GetSubjects()
         {
-            var subjects = await _unit.SubjectRepository.GetAllAsync();
+            var subjects = await _unitOfWork.SubjectRepository.GetAllAsync();
             return Ok(new ApiResponse<IEnumerable<Subject>>
             {
                 Success = subjects != null && subjects.Any(),
                 Data = subjects,
-                Message = subjects == null || !subjects.Any() ? "No Subjects found" : ""
+                Message = subjects == null || !subjects.Any() ? "Không có dữ liệu" : ""
             });
         }
 
@@ -35,21 +34,21 @@ namespace MultipleChoiceTest.Api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ApiResponse<Subject>>> GetSubject(int id)
         {
-            var subject = await _unit.SubjectRepository.GetByIdAsync(id);
+            var subject = await _unitOfWork.SubjectRepository.GetByIdAsync(id);
 
             return Ok(new ApiResponse<Subject>
             {
                 Success = subject != null,
                 Data = subject,
-                Message = subject == null ? "Subject not found" : ""
+                Message = subject == null ? "Không tìm thấy môn học" : ""
             });
         }
 
         // PUT: api/Subjects/5
         [HttpPut]
-        public async Task<ActionResult<ApiResponse<Subject>>> PutSubject([FromBody] Subject subject)
+        public async Task<ActionResult<ApiResponse<Subject>>> PutSubject([FromBody] CUSubject subject)
         {
-            if (await _unit.SubjectRepository.IsExistSubjectName(subject.SubjectName))
+            if (await _unitOfWork.SubjectRepository.IsExistSubjectName(subject.SubjectName))
             {
                 return new ApiResponse<Subject>()
                 {
@@ -59,9 +58,10 @@ namespace MultipleChoiceTest.Api.Controllers
             }
             try
             {
-                subject.UpdatedDate = DateTime.Now;
-                subject.UpdatedBy = User.FindFirst(ClaimTypes.Name)?.Value;
-                await _unit.SubjectRepository.UpdateAsync(subject);
+                var subjectUpdate = await _unitOfWork.SubjectRepository.GetByIdAsync(subject.Id);
+                subjectUpdate.SubjectName = subject.SubjectName;
+                subjectUpdate.UpdatedBy = User.FindFirst(ClaimTypes.Name)?.Value;
+                await _unitOfWork.SubjectRepository.UpdateAsync(subjectUpdate);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -70,7 +70,7 @@ namespace MultipleChoiceTest.Api.Controllers
                     return NotFound(new ApiResponse<Subject>
                     {
                         Success = false,
-                        Message = "Subject not found"
+                        Message = "Không tìm thấy môn học"
                     });
                 }
                 else
@@ -82,16 +82,16 @@ namespace MultipleChoiceTest.Api.Controllers
             return new ApiResponse<Subject>()
             {
                 Success = true,
-                Data = subject,
+                Data = _mapper.Map<Subject>(subject),
                 Message = "Cập nhật dữ liệu thành công"
             };
         }
 
         // POST: api/Subjects
         [HttpPost]
-        public async Task<ActionResult<ApiResponse<Subject>>> PostSubject(Subject subject)
+        public async Task<ActionResult<ApiResponse<Subject>>> PostSubject(CUSubject subject)
         {
-            if (await _unit.SubjectRepository.IsExistSubjectName(subject.SubjectName))
+            if (await _unitOfWork.SubjectRepository.IsExistSubjectName(subject.SubjectName))
             {
                 return new ApiResponse<Subject>()
                 {
@@ -99,15 +99,15 @@ namespace MultipleChoiceTest.Api.Controllers
                     Message = "Tên môn học đã tồn tại"
                 };
             }
-            subject.CreatedDate = DateTime.Now;
+
             subject.CreatedBy = User.FindFirst(ClaimTypes.Name)?.Value;
-            await _unit.SubjectRepository.AddAsync(subject);
+            await _unitOfWork.SubjectRepository.AddAsync(_mapper.Map<Subject>(subject));
 
             return CreatedAtAction("GetSubject", new { id = subject.Id }, new ApiResponse<Subject>
             {
                 Success = true,
-                Data = subject,
-                Message = "Subject created successfully"
+                Data = _mapper.Map<Subject>(subject),
+                Message = "Thêm dữ liệu thành công"
             });
         }
 
@@ -115,7 +115,7 @@ namespace MultipleChoiceTest.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<ApiResponse<Subject>>> DeleteSubject(int id)
         {
-            var subject = await _unit.SubjectRepository.GetByIdAsync(id);
+            var subject = await _unitOfWork.SubjectRepository.GetByIdAsync(id);
             if (subject == null)
             {
                 return NotFound(new ApiResponse<Subject>
@@ -127,7 +127,7 @@ namespace MultipleChoiceTest.Api.Controllers
 
             try
             {
-                await _unit.SubjectRepository.SoftRemoveAsync(subject);
+                await _unitOfWork.SubjectRepository.SoftRemoveAsync(subject);
             }
             catch (Exception ex)
             {
@@ -143,7 +143,7 @@ namespace MultipleChoiceTest.Api.Controllers
 
         private async Task<bool> SubjectExists(int id)
         {
-            return await _unit.SubjectRepository.GetByIdAsync(id) != null;
+            return await _unitOfWork.SubjectRepository.GetByIdAsync(id) != null;
         }
     }
 }

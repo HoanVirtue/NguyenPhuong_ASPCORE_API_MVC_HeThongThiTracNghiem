@@ -2,7 +2,7 @@
 
 namespace MultipleChoiceTest.Domain.ModelViews
 {
-    public class CreateUser
+    public class CUUser
     {
         [Required(ErrorMessage = "Họ tên không được bỏ trống")]
         public string UserName { get; set; }
