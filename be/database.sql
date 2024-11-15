@@ -27,21 +27,36 @@ CREATE TABLE Lesson (
     FOREIGN KEY (SubjectId) REFERENCES Subject(Id)
 );
 
+CREATE TABLE QuestionType (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    TypeName NVARCHAR(50),  -- Tên loại câu hỏi (Trắc nghiệm, Tự luận, v.v.)
+    Description NVARCHAR(255),  -- Mô tả về loại câu hỏi (Tuỳ chọn)
+	CreatedDate DATE,
+    CreatedBy NVARCHAR(100),
+    UpdatedDate DATE,
+    UpdatedBy NVARCHAR(100),
+    IsDeleted BIT DEFAULT 0 -- Cột IsDeleted
+);
+
 -- Table Question
 CREATE TABLE Question (
     Id INT PRIMARY KEY IDENTITY(1,1),
-    QuestionText TEXT,
-    Choices TEXT,
-    CorrectAnswer TEXT,
+    QuestionText NVARCHAR(MAX) NOT NULL,
+    Choices NVARCHAR(MAX),
+    CorrectAnswer NVARCHAR(MAX),
+	AnswerExplanation NVARCHAR(MAX),
     SubjectId INT, -- Foreign key linked to the Subject table
     LessonId INT, -- Foreign key linked to the Lesson table
+	QuestionTypeId INT,
+	AudioFilePath NVARCHAR(255),
     CreatedDate DATE,
     CreatedBy NVARCHAR(100),
     UpdatedDate DATE,
     UpdatedBy NVARCHAR(100),
     IsDeleted BIT DEFAULT 0, -- Cột IsDeleted
     FOREIGN KEY (SubjectId) REFERENCES Subject(Id),
-    FOREIGN KEY (LessonId) REFERENCES Lesson(Id)
+    FOREIGN KEY (LessonId) REFERENCES Lesson(Id),
+	FOREIGN KEY (QuestionTypeId) REFERENCES QuestionType(Id)
 );
 
 -- Table Exam
@@ -86,7 +101,7 @@ CREATE TABLE ExamAttempt (
     UserId INT, -- Foreign key linked to the User table
     ExamId INT, -- Foreign key linked to the Exam table
     QuestionId INT, -- Foreign key linked to the Question table
-    Answer TEXT,
+    Answer NVARCHAR(MAX),
     IsCorrect BIT,
     CreatedDate DATE,
     CreatedBy NVARCHAR(100),
@@ -156,7 +171,7 @@ CREATE TABLE Feedback (
     Email NVARCHAR(255),
     Phone NVARCHAR(15),
     Address NVARCHAR(255),
-    Content TEXT,
+    Content NVARCHAR(MAX),
     CreatedDate DATE,
     CreatedBy NVARCHAR(100),
     UpdatedDate DATE,
