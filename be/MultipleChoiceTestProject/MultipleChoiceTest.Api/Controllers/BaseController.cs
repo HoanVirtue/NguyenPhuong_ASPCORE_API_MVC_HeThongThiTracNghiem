@@ -8,10 +8,12 @@ namespace MultipleChoiceTest.Api.Controllers
     {
         protected readonly IUnitOfWork _unitOfWork;
         protected readonly IMapper _mapper;
-        public BaseController(IUnitOfWork unitOfWork, IMapper mapper)
+        protected readonly IConfiguration _configuration;
+        public BaseController(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _configuration = configuration;
         }
     }
 }

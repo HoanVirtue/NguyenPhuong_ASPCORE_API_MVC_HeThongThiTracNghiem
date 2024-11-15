@@ -5,7 +5,6 @@ using MultipleChoiceTest.Domain.ApiModel;
 using MultipleChoiceTest.Domain.Models;
 using MultipleChoiceTest.Domain.ModelViews;
 using MultipleChoiceTest.Repository.UnitOfWork;
-using System.Security.Claims;
 
 namespace MultipleChoiceTest.Api.Controllers
 {
@@ -13,10 +12,9 @@ namespace MultipleChoiceTest.Api.Controllers
     [ApiController]
     public class LessonsController : BaseController
     {
-        public LessonsController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+        public LessonsController(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration) : base(unitOfWork, mapper, configuration)
         {
         }
-
 
         // GET: api/Lessons
         [HttpGet]
@@ -115,8 +113,6 @@ namespace MultipleChoiceTest.Api.Controllers
                     Message = "Tên bài học đã tồn tại"
                 };
             }
-            lesson.CreatedDate = DateTime.Now;
-            lesson.CreatedBy = User.FindFirst(ClaimTypes.Name)?.Value;
             await _unitOfWork.LessonRepository.AddAsync(_mapper.Map<Lesson>(lesson));
 
             return CreatedAtAction("GetLesson", new { id = lesson.Id }, new ApiResponse<Lesson>

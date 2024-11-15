@@ -6,7 +6,7 @@ namespace MultipleChoiceTest.Repository.Repository
 {
     public interface ISubjectRepository : IRepository<Subject>
     {
-        Task<bool> IsExistSubjectName(string subjectName);
+        Task<bool> IsExistSubjectName(string name, int? id = 0);
     }
     public class SubjectRepository : GenericRepository<Subject>, ISubjectRepository
     {
@@ -14,9 +14,9 @@ namespace MultipleChoiceTest.Repository.Repository
         {
         }
 
-        public Task<bool> IsExistSubjectName(string subjectName)
+        public Task<bool> IsExistSubjectName(string name, int? id = 0)
         {
-            return _dbContext.Subjects.AnyAsync(x => x.SubjectName == subjectName && x.IsDeleted != true);
+            return _dbContext.Subjects.AnyAsync(x => x.SubjectName == name && x.Id != id && x.IsDeleted != true);
         }
     }
 }

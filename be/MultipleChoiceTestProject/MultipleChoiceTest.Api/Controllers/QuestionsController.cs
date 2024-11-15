@@ -12,12 +12,10 @@ namespace MultipleChoiceTest.Api.Controllers
     [ApiController]
     public class QuestionsController : BaseController
     {
-        public QuestionsController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+        public QuestionsController(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration) : base(unitOfWork, mapper, configuration)
         {
         }
 
-
-        // GET: api/Questions
         [HttpGet]
         public async Task<ActionResult<ApiResponse<IEnumerable<Question>>>> GetQuestions()
         {
@@ -64,8 +62,11 @@ namespace MultipleChoiceTest.Api.Controllers
                 questionUpdate.QuestionText = question.QuestionText;
                 questionUpdate.Choices = question.Choices;
                 questionUpdate.CorrectAnswer = question.CorrectAnswer;
+                questionUpdate.AnswerExplanation = question.AnswerExplanation;
                 questionUpdate.SubjectId = question.SubjectId;
                 questionUpdate.LessonId = question.LessonId;
+                questionUpdate.QuestionTypeId = question.QuestionTypeId;
+                questionUpdate.AudioFilePath = question.AudioFilePath;
                 await _unitOfWork.QuestionRepository.UpdateAsync(questionUpdate);
             }
             catch (DbUpdateConcurrencyException ex)
@@ -158,6 +159,11 @@ namespace MultipleChoiceTest.Api.Controllers
             {
                 isSuccess = false;
                 message = string.Join("Không tìm thấy bài học", ",");
+            }
+            if (await _unitOfWork.QuestionTypeRepository.GetByIdAsync(question.QuestionTypeId) == null)
+            {
+                isSuccess = false;
+                message = string.Join("Không tìm thấy loại câu hỏi", ",");
             }
             return new ApiResponse<Question>
             {

@@ -2,6 +2,7 @@
 {
     public class CUQuestion
     {
+        public int Id { get; set; }
         public string QuestionText { get; set; } = null!;
 
         public string? Choices { get; set; }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using MultipleChoiceTest.Domain.ApiModel;
 using MultipleChoiceTest.Domain.Models;
 using MultipleChoiceTest.Repository.UnitOfWork;
@@ -7,17 +8,16 @@ namespace MultipleChoiceTest.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UsersController : BaseController
     {
-        private readonly IUnitOfWork _unit;
-        public UsersController(IUnitOfWork unit)
+        public UsersController(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration) : base(unitOfWork, mapper, configuration)
         {
-            _unit = unit;
         }
+
         [HttpGet]
         public async Task<IActionResult> GetAsync()
         {
-            var list = await _unit.UserRepository.GetAllAsync();
+            var list = await _unitOfWork.UserRepository.GetAllAsync();
             return Ok(new ApiResponse<IEnumerable<User>>()
             {
                 Success = true,
@@ -28,7 +28,7 @@ namespace MultipleChoiceTest.Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAsync(int id)
         {
-            var result = await _unit.UserRepository.GetByIdAsync(id);
+            var result = await _unitOfWork.UserRepository.GetByIdAsync(id);
             return Ok(new ApiResponse<User>()
             {
                 Success = result != null,
@@ -41,7 +41,7 @@ namespace MultipleChoiceTest.Api.Controllers
         //[HttpPost]
         //public IActionResult Post(User user)
         //{
-        //    var result = _unit.UserRepository.GetByIdAsync();
+        //    var result = _unitOfWork.UserRepository.GetByIdAsync();
         //}
     }
 }

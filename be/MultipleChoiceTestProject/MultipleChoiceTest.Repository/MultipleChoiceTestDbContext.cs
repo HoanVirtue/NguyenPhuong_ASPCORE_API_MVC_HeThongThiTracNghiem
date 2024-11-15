@@ -38,11 +38,11 @@ public partial class MultipleChoiceTestDbContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        var connectionString = _configuration.GetConnectionString("DefaultConnection");
-        optionsBuilder.UseSqlServer(connectionString);
-    }
+    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //{
+    //    var connectionString = _configuration.GetConnectionString("DefaultConnection");
+    //    optionsBuilder.UseSqlServer(connectionString);
+    //}
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

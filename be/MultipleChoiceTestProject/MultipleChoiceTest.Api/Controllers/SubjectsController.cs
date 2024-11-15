@@ -5,7 +5,6 @@ using MultipleChoiceTest.Domain.ApiModel;
 using MultipleChoiceTest.Domain.Models;
 using MultipleChoiceTest.Domain.ModelViews;
 using MultipleChoiceTest.Repository.UnitOfWork;
-using System.Security.Claims;
 
 namespace MultipleChoiceTest.Api.Controllers
 {
@@ -13,7 +12,7 @@ namespace MultipleChoiceTest.Api.Controllers
     [ApiController]
     public class SubjectsController : BaseController
     {
-        public SubjectsController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+        public SubjectsController(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration) : base(unitOfWork, mapper, configuration)
         {
         }
 
@@ -48,7 +47,7 @@ namespace MultipleChoiceTest.Api.Controllers
         [HttpPut]
         public async Task<ActionResult<ApiResponse<Subject>>> PutSubject([FromBody] CUSubject subject)
         {
-            if (await _unitOfWork.SubjectRepository.IsExistSubjectName(subject.SubjectName))
+            if (await _unitOfWork.SubjectRepository.IsExistSubjectName(subject.SubjectName, subject.Id))
             {
                 return new ApiResponse<Subject>()
                 {
@@ -60,7 +59,6 @@ namespace MultipleChoiceTest.Api.Controllers
             {
                 var subjectUpdate = await _unitOfWork.SubjectRepository.GetByIdAsync(subject.Id);
                 subjectUpdate.SubjectName = subject.SubjectName;
-                subjectUpdate.UpdatedBy = User.FindFirst(ClaimTypes.Name)?.Value;
                 await _unitOfWork.SubjectRepository.UpdateAsync(subjectUpdate);
             }
             catch (DbUpdateConcurrencyException)
@@ -100,7 +98,6 @@ namespace MultipleChoiceTest.Api.Controllers
                 };
             }
 
-            subject.CreatedBy = User.FindFirst(ClaimTypes.Name)?.Value;
             await _unitOfWork.SubjectRepository.AddAsync(_mapper.Map<Subject>(subject));
 
             return CreatedAtAction("GetSubject", new { id = subject.Id }, new ApiResponse<Subject>

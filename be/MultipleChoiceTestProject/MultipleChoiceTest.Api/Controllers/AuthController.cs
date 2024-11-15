@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using MultipleChoiceTest.Domain.ApiModel;
 using MultipleChoiceTest.Domain.Models;
@@ -12,14 +13,10 @@ namespace MultipleChoiceTest.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthController : ControllerBase
+    public class AuthController : BaseController
     {
-        private IConfiguration _configuration;
-        private IUnitOfWork _unit;
-        public AuthController(IConfiguration configuration, IUnitOfWork unitOfWork)
+        public AuthController(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration) : base(unitOfWork, mapper, configuration)
         {
-            _configuration = configuration;
-            _unit = unitOfWork;
         }
 
         [Route("Login")]
@@ -32,7 +29,7 @@ namespace MultipleChoiceTest.Api.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-                User user = await _unit.UserRepository.CheckLogin(model);
+                User user = await _unitOfWork.UserRepository.CheckLogin(model);
                 if (user != null)
                 {
                     return Ok(new ApiResponse<LoginResponse>
