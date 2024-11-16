@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using MultipleChoiceTest.Domain.ModelViews;
 using MultipleChoiceTest.Web.Api;
 using MultipleChoiceTest.Web.Constants;
-using MultipleChoiceTest.Web.Controllers.Guard;
 using Newtonsoft.Json;
 
 namespace MultipleChoiceTest.Web.Areas.Admin.Controllers

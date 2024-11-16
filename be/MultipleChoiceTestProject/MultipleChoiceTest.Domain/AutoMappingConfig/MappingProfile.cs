@@ -13,6 +13,8 @@ namespace MultipleChoiceTest.Domain.AutoMappingConfig
 
             CreateMap<CULesson, Lesson>();
             CreateMap<Lesson, CULesson>();
+            CreateMap<Lesson, LessonItem>()
+                .ForMember(dest => dest.SubjectName, opt => opt.MapFrom(src => src.Subject.SubjectName));
 
             CreateMap<CUQuestion, Question>();
             CreateMap<Question, CUQuestion>();

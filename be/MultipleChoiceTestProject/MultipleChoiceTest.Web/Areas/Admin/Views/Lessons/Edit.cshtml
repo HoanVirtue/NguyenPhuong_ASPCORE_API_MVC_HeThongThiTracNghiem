@@ -1,4 +1,4 @@
-﻿@model CUSubject
+﻿@model CULesson
 
 @{
     ViewData["Title"] = "Cập nhật Bài học";
@@ -13,7 +13,7 @@
                 <div class="header-sub-title">
                     <nav class="breadcrumb breadcrumb-dash">
                         <a asp-controller="Dashboard" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Trang chủ</a>
-                        <a asp-controller="Subjects" asp-action="Index" class="breadcrumb-item">Danh sách môn học</a>
+                        <a asp-controller="Lessons" asp-action="Index" class="breadcrumb-item">Danh sách bài học</a>
                         <span class="breadcrumb-item active">Cập nhật</span>
                     </nav>
                 </div>
@@ -33,10 +33,17 @@
                 <div class="card-body">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="row">
-                        <div class="form-group col-md-12">
-                            <label asp-for="SubjectName">Tên môn học</label>
-                            <input asp-for="SubjectName" class="form-control" is-valid placeholder="Type Name" required />
-                            <span asp-validation-for="SubjectName" class="text-danger"></span>
+                        <div class="form-group col-md-6">
+                            <label asp-for="SubjectId">Môn học <span class="text-danger">*</span></label>
+                            <select asp-for="SubjectId" class="form-control" asp-items="ViewBag.Subjects" required>
+                                <option selected disabled>--Chọn môn học--</option>
+                            </select>
+                            <span asp-validation-for="SubjectId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="LessonName">Tên Bài học <span class="text-danger">*</span></label>
+                            <input asp-for="LessonName" class="form-control" is-valid required />
+                            <span asp-validation-for="LessonName" class="text-danger"></span>
                         </div>
                     </div>
 

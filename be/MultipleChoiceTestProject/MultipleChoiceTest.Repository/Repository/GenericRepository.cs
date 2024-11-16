@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using MultipleChoiceTest.Domain;
 using MultipleChoiceTest.Repository.Authorizations;
 using System.Linq.Expressions;
@@ -30,13 +31,15 @@ namespace MultipleChoiceTest.Repository.Repository
         protected MultipleChoiceTestDbContext _dbContext;
         protected DbSet<TEntity> _dbSet;
         private MultipleChoiceTestDbContext dbContext;
-        private readonly IUserContextService _userContext;
+        protected readonly IUserContextService _userContext;
+        protected readonly IMapper _mapper;
 
-        public GenericRepository(MultipleChoiceTestDbContext dbContext, IUserContextService userContextService)
+        public GenericRepository(MultipleChoiceTestDbContext dbContext, IUserContextService userContextService, IMapper mapper)
         {
             _dbContext = dbContext;
             _userContext = userContextService;
             _dbSet = _dbContext.Set<TEntity>();
+            _mapper = mapper;
         }
 
         public GenericRepository(MultipleChoiceTestDbContext dbContext)

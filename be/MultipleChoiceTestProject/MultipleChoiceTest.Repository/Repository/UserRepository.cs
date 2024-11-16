@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using MultipleChoiceTest.Domain.Models;
 using MultipleChoiceTest.Domain.ModelViews;
 using MultipleChoiceTest.Repository.Authorizations;
@@ -11,7 +12,7 @@ namespace MultipleChoiceTest.Repository.Repository
     }
     public class UserRepository : GenericRepository<User>, IUserRepository
     {
-        public UserRepository(MultipleChoiceTestDbContext dbContext, IUserContextService userContextService) : base(dbContext, userContextService)
+        public UserRepository(MultipleChoiceTestDbContext dbContext, IUserContextService userContextService, IMapper mapper) : base(dbContext, userContextService, mapper)
         {
         }
 

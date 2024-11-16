@@ -1,4 +1,5 @@
-﻿using MultipleChoiceTest.Domain.Models;
+﻿using AutoMapper;
+using MultipleChoiceTest.Domain.Models;
 using MultipleChoiceTest.Repository.Authorizations;
 
 namespace MultipleChoiceTest.Repository.Repository
@@ -9,7 +10,7 @@ namespace MultipleChoiceTest.Repository.Repository
     }
     public class FeedbackRepository : GenericRepository<Feedback>, IFeedbackRepository
     {
-        public FeedbackRepository(MultipleChoiceTestDbContext dbContext, IUserContextService userContextService) : base(dbContext, userContextService)
+        public FeedbackRepository(MultipleChoiceTestDbContext dbContext, IUserContextService userContextService, IMapper mapper) : base(dbContext, userContextService, mapper)
         {
         }
     }

@@ -1,12 +1,11 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using MultipleChoiceTest.Web.Areas.Admin.Controllers.Guard;
+using MultipleChoiceTest.Web.Controllers.Guard;
 
-namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
+namespace MultipleChoiceTest.Web.Controllers
 {
-    [Area("Admin")]
-    [Admin]
+    [User]
     public class BaseController : Controller
     {
         protected readonly INotyfService _notyfService;

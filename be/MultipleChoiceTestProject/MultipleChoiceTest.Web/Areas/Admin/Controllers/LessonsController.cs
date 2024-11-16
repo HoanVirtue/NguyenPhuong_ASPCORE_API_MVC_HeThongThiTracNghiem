@@ -1,6 +1,7 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using MultipleChoiceTest.Domain.Helpper;
 using MultipleChoiceTest.Domain.Models;
 using MultipleChoiceTest.Domain.ModelViews;
@@ -9,85 +10,89 @@ using Newtonsoft.Json;
 
 namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
 {
-    public class SubjectsController : BaseController
+    public class LessonsController : BaseController
     {
-        public SubjectsController(INotyfService notyfService, IHttpContextAccessor httpContextAccessor, ILogger<BaseController> logger, IMapper mapper) : base(notyfService, httpContextAccessor, logger, mapper)
+        public LessonsController(INotyfService notyfService, IHttpContextAccessor httpContextAccessor, ILogger<BaseController> logger, IMapper mapper) : base(notyfService, httpContextAccessor, logger, mapper)
         {
         }
 
         [HttpGet]
         public async Task<IActionResult> Index(string searchKey = "")
         {
-            var subjectRs = await ApiClient.GetAsync<List<Subject>>(Request, "Subjects");
+            var lessonRs = await ApiClient.GetAsync<List<LessonItem>>(Request, "Lessons");
 
-            if (subjectRs.Success)
+            if (lessonRs.Success)
             {
-                var subjects = subjectRs.Data;
+                var lessons = lessonRs.Data;
                 if (!string.IsNullOrWhiteSpace(searchKey))
                 {
                     searchKey = Utilities.RemoveDiacriticsAndToLower(searchKey);
-                    subjects = subjects.Where(p => Utilities.IsSubstring(Utilities.RemoveDiacriticsAndToLower(p.SubjectName), searchKey)).ToList();
+                    lessons = lessons.Where(p => Utilities.IsSubstring(Utilities.RemoveDiacriticsAndToLower(p.LessonName), searchKey)).ToList();
                 }
                 ViewBag.SearchKey = searchKey;
-                return View(subjects);
+                return View(lessons);
             }
             this._notyfService.Error("Retrieving the list of type failed");
             return View();
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            await CreateViewBagAsync();
             return View();
         }
 
         // POST: Brand/Create
         [HttpPost]
-        public async Task<IActionResult> Create([Bind("Id,SubjectName")] CUSubject subject)
+        public async Task<IActionResult> Create([Bind("Id,LessonName,SubjectId")] CULesson lesson)
         {
             if (ModelState.IsValid)
             {
-                var createRs = await ApiClient.PostAsync<Subject>(Request, "Subjects", JsonConvert.SerializeObject(subject));
+                var createRs = await ApiClient.PostAsync<Lesson>(Request, "Lessons", JsonConvert.SerializeObject(lesson));
                 if (createRs.Success)
                 {
                     _notyfService.Success("Thêm dữ liệu thành công");
-                    return RedirectToAction("Index", "Subjects");
+                    return RedirectToAction("Index", "Lessons");
                 }
                 else
                 {
                     _notyfService.Warning(createRs.Message);
                 }
                 _notyfService.Error("Thêm dữ liệu thất bại");
-                return View(subject);
+                return View(lesson);
             }
             _notyfService.Error("Vui lòng nhập đầy đủ dữ liệu");
-            return View(subject);
+            await CreateViewBagAsync();
+            return View(lesson);
         }
 
         // GET: Brand/Edit/Id
         public async Task<IActionResult> Edit(int id)
         {
-            var detailRs = await ApiClient.GetAsync<Subject>(Request, $"Subjects/{id}");
-            var data = _mapper.Map<CUSubject>(detailRs.Data);
+            var detailRs = await ApiClient.GetAsync<Lesson>(Request, $"Lessons/{id}");
+            var data = _mapper.Map<CULesson>(detailRs.Data);
             if (detailRs.Success)
             {
+                await CreateViewBagAsync(data);
                 return View(data);
             }
 
-            _notyfService.Error("Subject not found");
+            _notyfService.Error("Không tìm thấy môn học");
+            await CreateViewBagAsync(data);
             return View(data);
         }
 
         // POST: Brand/Edit/Id
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,SubjectName")] CUSubject subject)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,LessonName,SubjectId")] CULesson lesson)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var updRs = await ApiClient.PutAsync<Subject>(Request, $"Subjects", JsonConvert.SerializeObject(_mapper.Map<Subject>(subject)));
+                    var updRs = await ApiClient.PutAsync<Lesson>(Request, $"Lessons", JsonConvert.SerializeObject(lesson));
                     if (updRs != null && updRs.Success)
                     {
                         _notyfService.Success("Cập nhật dữ liệu thành công");
@@ -96,15 +101,15 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
                     {
                         _notyfService.Warning(updRs.Message);
                     }
-                    return RedirectToAction("Index", "Subjects");
+                    return RedirectToAction("Index", "Lessons");
                 }
                 catch (Exception ex)
                 {
-                    _notyfService.Error("An error occurred");
-                    return View(subject);
+                    _notyfService.Error("Đã có lỗi xảy ra vui lòng thử lại sau!");
                 }
             }
-            return View(subject);
+            await CreateViewBagAsync(lesson);
+            return View(lesson);
         }
 
 
@@ -114,7 +119,7 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
         {
             try
             {
-                var delRs = await ApiClient.DeleteAsync<Subject>(Request, $"Subjects/{id}");
+                var delRs = await ApiClient.DeleteAsync<Lesson>(Request, $"Lessons/{id}");
                 if (delRs.Success)
                 {
                     _notyfService.Success("Xóa dữ liệu thành công");
@@ -123,13 +128,27 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
                 {
                     _notyfService.Error(delRs.Message);
                 }
-                return RedirectToAction("Index", "Subjects");
+                return RedirectToAction("Index", "Lessons");
 
             }
             catch (Exception ex)
             {
                 _notyfService.Error("Đã có lỗi xảy ra!");
-                return RedirectToAction("Delete", "Subjects");
+                return RedirectToAction("Delete", "Lessons");
+            }
+        }
+
+
+        private async Task CreateViewBagAsync(CULesson? lesson = null)
+        {
+            var subjects = await ApiClient.GetAsync<List<Subject>>(Request, "Subjects");
+            if (lesson != null)
+            {
+                ViewData["Subjects"] = new SelectList(subjects.Data, "Id", "SubjectName", lesson.SubjectId);
+            }
+            else
+            {
+                ViewData["Subjects"] = new SelectList(subjects.Data, "Id", "SubjectName");
             }
         }
     }

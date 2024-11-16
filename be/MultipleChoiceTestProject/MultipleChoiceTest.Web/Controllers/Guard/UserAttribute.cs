@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using MultipleChoiceTest.Web.Constants;
-namespace MultipleChoiceTest.Web.Areas.Admin.Controllers.Guard
+namespace MultipleChoiceTest.Web.Controllers.Guard
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = true, AllowMultiple = false)]
-    public class AdminAttribute : Attribute, IAuthorizationFilter
+    public class UserAttribute : Attribute, IAuthorizationFilter
     {
         public void OnAuthorization(AuthorizationFilterContext context)
         {
@@ -16,7 +16,6 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers.Guard
                 // Chuyển hướng đến trang đăng nhập nếu không có token
                 context.Result = new RedirectToRouteResult(new RouteValueDictionary
                 {
-                    { "area", "Admin" },
                     { "controller", "Auth" },
                     { "action", "Login" }
                 });
@@ -26,7 +25,6 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers.Guard
             {
                 context.Result = new RedirectToRouteResult(new RouteValueDictionary
                 {
-                    { "area", "Admin" },
                     { "controller", "Auth" },
                     { "action", "Login" }
                 });
@@ -34,11 +32,10 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers.Guard
             }
             else
             {
-                if (role != ((int)TypeUserConstant.Role.ADMIN).ToString())
+                if (role != ((int)TypeUserConstant.Role.CUSTOMER).ToString())
                 {
                     context.Result = new RedirectToRouteResult(new RouteValueDictionary
                     {
-                        { "area", "Admin" },
                         { "controller", "Auth" },
                         { "action", "Login" }
                     });

@@ -18,10 +18,10 @@ namespace MultipleChoiceTest.Api.Controllers
 
         // GET: api/Lessons
         [HttpGet]
-        public async Task<ActionResult<ApiResponse<IEnumerable<Lesson>>>> GetLessons()
+        public async Task<ActionResult<ApiResponse<List<LessonItem>>>> GetLessons()
         {
-            var lessons = await _unitOfWork.LessonRepository.GetAllAsync();
-            return Ok(new ApiResponse<IEnumerable<Lesson>>
+            var lessons = await _unitOfWork.LessonRepository.GetAll();
+            return Ok(new ApiResponse<List<LessonItem>>
             {
                 Success = lessons != null && lessons.Any(),
                 Data = lessons,
@@ -47,7 +47,7 @@ namespace MultipleChoiceTest.Api.Controllers
         [HttpPut]
         public async Task<ActionResult<ApiResponse<Lesson>>> PutLesson([FromBody] CULesson lesson)
         {
-            if (await _unitOfWork.LessonRepository.IsExistLessonName(lesson.LessonName, lesson.Id))
+            if (await _unitOfWork.LessonRepository.IsExistLessonName(lesson.LessonName, lesson.SubjectId, lesson.Id))
             {
                 return new ApiResponse<Lesson>()
                 {
@@ -105,7 +105,7 @@ namespace MultipleChoiceTest.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<ApiResponse<Lesson>>> PostLesson(CULesson lesson)
         {
-            if (await _unitOfWork.LessonRepository.IsExistLessonName(lesson.LessonName))
+            if (await _unitOfWork.LessonRepository.IsExistLessonName(lesson.LessonName, lesson.SubjectId))
             {
                 return new ApiResponse<Lesson>()
                 {
