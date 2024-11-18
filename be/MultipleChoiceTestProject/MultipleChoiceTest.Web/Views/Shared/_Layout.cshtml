@@ -4,43 +4,181 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - MultipleChoiceTest.Web</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/MultipleChoiceTest.Web.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="/assets/lib/bootstrap-5.0.2-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+          integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/login.css">
+    <link rel="stylesheet" href="/assets/css/contact.css">
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MultipleChoiceTest.Web</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+        <div class="container">
+            <div class="row">
+                <a href="">
+                    <img src="/assets/images/banner_new-3-3.png" width="1117" height="154"
+                         alt="Hệ thống Ôn thi trắc nghiệm">
+                </a>
+            </div>
+        </div>
+    </header>
+    <nav>
+        <div class="container">
+            <div class="">
+                <div class="menu_header">
+                    <div class="menu_background">
+                        <div id="search" class="headerSearch">
+                            <div class="input-group search_header">
+                                <input type="text" class="form-control" maxlength="60" placeholder="Tìm kiếm...">
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-info">
+                                        <img src="/assets/images/icon_search.png">
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="navbar navbar-default navbar-static-top">
+                            <div class="collapse navbar-collapse" id="menu-site-default">
+                                <ul class="nav navbar-nav">
+                                    <li>
+                                        <a href="/vi/" title="Trang nhất"><span>TRANG CHỦ</span></a>
+                                    </li>
+                                    <li class="dropdown" rol="presentation">
+                                        <a class="dropdown-toggle" role="button" aria-expanded="false"
+                                           title="LUYỆN THI">
+                                            <span>LUYỆN THI</span> <strong class="caret">&nbsp;</strong>
+                                        </a>
+                                        <ul class="submenu clearfix dropdown-menu">
+                                            <li class="dropdown-submenu">
+                                                <a href="/vi/test/toan-cao-cap/" title="Toán Cao Cấp" class="">
+                                                    Toán Cao
+                                                    Cấp
+                                                </a>
+                                                <ul class="submenu clearfix dropdown-menu">
+                                                    <li>
+                                                        <a href="/vi/test/toan-cao-cap-1/" title="Đại Số Tuyến Tính"
+                                                           class="">Đại Số Tuyến Tính</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/vi/test/toan-cao-cap-2/" title="Giải tích"
+                                                           class="">
+                                                            Giải
+                                                            tích
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/vi/test/xac-xuat-thong-ke/" title="Xác Xuất Thống Kê"
+                                                           class="">Xác Xuất Thống Kê</a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="dropdown-submenu">
+                                                <a href="/vi/test/tieng-anh/" title="Tiếng Anh" class="">Tiếng Anh</a>
+                                                <ul class="submenu clearfix dropdown-menu">
+                                                    <li>
+                                                        <a href="/vi/test/anh-ngu-1-tieng-anh-1/"
+                                                           title="Anh Ngữ 1 (Tiếng Anh 1)" class="">
+                                                            Anh Ngữ 1 (Tiếng
+                                                            Anh
+                                                            1)
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/vi/test/anh-ngu-2-tieng-anh-2/"
+                                                           title="Anh Ngữ 2 (Tiếng Anh 2)" class="">
+                                                            Anh Ngữ 2 (Tiếng
+                                                            Anh
+                                                            2)
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/vi/test/anh-ngu-3-tieng-anh-3/"
+                                                           title="Anh Ngữ 3 (Tiếng Anh 3)" class="">
+                                                            Anh Ngữ 3 (Tiếng
+                                                            Anh
+                                                            3)
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/vi/test/anh-ngu-4-tieng-anh-4/"
+                                                           title="Anh Ngữ 4 (Tiếng Anh 4)" class="">
+                                                            Anh Ngữ 4 (Tiếng
+                                                            Anh
+                                                            4)
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/vi/test/tieng-anh-5/" title="Tiếng Anh 5"
+                                                           class="">
+                                                            Tiếng
+                                                            Anh 5
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/vi/test/tieng-anh-6/" title="Tiếng Anh 6"
+                                                           class="">
+                                                            Tiếng
+                                                            Anh 6
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li rol="presentation">
+                                        <a role="button" aria-expanded="false" title="LỊCH SỬ THI">
+                                            <span>
+                                                LỊCH SỬ
+                                                THI
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li rol="presentation">
+                                        <a role="button" aria-expanded="false" title="LIÊN HỆ"><span>LIÊN HỆ</span></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+        </div>
+    </nav>
+    <div class="main">
+        <div class="container">
             @RenderBody()
-        </main>
+        </div>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - MultipleChoiceTest.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer id="footer">
+        <div class="footer-copyright">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-24 col-sm-24 col-md-12">
+                        <div class="panel-body">
+                            <div class="powered fr">
+                                © Bản quyền thuộc về <a href="https://fb.com/buiphukhuyen" style="color:#ffff00"
+                                                        title="Bùi Phú Khuyên" target="_blank" rel="noopener noreferrer nofollow">
+                                    Tạ Đức
+                                    Hoàn
+                                </a>.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-24 col-sm-24 col-md-12">
+                        <div class="panel-body">
+                            <div class="theme-change fr">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </footer>
+
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

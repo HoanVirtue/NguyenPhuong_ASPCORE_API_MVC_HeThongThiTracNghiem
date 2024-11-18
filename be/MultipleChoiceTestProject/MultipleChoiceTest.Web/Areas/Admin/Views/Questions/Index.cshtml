@@ -1,0 +1,105 @@
+﻿@model List<QuestionItem>
+
+@{
+    ViewData["Title"] = "Bài học";
+    Layout = "~/Areas/Admin/Views/Shared/_GlobalLayout.cshtml";
+}
+<div class="page-header">
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-controller="Dashboard" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Trang chủ</a>
+            <span class="breadcrumb-item active">Câu hỏi</span>
+        </nav>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <div class="row m-b-30">
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-8">
+                        <form asp-action="Index" asp-controller="Questions" method="get">
+                            <div class="input-affix m-v-10">
+                                <i class="prefix-icon anticon anticon-search opacity-04"></i>
+                                <input id="keyword" name="searchKey" value="@ViewBag.SearchKey" type="text" class="form-control" placeholder="Tìm kiếm...">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 text-right m-v-10">
+                <a class="btn btn-primary" asp-controller="Questions" asp-action="Create"><i class="anticon anticon-plus-circle m-r-5"></i><span>Thêm mới</span></a>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover e-commerce-table">
+                <thead>
+                    <tr>
+                        <th class="text-center">Id</th>
+                        <th class="text-center">Câu hỏi</th>
+                        <th class="text-center">Chủ đề</th>
+                        <th class="text-center">Loại câu hỏi</th>
+                        <th class="text-center">Ngày tạo</th>
+                        <th class="text-center">Người tạo</th>
+                        <th class="text-center">Ngày sửa</th>
+                        <th class="text-center">Người sửa</th>
+                        <th scope="col" class="text-center" style="width:300px;">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody id="records_table">
+                    @if (Model != null)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td scope="row" class="text-center"><p>@item.Id</p></td>
+                                <td scope="row" class="text-center"><p>@item.QuestionText</p></td>
+                                <td scope="row" class="text-center">
+                                    <p>Môn học: @item.SubjectName</p>
+                                    <p>Bài học: @item.LessonName</p>
+                                </td>
+                                <td scope="row" class="text-center"><p>@item.QuestionTypeName</p></td>
+                                <td scope="row" class="text-center"><p>@item.CreatedDate</p></td>
+                                <td scope="row" class="text-center"><p>@item.CreatedBy</p></td>
+                                <td scope="row" class="text-center"><p>@item.UpdatedDate</p></td>
+                                <td scope="row" class="text-center"><p>@item.UpdatedBy</p></td>
+                                <td class="text-center" style="width:300px;">
+                                    <a class="btn btn-primary btn-tone m-r-5 fas fa-eye" asp-controller="Questions" asp-action="Details" asp-route-id="@item.Id"></a>
+                                    <a class="btn btn-secondary btn-tone m-r-5 fas fa-edit" asp-controller="Questions" asp-action="Edit" asp-route-id="@item.Id"></a>
+                                    <button class="btn btn-danger btn-tone m-r-5 far fa-trash-alt" type="button" data-toggle="modal" data-target="#exampleModal-@item.Id"></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <div class="modal fade" id="exampleModal-@item.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <form asp-action="Delete" asp-controller="Questions" method="post">
+                                            <input type="hidden" name="id" value="@item.Id" />
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Cảnh báo</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Bạn có chắc chắn muốn xóa dữ liệu này không?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                                    <button type="submit" class="btn btn-primary">Xác nhận</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </tr>
+                        }
+                    }
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

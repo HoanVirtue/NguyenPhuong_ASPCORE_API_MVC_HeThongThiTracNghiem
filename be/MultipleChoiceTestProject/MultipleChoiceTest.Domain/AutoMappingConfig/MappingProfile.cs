@@ -18,6 +18,7 @@ namespace MultipleChoiceTest.Domain.AutoMappingConfig
 
             CreateMap<CUQuestion, Question>();
             CreateMap<Question, CUQuestion>();
+
         }
     }
 }

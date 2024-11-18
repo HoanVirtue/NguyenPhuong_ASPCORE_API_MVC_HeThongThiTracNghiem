@@ -28,6 +28,18 @@ namespace MultipleChoiceTest.Api.Controllers
             });
         }
 
+        [HttpGet("GetGridQuestions")]
+        public async Task<ActionResult<ApiResponse<IEnumerable<QuestionItem>>>> GetGridQuestions()
+        {
+            var questions = await _unitOfWork.QuestionRepository.GetQuestionList();
+            return Ok(new ApiResponse<IEnumerable<QuestionItem>>
+            {
+                Success = questions != null && questions.Any(),
+                Data = questions,
+                Message = questions == null || !questions.Any() ? "không có dữ liệu" : ""
+            });
+        }
+
         // GET: api/Questions/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ApiResponse<Question>>> GetQuestion(int id)
