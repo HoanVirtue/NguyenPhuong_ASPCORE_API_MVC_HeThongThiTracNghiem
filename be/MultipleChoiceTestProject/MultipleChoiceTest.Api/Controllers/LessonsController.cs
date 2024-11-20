@@ -17,6 +17,18 @@ namespace MultipleChoiceTest.Api.Controllers
         }
 
         // GET: api/Lessons
+        [HttpGet("GetAll")]
+        public async Task<ActionResult<ApiResponse<IEnumerable<Lesson>>>> GeDatatLessons()
+        {
+            var lessons = await _unitOfWork.LessonRepository.GetAllAsync();
+            return Ok(new ApiResponse<IEnumerable<Lesson>>
+            {
+                Success = lessons != null && lessons.Any(),
+                Data = lessons,
+                Message = lessons == null || !lessons.Any() ? "không có dữ liệu" : ""
+            });
+        }
+
         [HttpGet]
         public async Task<ActionResult<ApiResponse<List<LessonItem>>>> GetLessons()
         {

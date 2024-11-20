@@ -19,7 +19,7 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(string searchKey = "")
         {
-            var questionRs = await ApiClient.GetAsync<List<QuestionItem>>(Request, "Questions/GetGridQuestions");
+            var questionRs = await ApiClient.GetAsync<IEnumerable<QuestionItem>>(Request, "Questions/GetGridQuestions");
 
             if (questionRs.Success)
             {
@@ -32,7 +32,7 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
                 ViewBag.SearchKey = searchKey;
                 return View(questions);
             }
-            this._notyfService.Error("Retrieving the list of type failed");
+            this._notyfService.Error("Không có dữ liệu");
             return View();
         }
 
@@ -45,7 +45,7 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
 
         // POST: Brand/Create
         [HttpPost]
-        public async Task<IActionResult> Create([Bind("Id,QuestionText,Choices,CorrectAnswer,AnswerExplanation,SubjectId,LessonId,QuestionTypeId,AudioFilePath")] CUQuestion question)
+        public async Task<IActionResult> Create([Bind("Id,QuestionText,Choices,CorrectAnswer,AnswerExplanation,SubjectId,LessonId,QuestionTypeId,AudioFile")] CUQuestion question)
         {
             if (ModelState.IsValid)
             {
@@ -142,13 +142,19 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
         private async Task CreateViewBagAsync(CUQuestion? question = null)
         {
             var subjects = await ApiClient.GetAsync<List<Subject>>(Request, "Subjects");
+            var lessons = await ApiClient.GetAsync<List<Lesson>>(Request, "Lessons/GetAll");
+            var types = await ApiClient.GetAsync<List<QuestionType>>(Request, "QuestionTypes");
             if (question != null)
             {
                 ViewData["Subjects"] = new SelectList(subjects.Data, "Id", "SubjectName", question.SubjectId);
+                ViewData["Lessons"] = new SelectList(lessons.Data, "Id", "LessonName", question.LessonId);
+                ViewData["QuestionTypes"] = new SelectList(types.Data, "Id", "TypeName", question.QuestionTypeId);
             }
             else
             {
                 ViewData["Subjects"] = new SelectList(subjects.Data, "Id", "SubjectName");
+                ViewData["Lessons"] = new SelectList(lessons.Data, "Id", "LessonName");
+                ViewData["QuestionTypes"] = new SelectList(types.Data, "Id", "TypeName");
             }
         }
     }

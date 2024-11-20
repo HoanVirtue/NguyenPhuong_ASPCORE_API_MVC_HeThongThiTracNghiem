@@ -1,4 +1,6 @@
-﻿namespace MultipleChoiceTest.Domain.ModelViews
+﻿using Microsoft.AspNetCore.Http;
+
+namespace MultipleChoiceTest.Domain.ModelViews
 {
     public class CUQuestion
     {
@@ -18,6 +20,7 @@
         public int? QuestionTypeId { get; set; }
 
         public string? AudioFilePath { get; set; }
+        public IFormFile? AudioFile { get; set; }
 
         public DateTime? CreatedDate { get; set; } = DateTime.UtcNow;
         public string? CreatedBy { get; set; }
