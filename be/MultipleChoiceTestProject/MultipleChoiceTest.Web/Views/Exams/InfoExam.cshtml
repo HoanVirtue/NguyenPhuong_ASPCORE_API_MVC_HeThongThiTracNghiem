@@ -1,0 +1,372 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<ol class="breadcrumb" itemscope="" itemtype="https://schema.org/BreadcrumbList">
+    <li class="home" itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem">
+        <em class="fa fa-lg fa-home">&nbsp;</em><a href="/vi/" itemprop="item" title="Trang nhất">
+            <span itemprop="name">Trang nhất</span>
+        </a><i class="hidden" itemprop="position" content="1"></i>
+    </li>
+    <li itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem">
+        <a href="/vi/users/" itemprop="item" title="Tài khoản Sinh viên">
+            <span itemprop="name">
+                Liên
+                hệ
+            </span>
+        </a><i class="hidden" itemprop="position" content="2"></i>
+    </li>
+</ol>
+<div class="row">
+    <div class="col-md-9">
+        <div class="content">
+            <div class="content-heading row">
+                <div class="modal fade modal-fullscreen " id="alert-not-in-site" tabindex="-1" role="dialog"
+                     aria-labelledby="myModalLabel">
+                    <div class="modal-dialog modal-xs" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <h3 class="modal-title">Thông báo!</h3>
+                            </div>
+                            <div class="modal-body">
+                                <div style="padding:20px 10px; border: 1px solid #9d9797; border-radius: 4px">
+                                    <p>
+                                        Bạn không phải Thành viên chính thức nên khi tham gia thi sẽ không
+                                        lưu lại Kết quả và Lịch sử thi!
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <a type="button" class="btn btn-success">
+                                    Đồng ý
+                                </a>
+                                <button type="button" class="btn btn-warning" data-dismiss="modal">
+                                    Bỏ
+                                    qua
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade modal-fullscreen " id="test-submit-confirm" tabindex="-1"
+                     role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog modal-xs" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <h3 class="modal-title">Thông báo!</h3>
+                            </div>
+                            <div class="modal-body">
+                                <div style="padding:20px 10px; border: 1px solid #9d9797; border-radius: 4px">
+                                    <p id="test-submit-confirm-msg"></p>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button id="submit-button" type="button" class="btn btn-primary">
+                                    Đồng ý
+                                </button>
+                                <button type="button" class="btn" data-dismiss="modal">Bỏ qua</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade modal-fullscreen " id="alert-not-enough-money" tabindex="-1"
+                     role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog modal-xs" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <h3 class="modal-title">Thông báo!</h3>
+                            </div>
+                            <div class="modal-body">
+                                <div style="padding:20px 10px; border: 1px solid #9d9797; border-radius: 4px">
+                                    <ul style="list-style-type:disc">
+                                        <li style="line-height: 25px">
+                                            <strong>Số dư trong tài khoản</strong>
+                                            của bạn còn <strong>
+                                                <span class="text-danger"
+                                                      id="remain_money">0</span><span class="text-danger">đ</span>
+                                            </strong> <strong>
+                                                không
+                                                đủ
+                                            </strong> để làm đề thi này!
+                                        </li>
+                                        <li style="line-height: 25px">
+                                            Vui lòng nạp tiền vào tài khoản để
+                                            tiếp tục
+                                        </li>
+                                        <li style="line-height: 25px">
+                                            Bạn có thể sử dụng số tiền còn lại để
+                                            làm các đề thi khác
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <a type="button" class="btn btn-success" href="/vi/wallet-pri/recharge/">
+                                    Nạp tiền
+                                </a>
+                                <button type="button" class="btn btn-warning" data-dismiss="modal">
+                                    Bỏ
+                                    qua
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade modal-fullscreen " id="alert-before-exam" tabindex="-1" role="dialog"
+                     aria-labelledby="myModalLabel">
+                    <div class="modal-dialog modal-xs" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <h3 class="modal-title">Thông báo!</h3>
+                            </div>
+                            <div class="modal-body">
+                                <div class="text-center"
+                                     style="padding:20px 10px; border: 1px solid #9d9797; border-radius: 4px">
+                                    <p>Đề thi: <strong>Pháp Luật Đại Cương (Luyện phần 1)</strong></p>
+                                    <p><label>Số câu</label>: 40 - <label>Thời gian</label>: 30 phút</p>
+                                    <p>
+                                        Số dư trong tài khoản của bạn còn <strong>
+                                            <span class="text-danger"
+                                                  id="remain_money">%s</span><span class="text-danger">đ</span>
+                                        </strong>
+                                    </p>
+                                    <p>
+                                        Phí làm bài là <strong>
+                                            <span class="text-danger">%s</span>
+                                        </strong><span class="text-danger">đ</span>/1 lượt thi.
+                                    </p>
+                                    <p>
+                                        Trong quá trình làm bài <strong class="text-danger">
+                                            tuyệt đối không
+                                            thoát khỏi Website
+                                        </strong> cho đến khi nộp bài thành công. Hệ
+                                        thống <strong class="text-danger">không hỗ trợ hoàn tiền</strong>
+                                        nếu bạn cố tình thoát trong quá trình thi.<br><br> Chọn <strong class="text-danger">Đồng ý</strong> để vào bài làm ngay!
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button id="start-exams-button" type="button" class="btn btn-primary">
+                                    Đồng ý
+                                </button>
+                                <button type="button" class="btn" data-dismiss="modal">Bỏ qua</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade modal-fullscreen " id="nv-test-exit" tabindex="-1" role="dialog"
+                     aria-labelledby="myModalLabel">
+                    <div class="modal-dialog modal-xs" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <h3 class="modal-title">Thông báo!</h3>
+                            </div>
+                            <div class="modal-body">
+                                <div style="padding:20px 10px; border: 1px solid #9d9797; border-radius: 4px">
+                                    <p>
+                                        Hành động này sẽ xóa tất cả các đáp án bạn đã chọn. Bạn có chắc chắn
+                                        muốn thoát khỏi đề thi?
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <a type="button" class="btn btn-success" href="javascript:void(0)">
+                                    Đồng ý
+                                </a>
+                                <button type="button" class="btn btn-warning" data-dismiss="modal">
+                                    Bỏ
+                                    qua
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="quiz-game-info-guest" role="dialog">
+                    <form action="#" method="post">
+                        <div class="modal-dialog modal-xs" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal"
+                                            aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <h3 class="modal-title">Nhập thông tin</h3>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <input class="form-control" type="text" name="ho_va_ten"
+                                               placeholder="Họ và tên">
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="form-control" type="text" name="dien_thoai"
+                                               placeholder=" Điện thoại">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-success">Đồng ý</button>
+                                    <button type="buttom" class="btn btn-warning" data-dismiss="modal">
+                                        Bỏ
+                                        qua
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div id="breadcrumbs_mobile" class="col-xs-24 col-sm-24 box-coll hidden-lg hidden-md ">
+                    <div class="col-xs-20 col-sm-20 title"></div>
+                </div>
+                <div class="row detail test-gird">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-4 sticky-exams">
+                                <div class="template2">
+                                    <h1>Pháp Luật Đại Cương (Luyện phần 1)</h1>
+                                    <ul class="exam-info">
+                                        <li><label>Số câu</label>: 40</li>
+                                        <li><label>Thời gian</label>: 30 phút</li>
+                                        <li><label>Họ và tên</label>: Tạ Đức Hoàn</li>
+                                    </ul>
+                                </div>
+                                <div class="template2">
+                                    <button class="btn btn-success m-bottom" id="btn-save" style="display: none;">
+                                        Lưu đề
+                                        thi
+                                    </button>
+                                    <button class="btn btn-primary m-bottom" id="btn-start">
+                                        Bắt đầu làm bài
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Hướng dẫn làm bài</div>
+                                    <div class="panel-body">
+                                        <span style="font-size:14px;">
+                                            1. Đợi đến khi đến
+                                            thời gian làm bài<br>
+                                            2. Click vào nút "<strong>Bắt đầu làm bài</strong>" để tiến hành
+                                            làm bài thi<br>
+                                            3. Ở mỗi câu hỏi, chọn đáp án đúng<br>
+                                            4. Hết thời gian làm bài, hệ thống sẽ tự thu bài. Bạn có thể nộp
+                                            bài trước khi thời gian kết thúc bằng cách nhấn
+                                            nút&nbsp;<strong>Nộp bài</strong>
+                                        </span><br>
+                                        <br>
+                                        &nbsp;
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="panel panel-primary-two">
+            <div class="panel-heading">
+                   <div class="panel-heading-left clearfix">
+                    <div class="icon-menu-left fl">&nbsp;</div>
+                    <div class="icon-menu-right fr">&nbsp;</div>
+                    <div class="title-block">
+                        <span>Đăng nhập thành viên</span>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="content signed clearfix">
+                    <div class="nv-info" style="display:none"></div>
+                    <div class="userBlock">
+                        <h3 class="text-center margin-bottom-lg">
+                            <span class="lev-user text-normal margin-right">Tài khoản:</span>Tạ Đức Hoàn
+                        </h3>
+                        <div class="row margin-bottom-lg">
+                            <div class="col-xs-8 text-center">
+                                <a title="" href="#">
+                                    <img src="/themes/edu20/images/users/no_avatar.png" alt="Tạ Đức Hoàn"
+                                         class="img-thumbnail bg-gainsboro">
+                                </a>
+                            </div>
+                            <div class="col-xs-16">
+                                <ul class="nv-list-item sm">
+                                    <li class="active">
+                                        <a href="/vi/users/">Thông tin thành viên</a>
+                                    </li>
+                                    <li>
+                                        <a href="/vi/users/editinfo/">Thiết lập tài khoản</a>
+                                    </li>
+                                    <li>
+                                        <a href="/vi/users/editinfo/openid/">OpenID</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-16 small">
+                                <em class="fa fa-clock-o" title="Đăng nhập vào">&nbsp;</em>03/11, 00:36
+                            </div>
+                            <div class="col-xs-8 text-right">
+                                <button type="button" class="btn btn-default btn-sm active">
+                                    <em class="fa fa-sign-out"></em>&nbsp;Thoát&nbsp;
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-primary-two">
+            <div class="panel-heading">
+                <div class="panel-heading-left clearfix">
+                    <div class="icon-menu-left fl">&nbsp;</div>
+                    <div class="icon-menu-right fr">&nbsp;</div>
+                    <div class="title-block">
+                        <span>Thống kê truy cập</span>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <ul class="nv-list-item">
+                    <li>
+                        <em class="fa fa-bolt fa-lg">&nbsp;</em> Đang truy cập <span class="pull-right">78</span>
+                    </li>
+                    <li>
+                        <em class="fa fa-user fa-lg">&nbsp;</em> Thành viên online <span class="pull-right">9</span>
+                    </li>
+                    <li>
+                        <em class="fa fa-bullseye fa-lg">&nbsp;</em> Khách viếng thăm <span class="pull-right">69</span>
+                    </li>
+                </ul>
+                <div class="nv-hr">&nbsp;</div>
+                <ul class="nv-list-item">
+                    <li>
+                        <em class="fa fa-filter fa-lg">&nbsp;</em> Hôm nay <span class="pull-right">510</span>
+                    </li>
+                    <li>
+                        <em class="fa fa-calendar-o fa-lg">&nbsp;</em> Tháng hiện tại <span class="pull-right">31,911</span>
+                    </li>
+                    <li>
+                        <em class="fa fa-bars fa-lg">&nbsp;</em> Tổng lượt truy cập <span class="pull-right">17,275,125</span>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+
+    </div>
+</div>

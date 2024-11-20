@@ -21,7 +21,6 @@
         </a><i class="hidden" itemprop="position" content="2"></i>
     </li>
 </ol>
-
 <div class="row">
     <div class="col-md-9">
         <div class="content">
@@ -30,43 +29,127 @@
                     <div class="login-box">
                         <div class="page panel panel-default margin-top-lg box-shadow bg-lavender">
                             <div class="panel-body">
-                                <h2 class="text-center margin-bottom-lg">Thành viên đăng nhập</h2>
+                                <h2 class="text-center margin-bottom-lg">Đăng ký thành viên</h2>
                                 <form action="/vi/users/login/" method="post">
-                                    <div class="form-detail">
-                                        <div class="form-group loginstep1">
-                                            <div class="input-group">
-                                                <span class="input-group-addon">
-                                                    <em class="fa fa-user fa-lg"></em>
-                                                </span>
+                                    <div class="form-detail register-form">
+                                        <div class="form-group">
+                                            <div>
+                                                <input type="text" class="form-control required input"
+                                                       placeholder="Họ và tên" value="" name="first_name"
+                                                       maxlength="100" data-mess="">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div>
                                                 <input type="text" class="required form-control"
-                                                       placeholder="Tên đăng nhập hoặc email" value=""
-                                                       name="nv_login" maxlength="100"
-                                                       data-pattern="/^(.){3,}$/"
-                                                       data-mess="Tên đăng nhập chưa được khai báo">
+                                                       placeholder="Tên đăng nhập" value="" name="username"
+                                                       maxlength="20" data-pattern="/^(.){4,20}$/"
+                                                       data-mess="Tên đăng nhập không hợp lệ: Tên đăng nhập chỉ được sử dụng Unicode, không có các ký tự đặc biệt và có từ 4 đến 20 ký tự">
                                             </div>
                                         </div>
 
-                                        <div class="form-group loginstep1">
-                                            <div class="input-group">
-                                                <span class="input-group-addon">
-                                                    <em class="fa fa-key fa-lg fa-fix"></em>
-                                                </span>
+                                        <div class="form-group">
+                                            <div>
+                                                <input type="email" class="required form-control"
+                                                       placeholder="Email" value="" name="email"
+                                                       maxlength="100" data-mess="Email chưa được khai báo">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div>
                                                 <input type="password" autocomplete="off"
-                                                       class="required form-control" placeholder="Mật khẩu"
-                                                       value="" name="nv_password" maxlength="100"
-                                                       data-pattern="/^(.){3,}$/"
-                                                       data-mess="Mật khẩu đăng nhập chưa được khai báo">
+                                                       class="password required form-control"
+                                                       placeholder="Mật khẩu" value="" name="password"
+                                                       maxlength="32" data-pattern="/^(.){8,32}$/"
+                                                       data-mess="Mật khẩu phải từ 8 đến 32 ký tự">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div>
+                                                <input type="password" autocomplete="off"
+                                                       class="re-password required form-control"
+                                                       placeholder="Lặp lại mật khẩu" value=""
+                                                       name="re_password" maxlength="32"
+                                                       data-pattern="/^(.){1,}$/"
+                                                       data-mess="Bạn chưa viết lại mật khẩu vào ô nhập lại mật khẩu">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div>
+                                                <div class="clearfix radio-box  input" data-mess="">
+                                                    <label class="col-md-4 control-label  input" title="">
+                                                        Giới tính
+                                                    </label>
+                                                    <div class="btn-group col-md-7" style="column-gap: 7px;">
+                                                        <label class="radio-box d-flex align-items-center">
+                                                            <input type="radio" name="gender" value="M"
+                                                                   class="input" checked="checked"> Nam
+                                                        </label>
+                                                        <label class="radio-box d-flex align-items-center">
+                                                            <input type="radio" name="gender" value="F"
+                                                                   class="input"> Nữ
+                                                        </label>
+                                                        <label class="radio-box d-flex align-items-center">
+                                                            <input type="radio" name="gender" value="N"
+                                                                   class="input"> N/A
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <input type="date"
+                                                       class="form-control datepicker bg-white input"
+                                                       data-provide="datepicker"
+                                                       placeholder="Ngày tháng năm sinh" value=""
+                                                       name="birthday" readonly="readonly" " data-mess="">
+                                                <span class=" input-group-addon pointer">
+                                                    <em class="fa fa-calendar"></em>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div>
+                                                <input type="text" class="form-control  input"
+                                                       placeholder="Trả lời câu hỏi" value="" name="answer"
+                                                       maxlength="255" data-pattern="/^(.){3,}$/"
+                                                       data-mess="Bạn chưa nhập câu Trả lời của câu hỏi">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div>
+                                                <input type="text" class="form-control  input"
+                                                       placeholder="MSSV" value=""
+                                                       name="custom_fields[student_id]" id="nvcf-student_id">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div>
+                                                <input type="text" class="form-control  input"
+                                                       placeholder="Điện thoại" value=""
+                                                       name="custom_fields[phone]" id="nvcf-phone">
                                             </div>
                                         </div>
                                         <div class="text-center margin-bottom-lg">
-                                            <input type="button" value="Thiết lập lại" class="btn btn-default">
-                                            <button class="bsubmit btn btn-primary" type="submit">Đăng nhập</button>
+                                            <input type="hidden" name="checkss"
+                                                   value="65ad57d8de08f74857344bb1b7b3390c">
+                                            <input type="button" value="Thiết lập lại"
+                                                   class="btn btn-default">
+                                            <input type="submit" class="btn btn-primary"
+                                                   value="Đăng ký thành viên">
                                         </div>
                                     </div>
                                 </form>
                                 <hr>
                                 <div class="text-center">
-                                    <p>Nếu bạn chưa có tài khoản <a href="./register.html" class="tag-underline">Đăng ký ngay</a></p>
+                                    <p>
+                                        Bạn đã có tài khoản? <a href="./login.html"
+                                                                class="tag-underline">Đăng nhập</a>
+                                    </p>
 
                                 </div>
                             </div>
