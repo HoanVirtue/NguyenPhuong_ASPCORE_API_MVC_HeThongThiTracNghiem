@@ -39,6 +39,7 @@
                         <th class="text-center">Id</th>
                         <th class="text-center">Tên đề thi</th>
                         <th class="text-center">Thời gian(phút)</th>
+                        <th class="text-center">Tổng số câu hỏi</th>
                         <th class="text-center">Môn học</th>
                         <th class="text-center">Bài học</th>
                         <th class="text-center">Ngày tạo</th>
@@ -54,11 +55,12 @@
                         foreach (var item in Model)
                         {
                             <tr>
+                                <td scope="row" class="text-center">@item.Id</td>
                                 <td scope="row" class="text-center">@item.ExamName</td>
                                 <td scope="row" class="text-center">@item.Duration</td>
                                 <td scope="row" class="text-center">@item.TotalQuestions</td>
-                                <td scope="row" class="text-center">@item.LessonName</td>
                                 <td scope="row" class="text-center">@item.SubjectName</td>
+                                <td scope="row" class="text-center">@item.LessonName</td>
                                 <td scope="row" class="text-center">@item.CreatedDate</td>
                                 <td scope="row" class="text-center">@item.CreatedBy</td>
                                 <td scope="row" class="text-center">@item.UpdatedDate</td>

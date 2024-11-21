@@ -46,14 +46,18 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
         private async Task CreateViewBagAsync(CUExam? exam = null)
         {
             var subjects = await ApiClient.GetAsync<List<Subject>>(Request, "Subjects");
+            var lessons = await ApiClient.GetAsync<List<Lesson>>(Request, "Lessons");
             if (exam != null)
             {
                 ViewData["Subjects"] = new SelectList(subjects.Data, "Id", "SubjectName", exam.SubjectId);
+                ViewData["Lessons"] = new SelectList(lessons.Data, "Id", "LessionName", exam.LessonId);
             }
             else
             {
                 ViewData["Subjects"] = new SelectList(subjects.Data, "Id", "SubjectName");
+                ViewData["Lessions"] = new SelectList(lessons.Data, "Id", "LessonName");
             }
+            
         }
     }
 }
