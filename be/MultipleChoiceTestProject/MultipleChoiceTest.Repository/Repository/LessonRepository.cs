@@ -10,6 +10,7 @@ namespace MultipleChoiceTest.Repository.Repository
     {
         Task<bool> IsExistLessonName(string name, int? subjectId, int? id = 0);
         Task<List<LessonItem>> GetAll();
+        Task<List<Lesson>> GetDataBySubjectId(int subjectId);
     }
     public class LessonRepository : GenericRepository<Lesson>, ILessonRepository
     {
@@ -21,6 +22,11 @@ namespace MultipleChoiceTest.Repository.Repository
         {
             var list = await _dbContext.Lessons.Include(x => x.Subject).Where(x => x.IsDeleted != true).ToListAsync();
             return _mapper.Map<List<LessonItem>>(list);
+        }
+
+        public Task<List<Lesson>> GetDataBySubjectId(int subjectId)
+        {
+            return _dbContext.Lessons.Where(x => x.SubjectId == subjectId).ToListAsync();
         }
 
         public Task<bool> IsExistLessonName(string name, int? subjectId, int? id = 0)

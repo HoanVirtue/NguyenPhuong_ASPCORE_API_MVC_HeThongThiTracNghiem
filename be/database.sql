@@ -41,7 +41,7 @@ CREATE TABLE QuestionType (
 -- Table Question
 CREATE TABLE Question (
     Id INT PRIMARY KEY IDENTITY(1,1),
-    QuestionText NVARCHAR(MAX) NOT NULL,
+    QuestionText NVARCHAR(MAX),
     Choices NVARCHAR(MAX),
     CorrectAnswer NVARCHAR(MAX),
 	AnswerExplanation NVARCHAR(MAX),
@@ -58,6 +58,7 @@ CREATE TABLE Question (
     FOREIGN KEY (LessonId) REFERENCES Lesson(Id),
 	FOREIGN KEY (QuestionTypeId) REFERENCES QuestionType(Id)
 );
+
 
 -- Table Exam
 CREATE TABLE Exam (
@@ -178,3 +179,9 @@ CREATE TABLE Feedback (
     UpdatedBy NVARCHAR(100),
     IsDeleted BIT DEFAULT 0 -- Cột IsDeleted
 );
+
+INSERT INTO QuestionType(TypeName)
+VAlues
+(N'Câu hỏi trắc nghiệm'),
+(N'Câu hỏi tự luận'),
+(N'Câu hỏi âm thanh');

@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace MultipleChoiceTest.Domain.ModelViews
 {
     public class CUQuestion
     {
         public int Id { get; set; }
-        public string QuestionText { get; set; } = null!;
+        public string? QuestionText { get; set; }
 
         public string? Choices { get; set; }
 
@@ -13,14 +13,15 @@ namespace MultipleChoiceTest.Domain.ModelViews
 
         public string? AnswerExplanation { get; set; }
 
-        public int? SubjectId { get; set; }
-
-        public int? LessonId { get; set; }
-
-        public int? QuestionTypeId { get; set; }
+        [Required(ErrorMessage = "Vui lòng chọn môn học")]
+        public int SubjectId { get; set; }
+        [Required(ErrorMessage = "Vui lòng chọn bài học")]
+        public int LessonId { get; set; }
+        [Required(ErrorMessage = "Vui lòng chọn loại câu hỏi")]
+        public int QuestionTypeId { get; set; }
 
         public string? AudioFilePath { get; set; }
-        public IFormFile? AudioFile { get; set; }
+        //public IFormFile? AudioFile { get; set; }
 
         public DateTime? CreatedDate { get; set; } = DateTime.UtcNow;
         public string? CreatedBy { get; set; }

@@ -194,5 +194,30 @@ namespace MultipleChoiceTest.Domain.Helpper
                 return null;
             }
         }
+
+        public static object FormatOptions(string options)
+        {
+            if (string.IsNullOrWhiteSpace(options))
+                return string.Empty;
+
+            var answerList = options
+                .Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(option => option.Trim())
+                .Where(option => !string.IsNullOrEmpty(option))
+                .ToList();
+
+            if (answerList.Count < 4)
+            {
+                return new
+                {
+                    Data = string.Empty,
+                    Message = "Cần ít nhất 4 đáp án."
+                };
+            }
+            return new
+            {
+                Data = string.Join(";", answerList),
+            };
+        }
     }
 }
