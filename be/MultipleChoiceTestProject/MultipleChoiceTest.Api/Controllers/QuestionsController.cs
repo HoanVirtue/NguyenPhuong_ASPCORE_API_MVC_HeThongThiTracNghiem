@@ -107,7 +107,7 @@ namespace MultipleChoiceTest.Api.Controllers
 
         // POST: api/Questions
         [HttpPost]
-        public async Task<ActionResult<ApiResponse<Question>>> PostQuestion(CUQuestion question)
+        public async Task<ActionResult<ApiResponse<Question>>> PostQuestion([FromBody] CUQuestion question)
         {
             var validateFK = await CheckValidateFK(question);
             if (!validateFK.Success)

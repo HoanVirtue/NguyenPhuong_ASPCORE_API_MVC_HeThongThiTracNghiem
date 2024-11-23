@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -105,6 +105,17 @@ builder.Services.AddScoped<IUserContextService, UserContextService>();
 
 builder.Services.AddDomainMappings();
 builder.Services.AddHttpContextAccessor();
+
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin", policy =>
+    {
+        policy.WithOrigins("https://localhost:7294") // Nguồn gốc được phép
+              .AllowAnyHeader()                     // Cho phép tất cả các header
+              .AllowAnyMethod();                    // Cho phép tất cả các phương thức (GET, POST,...)
+    });
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -113,6 +124,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors("AllowSpecificOrigin");
 
 app.UseHttpsRedirection();
 

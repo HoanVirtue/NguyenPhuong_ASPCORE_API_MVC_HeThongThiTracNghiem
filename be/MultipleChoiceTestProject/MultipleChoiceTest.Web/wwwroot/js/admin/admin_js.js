@@ -1,36 +1,36 @@
 ﻿
 $(document).ready(function () {
-    $("#pickupImage").change(function () {
-        var maLoai = document.getElementById("MaLoaiSP").value;
-        var file = $("#pickupImage")[0].files[0];
+    var apiAddress = "https://localhost:7047/api/";
+    $('.select-subject').on('change', function () {
+        var val = $(this).val();
+        if (val !== "") {
+            loadLesson(val);
+        }
     });
 
-    function uploadImage(file, maLoaiSP) {
-        var formData = new FormData();
-        formData.append("file", file);
-        console.log(formData);
+    function loadLesson(subjectId) {
         $.ajax({
-            url: '/Admin/SanPhamAdmin/SaveFile',
-            type: 'POST',
-            data: {
-                file: file,
-                maLoaiSP: maLoaiSP
+            type: 'GET',
+            url: `${apiAddress}Lessons/GetBySubjectId/${subjectId}`,
+            success: function (response) {
+                if (response != "") {
+                    var lessonDropdown = $('.select-lesson');
+                    lessonDropdown.empty();
+                    lessonDropdown.append('<option selected disabled>--Chọn bài học--</option>');
+                    if (response.data != "") {
+                        response.data.forEach(les => {
+                            lessonDropdown.append(`<option value="${les.id}">${les.lessonName}</option>`);
+                        })
+                    }
+                } else {
+                    console.error("lỗi load lesson");
+                }
             },
-            dataType: 'json',
-            cache: false,
-            processData: false,
-            success: function (urlImage) {
-                document.getElementById("HinhAnh").value = urlImage;
-                ViewImage(urlImage);
-            }
+            error: errorCallback
         });
     }
 
-    
-
-    function ViewImage(url) {
-        if (url) {
-            document.getElementById("imageView").attr('src', url);
-        }
+    function errorCallback() {
+        bootbox.alert("Đã có lỗi xảy ra! Vui lòng thử lại sau");
     }
 });

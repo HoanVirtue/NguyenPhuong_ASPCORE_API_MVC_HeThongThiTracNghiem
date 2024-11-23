@@ -2,7 +2,7 @@
 
 public partial class Question : BaseEntity
 {
-    public string QuestionText { get; set; } = null!;
+    public string? QuestionText { get; set; }
 
     public string? Choices { get; set; }
 
