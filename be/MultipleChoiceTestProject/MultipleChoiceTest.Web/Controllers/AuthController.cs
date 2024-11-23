@@ -7,6 +7,7 @@ namespace MultipleChoiceTest.Web.Controllers
         [HttpGet]
         public IActionResult Login()
         {
+
             return View();
         }
 

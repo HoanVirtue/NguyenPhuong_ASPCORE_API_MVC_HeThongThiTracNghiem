@@ -19,7 +19,6 @@ public partial class ExamResult : BaseEntity
 
 	public string? Rank { get; set; }
 
-
 	public virtual Exam? Exam { get; set; }
 
 	public virtual User? User { get; set; }

@@ -1,14 +1,17 @@
-﻿@model List<ExamItem>
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model List<ResultItem>
 
 @{
-    ViewData["Title"] = "Đề thi";
+    ViewData["Title"] = "Kết quả thi";
     Layout = "~/Areas/Admin/Views/Shared/_GlobalLayout.cshtml";
 }
 <div class="page-header">
     <div class="header-sub-title">
         <nav class="breadcrumb breadcrumb-dash">
             <a asp-controller="Dashboard" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Trang chủ</a>
-            <span class="breadcrumb-item active">Bài học</span>
+            <span class="breadcrumb-item active">Kết quả thi</span>
         </nav>
     </div>
 </div>
@@ -27,21 +30,20 @@
                     </div>
                 </div>
             </div>
-
-            <div class="col-lg-4 text-right m-v-10">
-                <a class="btn btn-primary" asp-controller="Exams" asp-action="Create"><i class="anticon anticon-plus-circle m-r-5"></i><span>Thêm mới</span></a>
-            </div>
         </div>
         <div class="table-responsive">
             <table class="table table-hover e-commerce-table">
                 <thead>
                     <tr>
                         <th class="text-center">Id</th>
-                        <th class="text-center">Tên đề thi</th>
-                        <th class="text-center">Thời gian(phút)</th>
-                        <th class="text-center">Tổng số câu hỏi</th>
-                        <th class="text-center">Môn học</th>
-                        <th class="text-center">Bài học</th>
+                        <th class="text-center">Tên môn học</th>
+                        <th class="text-center">Tên bài thi</th>
+                        <th class="text-center">Thời gian hoàn thành</th>
+                        <th class="text-center">Số câu trả lời đúng</th>
+                        <th class="text-center">Số câu trả lời sai</th>
+                        <th class="text-center">Số câu chưa hoàn thành</th>
+                        <th class="text-center">Điểm số</th>
+                        <th class="text-center">Thứ hạng</th>
                         <th class="text-center">Ngày tạo</th>
                         <th class="text-center">Người tạo</th>
                         <th class="text-center">Ngày sửa</th>
@@ -57,10 +59,12 @@
                             <tr>
                                 <td scope="row" class="text-center">@item.Id</td>
                                 <td scope="row" class="text-center">@item.ExamName</td>
-                                <td scope="row" class="text-center">@item.Duration</td>
-                                <td scope="row" class="text-center">@item.TotalQuestions</td>
-                                <td scope="row" class="text-center">@item.SubjectName</td>
-                                <td scope="row" class="text-center">@item.LessonName</td>
+                                <td scope="row" class="text-center">@item.CompletionTime</td>
+                                <td scope="row" class="text-center">@item.CorrectAnswersCount</td>
+                                <td scope="row" class="text-center">@item.IncorrectAnswersCount</td>
+                                <td scope="row" class="text-center">@item.UnansweredQuestionsCount</td>
+                                <td scope="row" class="text-center">@item.Score</td>
+                                <td scope="row" class="text-center">@item.Rank</td>
                                 <td scope="row" class="text-center">@item.CreatedDate</td>
                                 <td scope="row" class="text-center">@item.CreatedBy</td>
                                 <td scope="row" class="text-center">@item.UpdatedDate</td>

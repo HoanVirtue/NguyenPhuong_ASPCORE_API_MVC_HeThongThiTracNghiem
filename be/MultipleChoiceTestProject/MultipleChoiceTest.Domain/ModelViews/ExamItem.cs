@@ -3,6 +3,12 @@
     public class ExamItem
     {
         public int Id { get; set; }
+        public string? ExamName { get; set; }
+
+        public int? Duration { get; set; }
+
+        public int? TotalQuestions { get; set; }
+        public string? LessonId { get; set; }
         public string? LessonName { get; set; }
         public int? SubjectId { get; set; }
         public string? SubjectName { get; set; }
