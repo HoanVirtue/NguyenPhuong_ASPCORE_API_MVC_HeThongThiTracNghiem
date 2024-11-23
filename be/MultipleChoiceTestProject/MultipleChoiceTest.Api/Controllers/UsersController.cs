@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MultipleChoiceTest.Domain.ApiModel;
 using MultipleChoiceTest.Domain.Models;
+using MultipleChoiceTest.Domain.ModelViews;
 using MultipleChoiceTest.Repository.UnitOfWork;
 
 namespace MultipleChoiceTest.Api.Controllers
@@ -43,5 +44,36 @@ namespace MultipleChoiceTest.Api.Controllers
         //{
         //    var result = _unitOfWork.UserRepository.GetByIdAsync();
         //}
+        // POST: api/Users
+        [HttpPost]
+        public async Task<ActionResult<ApiResponse<User>>> PostUser(CUUser user)
+        {
+            if (await _unitOfWork.UserRepository.IsExistAccountName(user.AccountName))
+            {
+                return new ApiResponse<User>()
+                {
+                    Success = false,
+                    Message = "Tên tài khoản đã tồn tại"
+                };
+            }
+            if(await _unitOfWork.UserRepository.IsExistEmail(user.Email))
+            {
+                return new ApiResponse<User>()
+                {
+                    Success = false,
+                    Message = "Email này đã tồn tại"
+                };
+            }
+
+            await _unitOfWork.UserRepository.AddAsync(_mapper.Map<User>(user));
+
+            return Ok(
+                new ApiResponse<User>
+                {
+                    Success = true,
+                    Data = _mapper.Map<User>(user),
+                    Message = "Thêm dữ liệu thành công"
+                });
+        }
     }
 }

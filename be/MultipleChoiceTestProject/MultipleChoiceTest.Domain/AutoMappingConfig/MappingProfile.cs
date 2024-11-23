@@ -19,6 +19,10 @@ namespace MultipleChoiceTest.Domain.AutoMappingConfig
             CreateMap<CUQuestion, Question>();
             CreateMap<Question, CUQuestion>();
 
+
+            // chưa mapp đối tượng, đây là chuyển đổi từ CUUSER -> USER
+            CreateMap<CUUser, User>();
+
         }
     }
 }

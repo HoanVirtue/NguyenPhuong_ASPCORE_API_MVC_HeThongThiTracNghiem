@@ -1,17 +1,17 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@model List<ResultItem>
+@model List<UserItem>
 
 @{
-    ViewData["Title"] = "Kết quả thi";
+    ViewData["Title"] = "Người dùng";
     Layout = "~/Areas/Admin/Views/Shared/_GlobalLayout.cshtml";
 }
 <div class="page-header">
     <div class="header-sub-title">
         <nav class="breadcrumb breadcrumb-dash">
             <a asp-controller="Dashboard" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Trang chủ</a>
-            <span class="breadcrumb-item active">Kết quả thi</span>
+            <span class="breadcrumb-item active">Người dùng</span>
         </nav>
     </div>
 </div>
@@ -21,7 +21,7 @@
             <div class="col-md-8">
                 <div class="row">
                     <div class="col-md-8">
-                        <form asp-action="Index" asp-controller="Exams" method="get">
+                        <form asp-action="Index" asp-controller="Lessons" method="get">
                             <div class="input-affix m-v-10">
                                 <i class="prefix-icon anticon anticon-search opacity-04"></i>
                                 <input id="keyword" name="searchKey" value="@ViewBag.SearchKey" type="text" class="form-control" placeholder="Tìm kiếm...">
@@ -30,20 +30,23 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-lg-4 text-right m-v-10">
+                <a class="btn btn-primary" asp-controller="Users" asp-action="Create"><i class="anticon anticon-plus-circle m-r-5"></i><span>Thêm mới</span></a>
+            </div>
         </div>
         <div class="table-responsive">
             <table class="table table-hover e-commerce-table">
                 <thead>
                     <tr>
                         <th class="text-center">Id</th>
-                        <th class="text-center">Tên môn học</th>
-                        <th class="text-center">Tên bài thi</th>
-                        <th class="text-center">Thời gian hoàn thành</th>
-                        <th class="text-center">Số câu trả lời đúng</th>
-                        <th class="text-center">Số câu trả lời sai</th>
-                        <th class="text-center">Số câu chưa hoàn thành</th>
-                        <th class="text-center">Điểm số</th>
-                        <th class="text-center">Thứ hạng</th>
+                        <th class="text-center">Tên người dùng</th>
+                        <th class="text-center">Email</th>
+                        <th class="text-center">Giới tính</th>
+                        <th class="text-center">Ngày sinh</th>
+                        <th class="text-center">Số điện thoại</th>
+                        <th class="text-center">Tài khoản</th>
+                        <th class="text-center">Quản trị viên</th>
                         <th class="text-center">Ngày tạo</th>
                         <th class="text-center">Người tạo</th>
                         <th class="text-center">Ngày sửa</th>
@@ -58,27 +61,27 @@
                         {
                             <tr>
                                 <td scope="row" class="text-center">@item.Id</td>
-                                <td scope="row" class="text-center">@item.ExamName</td>
-                                <td scope="row" class="text-center">@item.CompletionTime</td>
-                                <td scope="row" class="text-center">@item.CorrectAnswersCount</td>
-                                <td scope="row" class="text-center">@item.IncorrectAnswersCount</td>
-                                <td scope="row" class="text-center">@item.UnansweredQuestionsCount</td>
-                                <td scope="row" class="text-center">@item.Score</td>
-                                <td scope="row" class="text-center">@item.Rank</td>
+                                <td scope="row" class="text-center">@item.UserName</td>
+                                <td scope="row" class="text-center">@item.Email</td>
+                                <td scope="row" class="text-center">@item.Gender</td>
+                                <td scope="row" class="text-center">@item.DateOfBirth</td>
+                                <td scope="row" class="text-center">@item.Phone</td>
+                                <td scope="row" class="text-center">@item.AccountName</td>
+                                <td scope="row" class="text-center">@item.IsAdmin</td>
                                 <td scope="row" class="text-center">@item.CreatedDate</td>
                                 <td scope="row" class="text-center">@item.CreatedBy</td>
                                 <td scope="row" class="text-center">@item.UpdatedDate</td>
                                 <td scope="row" class="text-center">@item.UpdatedBy</td>
                                 <td class="text-center" style="width:300px;">
-                                    <a class="btn btn-primary btn-tone m-r-5 fas fa-eye" asp-controller="Exams" asp-action="Details" asp-route-id="@item.Id"></a>
-                                    <a class="btn btn-secondary btn-tone m-r-5 fas fa-edit" asp-controller="Exams" asp-action="Edit" asp-route-id="@item.Id"></a>
+                                    <a class="btn btn-primary btn-tone m-r-5 fas fa-eye" asp-controller="Lessons" asp-action="Details" asp-route-id="@item.Id"></a>
+                                    <a class="btn btn-secondary btn-tone m-r-5 fas fa-edit" asp-controller="Lessons" asp-action="Edit" asp-route-id="@item.Id"></a>
                                     <button class="btn btn-danger btn-tone m-r-5 far fa-trash-alt" type="button" data-toggle="modal" data-target="#exampleModal-@item.Id"></button>
                                 </td>
                             </tr>
                             <tr>
                                 <div class="modal fade" id="exampleModal-@item.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
-                                        <form asp-action="Delete" asp-controller="Exams" method="post">
+                                        <form asp-action="Delete" asp-controller="Lessons" method="post">
                                             <input type="hidden" name="id" value="@item.Id" />
                                             <div class="modal-content">
                                                 <div class="modal-header">
