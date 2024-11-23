@@ -47,10 +47,10 @@
                         <th class="text-center">Số điện thoại</th>
                         <th class="text-center">Tài khoản</th>
                         <th class="text-center">Quản trị viên</th>
-                        <th class="text-center">Ngày tạo</th>
-                        <th class="text-center">Người tạo</th>
-                        <th class="text-center">Ngày sửa</th>
-                        <th class="text-center">Người sửa</th>
+                         @* <th class="text-center">Ngày tạo</th>
+                         <th class="text-center">Người tạo</th>
+                         <th class="text-center">Ngày sửa</th>
+                         <th class="text-center">Người sửa</th> *@
                         <th scope="col" class="text-center" style="width:300px;">Hành động</th>
                     </tr>
                 </thead>
@@ -67,11 +67,20 @@
                                 <td scope="row" class="text-center">@item.DateOfBirth</td>
                                 <td scope="row" class="text-center">@item.Phone</td>
                                 <td scope="row" class="text-center">@item.AccountName</td>
-                                <td scope="row" class="text-center">@item.IsAdmin</td>
-                                <td scope="row" class="text-center">@item.CreatedDate</td>
+                                <td scope="row" class="text-center">
+                                    @if(item.IsAdmin == true)
+                                    {
+                                        <span><i class="fa-solid fa-user"></i> Quản trị viên</span>
+                                    }
+                                    else
+                                    {
+                                        <span><i class="fa-solid fa-person-military-pointing"></i> Khách hàng</span>
+                                    }
+                                </td>
+                                @* <td scope="row" class="text-center">@item.CreatedDate</td>
                                 <td scope="row" class="text-center">@item.CreatedBy</td>
                                 <td scope="row" class="text-center">@item.UpdatedDate</td>
-                                <td scope="row" class="text-center">@item.UpdatedBy</td>
+                                <td scope="row" class="text-center">@item.UpdatedBy</td> *@
                                 <td class="text-center" style="width:300px;">
                                     <a class="btn btn-primary btn-tone m-r-5 fas fa-eye" asp-controller="Lessons" asp-action="Details" asp-route-id="@item.Id"></a>
                                     <a class="btn btn-secondary btn-tone m-r-5 fas fa-edit" asp-controller="Lessons" asp-action="Edit" asp-route-id="@item.Id"></a>

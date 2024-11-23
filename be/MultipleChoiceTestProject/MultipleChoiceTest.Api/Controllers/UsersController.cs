@@ -39,12 +39,6 @@ namespace MultipleChoiceTest.Api.Controllers
 
         }
 
-        //[HttpPost]
-        //public IActionResult Post(User user)
-        //{
-        //    var result = _unitOfWork.UserRepository.GetByIdAsync();
-        //}
-        // POST: api/Users
         [HttpPost]
         public async Task<ActionResult<ApiResponse<User>>> PostUser(CUUser user)
         {
