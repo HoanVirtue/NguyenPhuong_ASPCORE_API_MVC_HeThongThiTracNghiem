@@ -11,6 +11,7 @@ namespace MultipleChoiceTest.Repository.Repository
         Task<User> CheckLogin(Login model);
         Task<bool> IsExistAccountName(string accountName, int? id = 0);
         Task<bool> IsExistEmail(string email, int? id = 0);
+        //Task<List<UserItem>> GetAll();
     }
     public class UserRepository : GenericRepository<User>, IUserRepository
     {
@@ -23,14 +24,21 @@ namespace MultipleChoiceTest.Repository.Repository
             return _dbContext.Users.SingleOrDefaultAsync(x => x.AccountName == model.AccountName && x.PasswordHash == model.Password);
         }
 
+        //public Task<List<UserItem>> GetAll()
+        //{
+        //    var list = await _dbContext.Users.Include(x => x.Subject).Where(x => x.IsDeleted != true).ToListAsync();
+        //    return _mapper.Map<List<UserItem>>(list);
+        //}
+        // em kiểm tra tài khoản tồn tại, đúng rồi nhưng mà chưa đủ, trong trường hợp này tài khoản đang đổi đang là tên thao, mình k cập nhật gì cả nhưng nó vẫn báo là tồn tại
+        // bởi vì nó check tất cả trong db
         public Task<bool> IsExistAccountName(string accountName, int? id = 0)
         {
-            return _dbContext.Users.AnyAsync(x=>x.AccountName == accountName && x.IsDeleted != true);
+            return _dbContext.Users.AnyAsync(x=>x.AccountName == accountName && x.Id != id && x.IsDeleted != true);
         }
 
         public Task<bool> IsExistEmail(string email, int? id = 0)
         {
-            return _dbContext.Users.AnyAsync(x => x.Email == email && x.IsDeleted != true);
+            return _dbContext.Users.AnyAsync(x => x.Email == email&& x.Id != id && x.IsDeleted != true);
         }
     }
 }

@@ -21,7 +21,7 @@
             <div class="col-md-8">
                 <div class="row">
                     <div class="col-md-8">
-                        <form asp-action="Index" asp-controller="Lessons" method="get">
+                        <form asp-action="Index" asp-controller="Users" method="get">
                             <div class="input-affix m-v-10">
                                 <i class="prefix-icon anticon anticon-search opacity-04"></i>
                                 <input id="keyword" name="searchKey" value="@ViewBag.SearchKey" type="text" class="form-control" placeholder="Tìm kiếm...">
@@ -82,15 +82,15 @@
                                 <td scope="row" class="text-center">@item.UpdatedDate</td>
                                 <td scope="row" class="text-center">@item.UpdatedBy</td> *@
                                 <td class="text-center" style="width:300px;">
-                                    <a class="btn btn-primary btn-tone m-r-5 fas fa-eye" asp-controller="Lessons" asp-action="Details" asp-route-id="@item.Id"></a>
-                                    <a class="btn btn-secondary btn-tone m-r-5 fas fa-edit" asp-controller="Lessons" asp-action="Edit" asp-route-id="@item.Id"></a>
+                                    <a class="btn btn-primary btn-tone m-r-5 fas fa-eye" asp-controller="Users" asp-action="Details" asp-route-id="@item.Id"></a>
+                                    <a class="btn btn-secondary btn-tone m-r-5 fas fa-edit" asp-controller="Users" asp-action="Edit" asp-route-id="@item.Id"></a>
                                     <button class="btn btn-danger btn-tone m-r-5 far fa-trash-alt" type="button" data-toggle="modal" data-target="#exampleModal-@item.Id"></button>
                                 </td>
                             </tr>
                             <tr>
                                 <div class="modal fade" id="exampleModal-@item.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
-                                        <form asp-action="Delete" asp-controller="Lessons" method="post">
+                                        <form asp-action="Delete" asp-controller="Users" method="post">
                                             <input type="hidden" name="id" value="@item.Id" />
                                             <div class="modal-content">
                                                 <div class="modal-header">

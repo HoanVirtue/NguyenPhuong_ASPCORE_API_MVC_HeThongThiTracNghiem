@@ -1,4 +1,5 @@
-﻿using AspNetCoreHero.ToastNotification.Abstractions;
+﻿
+using AspNetCoreHero.ToastNotification.Abstractions;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -43,6 +44,8 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
         }
 
         // POST: Brand/Create
+        // em để ý thằng create này xem, khi nó lỗi thì nó lại trả về trang create ban đầu và truền thêm dl, khi lỗi nó phải báo lỗi và ở yên trang đag sửa chứ s lại về trang ban đầu là seo
+        // đrio thế a mới bảo e xem lại create á, sau cái kia a sửa sau
         [HttpPost]
         public async Task<IActionResult> Create([Bind("Id,UserName,Email,Gender,DateOfBirth,Phone,AccountName,PasswordHash,IsAdmin")] CUUser user)
         {
@@ -63,6 +66,73 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
             }
             _notyfService.Error("Vui lòng nhập đầy đủ dữ liệu");
             return View(user);
+        }
+        // GET: Brand/Edit/Id
+        public async Task<IActionResult> Edit(int id)
+        {
+            var detailRs = await ApiClient.GetAsync<User>(Request, $"Users/{id}");
+            var data = _mapper.Map<CUUser>(detailRs.Data);
+            if (detailRs.Success)
+            {
+                return View(data);
+            }
+
+            _notyfService.Error("Không tìm thấy người dùng");
+            return View(data);
+        }
+
+        // POST: Brand/Edit/Id
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,UserName,Email,Gender,DateOfBirth,Phone,AccountName,PasswordHash,IsAdmin")] CUUser user)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var updRs = await ApiClient.PutAsync<User>(Request, $"Users", JsonConvert.SerializeObject(user));
+                    if (updRs != null && updRs.Success)
+                    {
+                        _notyfService.Success("Cập nhật dữ liệu thành công");
+                        // thành công trả về danh sách
+                        return RedirectToAction("Index", "Users");
+                    }
+                    else
+                    {
+                        _notyfService.Warning(updRs.Message);
+                    }
+                    return View(user);
+                }
+                catch (Exception ex)
+                {
+                    _notyfService.Error("Đã có lỗi xảy ra vui lòng thử lại sau!");
+                }
+            }
+            return View(user);
+        }
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            try
+            {
+                var delRs = await ApiClient.DeleteAsync<User>(Request, $"Users/{id}");
+                if (delRs.Success)
+                {
+                    _notyfService.Success("Xóa dữ liệu thành công");
+                }
+                else
+                {
+                    _notyfService.Error(delRs.Message);
+                }
+                return RedirectToAction("Index", "Users");
+
+            }
+            catch (Exception ex)
+            {
+                _notyfService.Error("Đã có lỗi xảy ra!");
+                return RedirectToAction("Delete", "Users");
+            }
         }
     }
 }
