@@ -1,20 +1,20 @@
 ﻿@model CUUser
 
 @{
-    ViewData["Title"] = "Thêm mới Người dùng";
+    ViewData["Title"] = "Cập nhật Người dùng";
     Layout = "~/Areas/Admin/Views/Shared/_GlobalLayout.cshtml";
 }
 
 <div class="content-wrapper">
     <!-- Main content -->
     <section class="content my-2">
-        <form asp-action="Create">
+        <form asp-action="Edit">
             <div class="page-header">
                 <div class="header-sub-title">
                     <nav class="breadcrumb breadcrumb-dash">
                         <a asp-controller="Dashboard" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Trang chủ</a>
                         <a asp-controller="Lessons" asp-action="Index" class="breadcrumb-item">Danh sách người dùng</a>
-                        <span class="breadcrumb-item active">Thêm mới</span>
+                        <span class="breadcrumb-item active">Cập nhật</span>
                     </nav>
                 </div>
             </div>
@@ -26,7 +26,7 @@
                         </div>
                         <div class=" col-md-6 text-right">
                             <a class=" btn btn-success fas fa-undo-alt" asp-action="Index"></a>
-                            <button class="btn btn-primary fas fa-plus-circle" type="submit"></button>
+                            <button class="btn btn-primary" type="submit"><i class="fas fas fa-save mr-1"></i>Xác nhận</button>
                         </div>
                     </div>
                 </div>
@@ -71,8 +71,8 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label asp-for="IsAdmin">Quản trị viên</label>
-                                <input asp-for="IsAdmin" class="form-control" style="width: 21px;height: 21px; margin-left:200px;" />
-                                <span asp-validation-for="IsAdmin" class="text-danger"></span>
+                            <input asp-for="IsAdmin" class="form-control" style="width: 21px;height: 21px; margin-left:200px;" />
+                            <span asp-validation-for="IsAdmin" class="text-danger"></span>
                         </div>
                     </div>
 
