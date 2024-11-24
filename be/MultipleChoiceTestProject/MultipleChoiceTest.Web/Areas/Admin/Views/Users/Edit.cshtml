@@ -13,7 +13,7 @@
                 <div class="header-sub-title">
                     <nav class="breadcrumb breadcrumb-dash">
                         <a asp-controller="Dashboard" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Trang chủ</a>
-                        <a asp-controller="Lessons" asp-action="Index" class="breadcrumb-item">Danh sách người dùng</a>
+                        <a asp-controller="Users" asp-action="Index" class="breadcrumb-item">Danh sách người dùng</a>
                         <span class="breadcrumb-item active">Cập nhật</span>
                     </nav>
                 </div>
@@ -46,12 +46,19 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label asp-for="Gender">Giới tính<span class="text-danger">*</span></label>
-                            <input asp-for="Gender" class="form-control" is-valid required />
+                            <div class="form-check">
+                                <input type="radio" asp-for="Gender" value="Nam" class="form-check-input" checked />
+                                <label asp-for="Gender" class="form-check-label">Nam</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="radio" asp-for="Gender" value="Nữ" class="form-check-input" />
+                                <label asp-for="Gender" class="form-check-label">Nữ</label>
+                            </div>
                             <span asp-validation-for="Gender" class="text-danger"></span>
                         </div>
                         <div class="form-group col-md-6">
                             <label asp-for="DateOfBirth">Ngày sinh<span class="text-danger">*</span></label>
-                            <input asp-for="DateOfBirth" class="form-control" is-valid required />
+                            <input type="date" asp-for="DateOfBirth" class="form-control" is-valid required />
                             <span asp-validation-for="DateOfBirth" class="text-danger"></span>
                         </div>
                         <div class="form-group col-md-6">
@@ -66,12 +73,12 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label asp-for="PasswordHash">Mật khẩu<span class="text-danger">*</span></label>
-                            <input asp-for="PasswordHash" class="form-control" is-valid required />
+                            <input type="password" asp-for="PasswordHash" class="form-control" is-valid required />
                             <span asp-validation-for="PasswordHash" class="text-danger"></span>
                         </div>
                         <div class="form-group col-md-6">
                             <label asp-for="IsAdmin">Quản trị viên</label>
-                            <input asp-for="IsAdmin" class="form-control" style="width: 21px;height: 21px; margin-left:200px;" />
+                            <input asp-for="IsAdmin" class="form-control" style="width: 21px;height: 21px;" />
                             <span asp-validation-for="IsAdmin" class="text-danger"></span>
                         </div>
                     </div>

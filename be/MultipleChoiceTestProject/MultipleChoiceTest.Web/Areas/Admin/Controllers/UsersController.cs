@@ -2,7 +2,6 @@
 using AspNetCoreHero.ToastNotification.Abstractions;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using MultipleChoiceTest.Domain.Helpper;
 using MultipleChoiceTest.Domain.Models;
 using MultipleChoiceTest.Domain.ModelViews;
@@ -43,9 +42,6 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
             return View();
         }
 
-        // POST: Brand/Create
-        // em để ý thằng create này xem, khi nó lỗi thì nó lại trả về trang create ban đầu và truền thêm dl, khi lỗi nó phải báo lỗi và ở yên trang đag sửa chứ s lại về trang ban đầu là seo
-        // đrio thế a mới bảo e xem lại create á, sau cái kia a sửa sau
         [HttpPost]
         public async Task<IActionResult> Create([Bind("Id,UserName,Email,Gender,DateOfBirth,Phone,AccountName,PasswordHash,IsAdmin")] CUUser user)
         {

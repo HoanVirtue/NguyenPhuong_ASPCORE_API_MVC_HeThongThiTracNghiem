@@ -70,13 +70,16 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
                 question.AudioFilePath = await UploadAudioAsync(AudioFile);
                 #endregion
 
-                dynamic choices = Utilities.FormatOptions(question.Choices);
-                if (!string.IsNullOrEmpty(choices.Data))
-                    question.Choices = choices.Data;
-                else
+                if (question.QuestionTypeId == (int)QuestionTypeConstant.Type.MultipleChoice)
                 {
-                    ModelState.AddModelError("error", choices.Message);
-                    return View(question);
+                    dynamic choices = Utilities.FormatOptions(question.Choices);
+                    if (!string.IsNullOrEmpty(choices.Data))
+                        question.Choices = choices.Data;
+                    else
+                    {
+                        ModelState.AddModelError("error", choices.Message);
+                        return View(question);
+                    }
                 }
 
                 var createRs = await ApiClient.PostAsync<Question>(Request, "Questions", JsonConvert.SerializeObject(question));
@@ -206,6 +209,8 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
                     ? "Lựa chọn không được bỏ trống"
                         : $"{errors}, Lựa chọn không được bỏ trống";
                 }
+                question.AnswerExplanation = null;
+                question.AudioFilePath = null;
             }
             else if (question.QuestionTypeId == (int)QuestionTypeConstant.Type.Essay)
             {
@@ -221,6 +226,10 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
                     ? "Đáp án tự luận không được bỏ trống"
                         : $"{errors}, Đáp án tự luận không được bỏ trống";
                 }
+
+                question.Choices = null;
+                question.CorrectAnswer = null;
+                question.AudioFilePath = null;
             }
             else
             {
@@ -236,6 +245,9 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
                     ? "Lựa chọn không được bỏ trống"
                         : $"{errors}, Lựa chọn không được bỏ trống";
                 }
+
+                question.QuestionText = null;
+                question.AnswerExplanation = null;
             }
             return errors;
         }
