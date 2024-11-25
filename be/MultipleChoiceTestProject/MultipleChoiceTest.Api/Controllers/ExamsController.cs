@@ -35,6 +35,7 @@ namespace MultipleChoiceTest.Api.Controllers
         {
             var exam = await _unitOfWork.ExamRepository.GetByIdAsync(id);
 
+
             return Ok(new ApiResponse<Exam>
             {
                 Success = exam != null,

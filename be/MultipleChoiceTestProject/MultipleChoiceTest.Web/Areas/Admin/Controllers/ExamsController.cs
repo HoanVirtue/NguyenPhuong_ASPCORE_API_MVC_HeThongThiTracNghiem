@@ -18,6 +18,20 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(string searchKey = "")
         {
+            var exams = await ApiClient.GetAsync<List<ExamItem>>(Request, "Exams");
+
+            if (exams.Success)
+            {
+                var exam = exams.Data;
+                if (!string.IsNullOrWhiteSpace(searchKey))
+                {
+                    searchKey = Utilities.RemoveDiacriticsAndToLower(searchKey);
+                    exam = exam.Where(p => Utilities.IsSubstring(Utilities.RemoveDiacriticsAndToLower(p.ExamName), searchKey)).ToList();
+                }
+                ViewBag.SearchKey = searchKey;
+                return View(exam);
+            }
+            this._notyfService.Error("Retrieving the list of type failed");
             return View();
         }
         
