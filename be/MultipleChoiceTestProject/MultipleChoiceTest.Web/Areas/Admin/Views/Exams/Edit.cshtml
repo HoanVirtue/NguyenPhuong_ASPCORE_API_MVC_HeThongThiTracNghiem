@@ -1,7 +1,7 @@
 ﻿@model CUExam
 
 @{
-    ViewData["Title"] = "Cập nhật đề thi";
+    ViewData["Title"] = "Cập nhật Bài học";
     Layout = "~/Areas/Admin/Views/Shared/_GlobalLayout.cshtml";
 }
 
@@ -13,7 +13,7 @@
                 <div class="header-sub-title">
                     <nav class="breadcrumb breadcrumb-dash">
                         <a asp-controller="Dashboard" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Trang chủ</a>
-                        <a asp-controller="Exams" asp-action="Index" class="breadcrumb-item">Danh sách đề thi</a>
+                        <a asp-controller="Exams" asp-action="Index" class="breadcrumb-item">Danh sách bài học</a>
                         <span class="breadcrumb-item active">Cập nhật</span>
                     </nav>
                 </div>
@@ -57,7 +57,7 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label asp-for="LessonId">Bài học <span class="text-danger">*</span></label>
-                            <select asp-for="LessonId" class="form-control" asp-items="ViewBag.Lessons" required>
+                            <select asp-for="LessonId" class="form-control" asp-items="ViewBag.Lessions" required>
                                 <option selected disabled>--Chọn bài học--</option>
                             </select>
                             <span asp-validation-for="LessonId" class="text-danger"></span>

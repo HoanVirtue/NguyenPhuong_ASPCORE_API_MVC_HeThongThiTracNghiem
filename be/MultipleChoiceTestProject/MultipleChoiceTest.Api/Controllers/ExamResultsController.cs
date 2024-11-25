@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MultipleChoiceTest.Domain.ApiModel;
 using MultipleChoiceTest.Domain.Models;
+using MultipleChoiceTest.Domain.ModelViews;
 using MultipleChoiceTest.Repository.UnitOfWork;
 
 namespace MultipleChoiceTest.Api.Controllers
@@ -14,7 +15,7 @@ namespace MultipleChoiceTest.Api.Controllers
         {
         }
         // GET: api/Exams
-        [HttpGet]
+        [HttpGet("GetAll")]
         public async Task<ActionResult<ApiResponse<IEnumerable<ExamResult>>>> GetExamsRf()
         {
             var exams = await _unitOfWork.ExamResultRepository.GetAllAsync();
@@ -24,8 +25,6 @@ namespace MultipleChoiceTest.Api.Controllers
                 Data = exams,
                 Message = exams == null || !exams.Any() ? "không có dữ liệu" : ""
             });
-
-            // eo ơi chán chưa 1:(((
         }
         // DELETE: api/examresult/5
         [HttpDelete("{id}")]
@@ -54,6 +53,17 @@ namespace MultipleChoiceTest.Api.Controllers
             {
                 Success = true,
                 Message = "Xóa dữ liệu thành công"
+            });
+        }
+        [HttpGet]
+        public async Task<ActionResult<ApiResponse<List<ResultItem>>>> GetRf()
+        {
+            var rf = await _unitOfWork.ExamResultRepository.GetAll();
+            return Ok(new ApiResponse<List<ResultItem>>
+            {
+                Success = rf != null && rf.Any(),
+                Data = rf,
+                Message = rf == null || !rf.Any() ? "không có dữ liệu" : ""
             });
         }
     }

@@ -17,7 +17,8 @@ namespace MultipleChoiceTest.Api.Controllers
         }
 
         // GET: api/Exams
-        [HttpGet]
+        [HttpGet("GetAll")]
+        //[HttpGet]
         public async Task<ActionResult<ApiResponse<IEnumerable<Exam>>>> GetExams()
         {
             var exams = await _unitOfWork.ExamRepository.GetAllAsync();
@@ -41,6 +42,17 @@ namespace MultipleChoiceTest.Api.Controllers
                 Success = exam != null,
                 Data = exam,
                 Message = exam == null ? "Không tìm thấy bài thi" : ""
+            });
+        }
+        [HttpGet]
+        public async Task<ActionResult<ApiResponse<List<ExamItem>>>> GetExam()
+        {
+            var exam = await _unitOfWork.ExamRepository.GetAll();
+            return Ok(new ApiResponse<List<ExamItem>>
+            {
+                Success = exam != null && exam.Any(),
+                Data = exam,
+                Message = exam == null || !exam.Any() ? "không có dữ liệu" : ""
             });
         }
 
