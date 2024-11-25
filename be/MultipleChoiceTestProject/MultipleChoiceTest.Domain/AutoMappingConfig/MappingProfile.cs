@@ -18,6 +18,10 @@ namespace MultipleChoiceTest.Domain.AutoMappingConfig
 
             CreateMap<CUQuestion, Question>(); // CUQuestion là nguồn, Question là đích, chuyển từ nguồn thành đích, e viết trương tự như usẻ đi
             CreateMap<Question, CUQuestion>();
+            CreateMap<Question, QuestionItem>()
+                .ForMember(dest => dest.QuestionTypeName, opt => opt.MapFrom(src => src.QuestionType.TypeName))
+                .ForMember(dest => dest.SubjectName, opt => opt.MapFrom(src => src.Subject.SubjectName))
+                .ForMember(dest => dest.LessonName, opt => opt.MapFrom(src => src.Lesson.LessonName));
 
 
             // chưa mapp đối tượng, đây là chuyển đổi từ CUUSER -> USER

@@ -82,7 +82,7 @@
                                 <td scope="row" class="text-center">@item.UpdatedDate</td>
                                 <td scope="row" class="text-center">@item.UpdatedBy</td> *@
                                 <td class="text-center" style="width:300px;">
-                                    <a class="btn btn-primary btn-tone m-r-5 fas fa-eye" asp-controller="Users" asp-action="Details" asp-route-id="@item.Id"></a>
+                                    @* <a class="btn btn-primary btn-tone m-r-5 fas fa-eye" asp-controller="Users" asp-action="Details" asp-route-id="@item.Id"></a> *@
                                     <a class="btn btn-secondary btn-tone m-r-5 fas fa-edit" asp-controller="Users" asp-action="Edit" asp-route-id="@item.Id"></a>
                                     <button class="btn btn-danger btn-tone m-r-5 far fa-trash-alt" type="button" data-toggle="modal" data-target="#exampleModal-@item.Id"></button>
                                 </td>

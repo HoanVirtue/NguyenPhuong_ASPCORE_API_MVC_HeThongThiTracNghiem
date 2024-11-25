@@ -1,5 +1,93 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model CUQuestion
+
 @{
+    ViewData["Title"] = "Cập nhật Câu hỏi";
+    Layout = "~/Areas/Admin/Views/Shared/_GlobalLayout.cshtml";
+}
+
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content my-2">
+        <form asp-action="Edit">
+            <div class="page-header">
+                <div class="header-sub-title">
+                    <nav class="breadcrumb breadcrumb-dash">
+                        <a asp-controller="Dashboard" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Trang chủ</a>
+                        <a asp-controller="Questions" asp-action="Index" class="breadcrumb-item">Danh sách câu học</a>
+                        <span class="breadcrumb-item active">Cập nhật</span>
+                    </nav>
+                </div>
+            </div>
+            <!-- Default box -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class=" col-md-6">
+                        </div>
+                        <div class=" col-md-6 text-right">
+                            <a class=" btn btn-success fas fa-undo-alt" asp-action="Index"></a>
+                            <button class="btn btn-primary" type="submit"><i class="fas fas fa-save mr-1"></i>Xác nhận</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <span class="text-danger">@Html.ValidationMessage("error")</span>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label asp-for="QuestionTypeId">Loại câu hỏi <span class="text-danger">*</span></label>
+                            <select asp-for="QuestionTypeId" class="form-control" asp-items="ViewBag.QuestionTypes" required>
+                                <option selected disabled>--Chọn loại câu hỏi--</option>
+                            </select>
+                            <span asp-validation-for="QuestionTypeId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label name="AudioFile">File âm thanh</label>
+                            <input type="file" value="@Model.AudioFilePath" accept=".mp3,audio/*" name="AudioFile" class="form-control" />
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label asp-for="QuestionText">Câu hỏi</label>
+                            <textarea asp-for="QuestionText" class="form-control"></textarea>
+                            <span asp-validation-for="QuestionText" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label asp-for="SubjectId">Môn học <span class="text-danger">*</span></label>
+                            <select asp-for="SubjectId" class="form-control select-subject" asp-items="ViewBag.Subjects" required>
+                                <option selected disabled>--Chọn môn học--</option>
+                            </select>
+                            <span asp-validation-for="SubjectId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="LessonId">Bài học <span class="text-danger">*</span></label>
+                            <select asp-for="LessonId" class="form-control select-lesson" asp-items="ViewBag.Lessons" required>
+                                <option selected disabled>--Chọn bài học--</option>
+                            </select>
+                            <span asp-validation-for="LessonId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="Choices">Lựa chọn </label>
+                            <textarea asp-for="Choices" class="form-control" style="height: 110px;"></textarea>
+                            <span asp-validation-for="Choices" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="CorrectAnswer">Đáp án trắc nghiệm</label>
+                            <input asp-for="CorrectAnswer" class="form-control" />
+                            <span asp-validation-for="CorrectAnswer" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label asp-for="AnswerExplanation">Đáp án tự luận <span class="text-danger">*</span></label>
+                            <textarea asp-for="AnswerExplanation" class="form-control"></textarea>
+                            <span asp-validation-for="AnswerExplanation" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </form>
+    </section>
+    <!-- /.content -->
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }

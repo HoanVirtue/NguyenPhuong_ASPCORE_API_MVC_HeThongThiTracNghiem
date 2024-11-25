@@ -1,0 +1,110 @@
+﻿@using MultipleChoiceTest.Web.Constants
+@model QuestionItem
+@{
+    ViewData["Title"] = "Thông tin câu hỏi";
+    Layout = "~/Areas/Admin/Views/Shared/_GlobalLayout.cshtml";
+}
+<div class="page-header">
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-controller="Dashboard" asp-action="Index" class="breadcrumb-item"><i class="fa-solid fa-house mr-1"></i>Trang chủ</a>
+            <a asp-controller="Question" asp-action="Index" class="breadcrumb-item">Danh sách câu hỏi</a>
+            <span class="breadcrumb-item active">Thông tin câu hỏi</span>
+        </nav>
+    </div>
+</div>
+<div class="page-header no-gutters has-tab">
+    <div class="d-md-flex m-b-15 align-items-center justify-content-between">
+        <div class="media align-items-center m-b-15">
+            <div class="m-l-15">
+                @if (Model.QuestionTypeId == (int)QuestionTypeConstant.Type.Audio)
+                {
+                    <h4 class="m-b-0">File Audio</h4>
+                }
+                else
+                {
+                    <h4 class="m-b-0">@Model.QuestionText</h4>
+                }
+                <p class="text-muted m-b-0">ID: #@Model.Id</p>
+            </div>
+        </div>
+        <div class="m-b-15">
+            <a class=" btn btn-primary fas fa-undo-alt" asp-action="Index"></a>
+            <a class=" btn btn-success fas fa-edit" asp-action="Edit" asp-route-id="@Model.Id"> </a>
+            <a class=" btn btn-danger far fa-trash-alt" asp-action="Delete" asp-route-id="@Model.Id"> </a>
+        </div>
+    </div>
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#product-overview">Tổng quan</a>
+        </li>
+    </ul>
+</div>
+<div class="container-fluid">
+    <div class="tab-content m-t-15">
+        <div class="tab-pane fade show active" id="product-overview">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class=" col-md-9">
+                            <h4 class="card-title">Thông tin câu hỏi</h4>
+                            <div class="table-responsive">
+                                <table class="product-info-table m-t-20">
+                                    <tbody>
+                                        <tr>
+                                            <td>Câu hỏi</td>
+                                            <td class="text-dark font-weight-semibold">
+                                                @if (Model.QuestionTypeId == (int)QuestionTypeConstant.Type.Audio)
+                                                {
+                                                    <p>Tên file: @Model.AudioFilePath</p>
+                                                }
+                                                else
+                                                {
+                                                    <p>@Model.QuestionText</p>
+                                                }
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Lựa chọn:</td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(Model.Choices))
+                                                {
+                                                    foreach (var choice in Model.Choices.Split(";"))
+                                                    {
+                                                        <p>@choice</p>
+                                                    }
+                                                }
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Đáp án trắc nghiệm:</td>
+                                            <td>@Model.CorrectAnswer</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Đáp án tự luận:</td>
+                                            <td>@Model.AnswerExplanation</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Môn học:</td>
+                                            <td>@Model.SubjectName</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Bài học:</td>
+                                            <td>@Model.LessonName</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Loại câu hỏi:</td>
+                                            <td>@Model.QuestionTypeName</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

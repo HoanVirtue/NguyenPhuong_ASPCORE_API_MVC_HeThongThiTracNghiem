@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using MultipleChoiceTest.Domain.ApiModel;
 using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -195,11 +196,16 @@ namespace MultipleChoiceTest.Domain.Helpper
             }
         }
 
-        public static object FormatOptions(string options)
+        public static ApiResponse<string> FormatOptions(string options)
         {
+            ApiResponse<string> result = new ApiResponse<string>();
             if (string.IsNullOrWhiteSpace(options))
-                return string.Empty;
-
+                return new ApiResponse<string>
+                {
+                    Success = false,
+                    Data = null,
+                    Message = "Đáp án không được bỏ trống."
+                };
             var answerList = options
                 .Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(option => option.Trim())
@@ -208,16 +214,32 @@ namespace MultipleChoiceTest.Domain.Helpper
 
             if (answerList.Count < 4)
             {
-                return new
+                return new ApiResponse<string>
                 {
+                    Success = false,
                     Data = string.Empty,
-                    Message = "Cần ít nhất 4 đáp án."
+                    Message = "Cần ít nhất 4 lựa chọn."
                 };
             }
-            return new
+            return new ApiResponse<string>
             {
+                Success = true,
                 Data = string.Join(";", answerList),
             };
+        }
+
+        public static string ConvertToTextArea(string options)
+        {
+            ApiResponse<string> result = new ApiResponse<string>();
+            if (string.IsNullOrWhiteSpace(options))
+                return null;
+            var answerList = options
+                .Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(option => option.Trim())
+                .Where(option => !string.IsNullOrEmpty(option))
+                .ToList();
+
+            return string.Join("\n", answerList);
         }
     }
 }
