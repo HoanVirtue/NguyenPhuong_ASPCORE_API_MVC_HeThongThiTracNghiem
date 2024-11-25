@@ -2,6 +2,7 @@
 {
     public class CUExam
     {
+        // validate ở đây nè e
         public int Id { get; set; }
         public string? ExamName { get; set; }
         public int? Duration { get; set; }

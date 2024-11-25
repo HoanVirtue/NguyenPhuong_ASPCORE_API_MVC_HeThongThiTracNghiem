@@ -21,7 +21,7 @@ namespace MultipleChoiceTest.Repository.Repository
 
         public Task<User> CheckLogin(Login model)
         {
-            return _dbContext.Users.SingleOrDefaultAsync(x => x.AccountName == model.AccountName && x.PasswordHash == model.Password);
+            return _dbContext.Users.SingleOrDefaultAsync(x => x.AccountName == model.AccountName && x.PasswordHash == model.Password && x.IsDeleted != true);
         }
 
         //public Task<List<UserItem>> GetAll()

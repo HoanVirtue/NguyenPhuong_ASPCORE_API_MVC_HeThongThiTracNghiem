@@ -21,7 +21,7 @@
             <div class="col-md-8">
                 <div class="row">
                     <div class="col-md-8">
-                        <form asp-action="Index" asp-controller="Exams" method="get">
+                        <form asp-action="Index" asp-controller="ExamResults" method="get">
                             <div class="input-affix m-v-10">
                                 <i class="prefix-icon anticon anticon-search opacity-04"></i>
                                 <input id="keyword" name="searchKey" value="@ViewBag.SearchKey" type="text" class="form-control" placeholder="Tìm kiếm...">
@@ -36,18 +36,16 @@
                 <thead>
                     <tr>
                         <th class="text-center">Id</th>
-                        <th class="text-center">Tên môn học</th>
+                        <th class="text-center">Tên người dùng</th>
                         <th class="text-center">Tên bài thi</th>
                         <th class="text-center">Thời gian hoàn thành</th>
-                        <th class="text-center">Số câu trả lời đúng</th>
-                        <th class="text-center">Số câu trả lời sai</th>
-                        <th class="text-center">Số câu chưa hoàn thành</th>
+                        <th class="text-center">Kết quả</th>
                         <th class="text-center">Điểm số</th>
                         <th class="text-center">Thứ hạng</th>
-                        <th class="text-center">Ngày tạo</th>
+                        @* <th class="text-center">Ngày tạo</th>
                         <th class="text-center">Người tạo</th>
                         <th class="text-center">Ngày sửa</th>
-                        <th class="text-center">Người sửa</th>
+                        <th class="text-center">Người sửa</th> *@
                         <th scope="col" class="text-center" style="width:300px;">Hành động</th>
                     </tr>
                 </thead>
@@ -58,27 +56,29 @@
                         {
                             <tr>
                                 <td scope="row" class="text-center">@item.Id</td>
+                                <td scope="row" class="text-center"><i class="fa-solid fa-user"></i> <br> @item.UserName</td>
                                 <td scope="row" class="text-center">@item.ExamName</td>
                                 <td scope="row" class="text-center">@item.CompletionTime</td>
-                                <td scope="row" class="text-center">@item.CorrectAnswersCount</td>
-                                <td scope="row" class="text-center">@item.IncorrectAnswersCount</td>
-                                <td scope="row" class="text-center">@item.UnansweredQuestionsCount</td>
+                                <td scope="row" class="text-center" style="width: 150px;">
+                                    <p>Số câu đúng: @item.CorrectAnswersCount</p>
+                                    <p>Số câu sai: @item.IncorrectAnswersCount</p>
+                                    <p>Số câu chưa làm: @item.UnansweredQuestionsCount</p>
+                                </td>
                                 <td scope="row" class="text-center">@item.Score</td>
-                                <td scope="row" class="text-center">@item.Rank</td>
-                                <td scope="row" class="text-center">@item.CreatedDate</td>
-                                <td scope="row" class="text-center">@item.CreatedBy</td>
-                                <td scope="row" class="text-center">@item.UpdatedDate</td>
-                                <td scope="row" class="text-center">@item.UpdatedBy</td>
+                                <td scope="row" class="text-center" style="margin-bottom:30px">
+                                    <span><i class="fa-solid fa-ranking-star"></i><br>
+                                        @item.Rank
+                                    </span>
+                                </td>
                                 <td class="text-center" style="width:300px;">
-                                    <a class="btn btn-primary btn-tone m-r-5 fas fa-eye" asp-controller="Exams" asp-action="Details" asp-route-id="@item.Id"></a>
-                                    <a class="btn btn-secondary btn-tone m-r-5 fas fa-edit" asp-controller="Exams" asp-action="Edit" asp-route-id="@item.Id"></a>
+                                    <a class="btn btn-primary btn-tone m-r-5 fas fa-eye" asp-controller="ExamResults" asp-action="Details" asp-route-id="@item.Id"></a>
                                     <button class="btn btn-danger btn-tone m-r-5 far fa-trash-alt" type="button" data-toggle="modal" data-target="#exampleModal-@item.Id"></button>
                                 </td>
                             </tr>
                             <tr>
                                 <div class="modal fade" id="exampleModal-@item.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
-                                        <form asp-action="Delete" asp-controller="Exams" method="post">
+                                        <form asp-action="Delete" asp-controller="ExamResults" method="post">
                                             <input type="hidden" name="id" value="@item.Id" />
                                             <div class="modal-content">
                                                 <div class="modal-header">

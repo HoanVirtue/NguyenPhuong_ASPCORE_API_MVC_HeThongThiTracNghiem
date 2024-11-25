@@ -17,7 +17,8 @@ namespace MultipleChoiceTest.Api.Controllers
         }
 
         // GET: api/Exams
-        [HttpGet]
+        [HttpGet("GetAll")]
+        //[HttpGet]
         public async Task<ActionResult<ApiResponse<IEnumerable<Exam>>>> GetExams()
         {
             var exams = await _unitOfWork.ExamRepository.GetAllAsync();
@@ -35,6 +36,7 @@ namespace MultipleChoiceTest.Api.Controllers
         {
             var exam = await _unitOfWork.ExamRepository.GetByIdAsync(id);
 
+
             return Ok(new ApiResponse<Exam>
             {
                 Success = exam != null,
@@ -42,12 +44,23 @@ namespace MultipleChoiceTest.Api.Controllers
                 Message = exam == null ? "Không tìm thấy bài thi" : ""
             });
         }
+        [HttpGet]
+        public async Task<ActionResult<ApiResponse<List<ExamItem>>>> GetExam()
+        {
+            var exam = await _unitOfWork.ExamRepository.GetAll();
+            return Ok(new ApiResponse<List<ExamItem>>
+            {
+                Success = exam != null && exam.Any(),
+                Data = exam,
+                Message = exam == null || !exam.Any() ? "không có dữ liệu" : ""
+            });
+        }
 
         // PUT: api/Exams/5
         [HttpPut]
         public async Task<ActionResult<ApiResponse<Exam>>> PutExam([FromBody] CUExam exam)
         {
-            if (await _unitOfWork.ExamRepository.IsExistExamName(exam.ExamName, exam.Id))
+            if (await _unitOfWork.ExamRepository.IsExistExamName(exam.ExamName, exam.LessonId, exam.Id))
             {
                 return new ApiResponse<Exam>()
                 {
@@ -103,7 +116,7 @@ namespace MultipleChoiceTest.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<ApiResponse<Exam>>> PostExam(CUExam exam)
         {
-            if (await _unitOfWork.ExamRepository.IsExistExamName(exam.ExamName))
+            if (await _unitOfWork.ExamRepository.IsExistExamName(exam.ExamName, exam.LessonId))
             {
                 return new ApiResponse<Exam>()
                 {
