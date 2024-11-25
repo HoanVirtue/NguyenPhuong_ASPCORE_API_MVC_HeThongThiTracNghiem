@@ -62,22 +62,27 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
                 if (!string.IsNullOrEmpty(errors))
                 {
                     ModelState.AddModelError("error", errors);
+                    await CreateViewBagAsync(question);
                     return View(question);
                 }
                 #endregion
 
                 #region import file
-                question.AudioFilePath = await UploadAudioAsync(AudioFile);
+                if (question.QuestionTypeId == (int)QuestionTypeConstant.Type.Audio)
+                {
+                    question.AudioFilePath = await UploadAudioAsync(AudioFile);
+                }
                 #endregion
 
-                if (question.QuestionTypeId == (int)QuestionTypeConstant.Type.MultipleChoice)
+                if (question.QuestionTypeId == (int)QuestionTypeConstant.Type.MultipleChoice || question.QuestionTypeId == (int)QuestionTypeConstant.Type.Audio)
                 {
-                    dynamic choices = Utilities.FormatOptions(question.Choices);
-                    if (!string.IsNullOrEmpty(choices.Data))
+                    var choices = Utilities.FormatOptions(question.Choices);
+                    if (choices.Success)
                         question.Choices = choices.Data;
                     else
                     {
                         ModelState.AddModelError("error", choices.Message);
+                        await CreateViewBagAsync(question);
                         return View(question);
                     }
                 }
@@ -93,7 +98,7 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
                     _notyfService.Warning(createRs.Message);
                 }
                 _notyfService.Error("Thêm dữ liệu thất bại");
-                await CreateViewBagAsync();
+                await CreateViewBagAsync(question);
                 return View(question);
             }
             _notyfService.Error("Vui lòng nhập đầy đủ dữ liệu");
@@ -104,15 +109,19 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
         // GET: Brand/Edit/Id
         public async Task<IActionResult> Edit(int id)
         {
-            var detailRs = await ApiClient.GetAsync<Question>(Request, $"Questions/{id}");
+            var detailRs = await ApiClient.GetAsync<Question>(Request, $"Questions/GetDetail/{id}");
             var data = _mapper.Map<CUQuestion>(detailRs.Data);
             if (detailRs.Success)
             {
                 await CreateViewBagAsync(data);
+                if (data.QuestionTypeId != (int)QuestionTypeConstant.Type.Essay)
+                {
+                    data.Choices = Utilities.ConvertToTextArea(data.Choices);
+                }
                 return View(data);
             }
 
-            _notyfService.Error("Không tìm thấy môn học");
+            _notyfService.Error("Không tìm thấy câu hỏi");
             await CreateViewBagAsync(data);
             return View(data);
         }
@@ -120,22 +129,54 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
         // POST: Brand/Edit/Id
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,QuestionName,SubjectId")] CUQuestion question)
+        public async Task<IActionResult> Edit([Bind("Id,QuestionText,Choices,CorrectAnswer,AnswerExplanation,SubjectId,LessonId,QuestionTypeId")] CUQuestion question, IFormFile? AudioFile)
         {
             if (ModelState.IsValid)
             {
+                #region Validate
+                string errors = ValidateData(question, AudioFile);
+                if (!string.IsNullOrEmpty(errors))
+                {
+                    ModelState.AddModelError("error", errors);
+                    await CreateViewBagAsync(question);
+                    return View(question);
+                }
+                #endregion
+
+                #region import file
+                if (question.QuestionTypeId == (int)QuestionTypeConstant.Type.Audio && (AudioFile != null && AudioFile.Length > 0))
+                {
+                    question.AudioFilePath = await UploadAudioAsync(AudioFile);
+                }
+                #endregion
+
+                if (question.QuestionTypeId == (int)QuestionTypeConstant.Type.MultipleChoice || question.QuestionTypeId == (int)QuestionTypeConstant.Type.Audio)
+                {
+                    var choices = Utilities.FormatOptions(question.Choices);
+                    if (choices.Success)
+                        question.Choices = choices.Data;
+                    else
+                    {
+                        ModelState.AddModelError("error", choices.Message);
+                        await CreateViewBagAsync(question);
+                        return View(question);
+                    }
+                }
+
                 try
                 {
                     var updRs = await ApiClient.PutAsync<Question>(Request, $"Questions", JsonConvert.SerializeObject(question));
                     if (updRs != null && updRs.Success)
                     {
                         _notyfService.Success("Cập nhật dữ liệu thành công");
+                        return RedirectToAction("Index", "Questions");
                     }
                     else
                     {
                         _notyfService.Warning(updRs.Message);
+                        await CreateViewBagAsync(question);
+                        return View(question);
                     }
-                    return RedirectToAction("Index", "Questions");
                 }
                 catch (Exception ex)
                 {
@@ -172,16 +213,28 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
             }
         }
 
+        [HttpGet("Details")]
+        public async Task<IActionResult> Details(int id)
+        {
+            var question = await ApiClient.GetAsync<QuestionItem>(Request, $"Questions/GetDetail/{id}");
+            if (question.Success)
+            {
+                return View(question.Data);
+            }
+            return BadRequest(question.Message);
+        }
+
 
         private async Task CreateViewBagAsync(CUQuestion? question = null)
         {
             var subjects = await ApiClient.GetAsync<List<Subject>>(Request, "Subjects");
-            //var lessons = await ApiClient.GetAsync<List<Lesson>>(Request, "Lessons");
             var types = await ApiClient.GetAsync<List<QuestionType>>(Request, "QuestionTypes");
             if (question != null)
             {
+                var lessons = await ApiClient.GetAsync<List<Lesson>>(Request, $"Lessons/GetBySubjectId/{question.SubjectId}");
+
                 ViewData["Subjects"] = new SelectList(subjects.Data, "Id", "SubjectName", question.SubjectId);
-                //ViewData["Lessons"] = new SelectList(lessons.Data, "Id", "LessonName", question.LessonId);
+                ViewData["Lessons"] = new SelectList(lessons.Data, "Id", "LessonName", question.LessonId);
                 ViewData["QuestionTypes"] = new SelectList(types.Data, "Id", "TypeName", question.QuestionTypeId);
             }
             else
@@ -208,6 +261,12 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
                     errors = string.IsNullOrEmpty(errors)
                     ? "Lựa chọn không được bỏ trống"
                         : $"{errors}, Lựa chọn không được bỏ trống";
+                }
+                if (string.IsNullOrEmpty(question.CorrectAnswer))
+                {
+                    errors = string.IsNullOrEmpty(errors)
+                    ? "Đáp án trắc nghiệm không được bỏ trống"
+                        : $"{errors}, Đáp án trắc nghiệm không được bỏ trống";
                 }
                 question.AnswerExplanation = null;
                 question.AudioFilePath = null;
@@ -245,7 +304,12 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
                     ? "Lựa chọn không được bỏ trống"
                         : $"{errors}, Lựa chọn không được bỏ trống";
                 }
-
+                if (string.IsNullOrEmpty(question.CorrectAnswer))
+                {
+                    errors = string.IsNullOrEmpty(errors)
+                    ? "Đáp án trắc nghiệm không được bỏ trống"
+                        : $"{errors}, Đáp án trắc nghiệm không được bỏ trống";
+                }
                 question.QuestionText = null;
                 question.AnswerExplanation = null;
             }
@@ -270,7 +334,7 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
                     int index = 1;
                     while (true)
                     {
-                        fileNameWithoutExtension = Path.GetFileName(audioFile.FileName) + index;
+                        fileNameWithoutExtension = $"{Path.GetFileNameWithoutExtension(audioFile.FileName)}_{index}";
                         fullPath = Path.Combine(path, fileNameWithoutExtension + extension);
                         if (System.IO.File.Exists(fullPath))
                         {

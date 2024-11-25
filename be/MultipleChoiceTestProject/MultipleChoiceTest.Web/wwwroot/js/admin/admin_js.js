@@ -15,6 +15,7 @@ $(document).ready(function () {
             success: function (response) {
                 if (response != "") {
                     var lessonDropdown = $('.select-lesson');
+
                     lessonDropdown.empty();
                     lessonDropdown.append('<option selected disabled>--Chọn bài học--</option>');
                     if (response.data != "") {

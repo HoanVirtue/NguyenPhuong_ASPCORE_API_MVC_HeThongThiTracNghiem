@@ -54,6 +54,19 @@ namespace MultipleChoiceTest.Api.Controllers
             });
         }
 
+        [HttpGet("GetDetail/{id}")]
+        public async Task<ActionResult<ApiResponse<QuestionItem>>> GetDetail(int id)
+        {
+            var question = await _unitOfWork.QuestionRepository.GetDetail(id);
+
+            return Ok(new ApiResponse<QuestionItem>
+            {
+                Success = question != null,
+                Data = question,
+                Message = question == null ? "Không tìm thấy câu hỏi" : ""
+            });
+        }
+
         //PUT: api/Questions/5
         [HttpPut]
         public async Task<ActionResult<ApiResponse<Question>>> PutQuestion([FromBody] CUQuestion question)

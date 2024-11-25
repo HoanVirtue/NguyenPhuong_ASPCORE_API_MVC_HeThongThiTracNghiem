@@ -9,11 +9,22 @@ namespace MultipleChoiceTest.Repository.Repository
     public interface IQuestionRepository : IRepository<Question>
     {
         Task<IEnumerable<QuestionItem>> GetQuestionList();
+        Task<QuestionItem> GetDetail(int id);
     }
     public class QuestionRepository : GenericRepository<Question>, IQuestionRepository
     {
         public QuestionRepository(MultipleChoiceTestDbContext dbContext, IUserContextService userContextService, IMapper mapper) : base(dbContext, userContextService, mapper)
         {
+        }
+
+        public async Task<QuestionItem> GetDetail(int id)
+        {
+            var question = await _dbContext.Questions
+                .Include(x => x.QuestionType)
+                .Include(x => x.Subject)
+                .Include(x => x.Lesson)
+                .SingleOrDefaultAsync(x => x.Id == id && x.IsDeleted != true);
+            return _mapper.Map<QuestionItem>(question);
         }
 
         public async Task<IEnumerable<QuestionItem>> GetQuestionList()
@@ -22,6 +33,7 @@ namespace MultipleChoiceTest.Repository.Repository
                         join s in _dbContext.Subjects on q.SubjectId equals s.Id
                         join l in _dbContext.Lessons on q.LessonId equals l.Id
                         join qt in _dbContext.QuestionTypes on q.QuestionTypeId equals qt.Id
+                        where q.IsDeleted != true
                         select new QuestionItem()
                         {
                             Id = q.Id,
