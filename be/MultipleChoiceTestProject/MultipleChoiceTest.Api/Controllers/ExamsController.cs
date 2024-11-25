@@ -60,7 +60,7 @@ namespace MultipleChoiceTest.Api.Controllers
         [HttpPut]
         public async Task<ActionResult<ApiResponse<Exam>>> PutExam([FromBody] CUExam exam)
         {
-            if (await _unitOfWork.ExamRepository.IsExistExamName(exam.ExamName, exam.Id))
+            if (await _unitOfWork.ExamRepository.IsExistExamName(exam.ExamName, exam.LessonId, exam.Id))
             {
                 return new ApiResponse<Exam>()
                 {
@@ -116,7 +116,7 @@ namespace MultipleChoiceTest.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<ApiResponse<Exam>>> PostExam(CUExam exam)
         {
-            if (await _unitOfWork.ExamRepository.IsExistExamName(exam.ExamName))
+            if (await _unitOfWork.ExamRepository.IsExistExamName(exam.ExamName, exam.LessonId))
             {
                 return new ApiResponse<Exam>()
                 {

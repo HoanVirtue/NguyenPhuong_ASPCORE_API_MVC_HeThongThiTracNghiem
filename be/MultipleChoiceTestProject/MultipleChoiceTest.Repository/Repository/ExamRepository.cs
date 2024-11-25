@@ -8,7 +8,7 @@ namespace MultipleChoiceTest.Repository.Repository
 {
     public interface IExamRepository : IRepository<Exam>
     {
-        Task<bool> IsExistExamName(string name, int? id = 0);
+        Task<bool> IsExistExamName(string name, int? lessonId, int? id = 0);
         Task<List<ExamItem>> GetAll();
     }
     public class ExamRepository : GenericRepository<Exam>, IExamRepository
@@ -23,9 +23,9 @@ namespace MultipleChoiceTest.Repository.Repository
             return _mapper.Map<List<ExamItem>>(list);
         }
 
-        public Task<bool> IsExistExamName(string name, int? id = 0)
+        public Task<bool> IsExistExamName(string name, int? lessonId, int? id = 0)
         {
-            return _dbContext.Exams.AnyAsync(x => x.ExamName == name && x.Id != id && x.IsDeleted != true);
+            return _dbContext.Exams.AnyAsync(x => x.ExamName == name && x.LessonId == lessonId && x.Id != id && x.IsDeleted != true);
         }
     }
 }

@@ -7,6 +7,7 @@ using MultipleChoiceTest.Domain.Models;
 using MultipleChoiceTest.Domain.ModelViews;
 using MultipleChoiceTest.Web.Api;
 using Newtonsoft.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
 {
@@ -59,6 +60,7 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
                     _notyfService.Warning(createRs.Message);
                 }
                 _notyfService.Error("Thêm dữ liệu thất bại");
+                await CreateViewBagAsync(exam);
                 return View(exam);
             }
             _notyfService.Error("Vui lòng nhập đầy đủ dữ liệu");
@@ -93,12 +95,14 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
                     if (updRs != null && updRs.Success)
                     {
                         _notyfService.Success("Cập nhật dữ liệu thành công");
+                        return RedirectToAction("Index", "Exams");
                     }
                     else
                     {
                         _notyfService.Warning(updRs.Message);
                     }
-                    return RedirectToAction("Index", "Exams");
+                    await CreateViewBagAsync(exam);
+                    return View(exam);
                 }
                 catch (Exception ex)
                 {
@@ -139,17 +143,15 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
             var subjects = await ApiClient.GetAsync<List<Subject>>(Request, "Subjects");
             if (exam != null)
             {
-                var lessons = await ApiClient.GetAsync<List<Lesson>>(Request, "Lessons");
+                var lessons = await ApiClient.GetAsync<List<Lesson>>(Request, $"Lessons/GetBySubjectId/{exam.SubjectId}");
 
                 ViewData["Subjects"] = new SelectList(subjects.Data, "Id", "SubjectName", exam.SubjectId);
-                ViewData["Lessons"] = new SelectList(lessons.Data, "Id", "LessionName", exam.LessonId);
+                ViewData["Lessons"] = new SelectList(lessons.Data, "Id", "LessonName", exam.LessonId);
             }
             else
             {
                 ViewData["Subjects"] = new SelectList(subjects.Data, "Id", "SubjectName");
-                //ViewData["Lessions"] = new SelectList(lessons.Data, "Id", "LessonName");
             }
-            
         }
     }
 }

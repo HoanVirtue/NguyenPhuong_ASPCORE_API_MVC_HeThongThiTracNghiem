@@ -26,7 +26,7 @@ namespace MultipleChoiceTest.Repository.Repository
 
         public Task<List<Lesson>> GetDataBySubjectId(int subjectId)
         {
-            return _dbContext.Lessons.Where(x => x.SubjectId == subjectId).ToListAsync();
+            return _dbContext.Lessons.Where(x => x.SubjectId == subjectId && x.IsDeleted != true).ToListAsync();
         }
 
         public Task<bool> IsExistLessonName(string name, int? subjectId, int? id = 0)
