@@ -45,7 +45,7 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
 
         // POST: Brand/Create
         [HttpPost]
-        public async Task<IActionResult> Create([Bind("Id,LessonName,SubjectId")] CULesson lesson)
+        public async Task<IActionResult> Create([Bind("Id,LessonName,SubjectId,Code")] CULesson lesson)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
         // POST: Brand/Edit/Id
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,LessonName,SubjectId")] CULesson lesson)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,LessonName,SubjectId,Code")] CULesson lesson)
         {
             if (ModelState.IsValid)
             {

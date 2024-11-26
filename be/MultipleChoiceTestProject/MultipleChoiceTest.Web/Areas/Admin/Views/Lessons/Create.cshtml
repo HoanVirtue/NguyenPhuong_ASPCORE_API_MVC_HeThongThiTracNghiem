@@ -34,6 +34,11 @@
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="row">
                         <div class="form-group col-md-6">
+                            <label asp-for="Code">Mã bài học <span class="text-danger">*</span></label>
+                            <input asp-for="Code" class="form-control" required />
+                            <span asp-validation-for="Code" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
                             <label asp-for="SubjectId">Môn học <span class="text-danger">*</span></label>
                             <select asp-for="SubjectId" class="form-control" asp-items="ViewBag.Subjects" required>
                                 <option selected disabled>--Chọn môn học--</option>

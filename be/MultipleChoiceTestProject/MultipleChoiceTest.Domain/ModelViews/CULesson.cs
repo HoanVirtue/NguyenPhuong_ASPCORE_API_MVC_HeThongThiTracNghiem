@@ -9,7 +9,8 @@ namespace MultipleChoiceTest.Domain.ModelViews
         public string? LessonName { get; set; }
         [Required(ErrorMessage = "Vui lòng chọn môn học")]
         public int? SubjectId { get; set; }
-
+        [Required(ErrorMessage = "Mã bài học không được để trống")]
+        public string? Code { get; set; }
 
         public DateTime? CreatedDate { get; set; } = DateTime.UtcNow;
         public string? CreatedBy { get; set; }

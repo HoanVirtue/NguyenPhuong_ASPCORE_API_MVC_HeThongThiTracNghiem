@@ -11,13 +11,17 @@ namespace MultipleChoiceTest.Repository.Repository
         Task<bool> IsExistLessonName(string name, int? subjectId, int? id = 0);
         Task<List<LessonItem>> GetAll();
         Task<List<Lesson>> GetDataBySubjectId(int subjectId);
+        Task<bool> IsExistCode(string code, int? id = 0);
     }
     public class LessonRepository : GenericRepository<Lesson>, ILessonRepository
     {
         public LessonRepository(MultipleChoiceTestDbContext dbContext, IUserContextService userContextService, IMapper mapper) : base(dbContext, userContextService, mapper)
         {
         }
-
+        public Task<bool> IsExistCode(string code, int? id = 0)
+        {
+            return _dbContext.Lessons.AnyAsync(x => x.Code == code && x.Id != id && x.IsDeleted != true);
+        }
         public async Task<List<LessonItem>> GetAll()
         {
             var list = await _dbContext.Lessons.Include(x => x.Subject).Where(x => x.IsDeleted != true).ToListAsync();

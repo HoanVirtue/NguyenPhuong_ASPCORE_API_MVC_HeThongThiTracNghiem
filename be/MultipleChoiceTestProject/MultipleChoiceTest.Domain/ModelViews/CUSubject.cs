@@ -7,6 +7,8 @@ namespace MultipleChoiceTest.Domain.ModelViews
         public int Id { get; set; }
         [Required(ErrorMessage = "Tên môn không được để trống")]
         public string? SubjectName { get; set; }
+        [Required(ErrorMessage = "Mã môn không được để trống")]
+        public string? Code { get; set; }
         public DateTime? CreatedDate { get; set; } = DateTime.UtcNow;
         public string? CreatedBy { get; set; }
         public DateTime? UpdatedDate { get; set; }

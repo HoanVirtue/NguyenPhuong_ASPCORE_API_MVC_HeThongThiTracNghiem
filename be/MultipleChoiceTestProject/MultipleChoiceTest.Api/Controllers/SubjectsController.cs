@@ -47,6 +47,11 @@ namespace MultipleChoiceTest.Api.Controllers
         [HttpPut]
         public async Task<ActionResult<ApiResponse<Subject>>> PutSubject([FromBody] CUSubject subject)
         {
+            if (await _unitOfWork.SubjectRepository.IsExistCode(subject.Code, subject.Id))
+            {
+                return ApiResponse<Subject>.ErrorResponse<Subject>("Mã môn đã tồn tại");
+            }
+
             if (await _unitOfWork.SubjectRepository.IsExistSubjectName(subject.SubjectName, subject.Id))
             {
                 return new ApiResponse<Subject>()
@@ -59,6 +64,7 @@ namespace MultipleChoiceTest.Api.Controllers
             {
                 var subjectUpdate = await _unitOfWork.SubjectRepository.GetByIdAsync(subject.Id);
                 subjectUpdate.SubjectName = subject.SubjectName;
+                subjectUpdate.Code = subject.Code;
                 await _unitOfWork.SubjectRepository.UpdateAsync(subjectUpdate);
             }
             catch (DbUpdateConcurrencyException)
@@ -89,6 +95,11 @@ namespace MultipleChoiceTest.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<ApiResponse<Subject>>> PostSubject(CUSubject subject)
         {
+            if (await _unitOfWork.SubjectRepository.IsExistCode(subject.Code))
+            {
+                return ApiResponse<Subject>.ErrorResponse<Subject>("Mã môn đã tồn tại");
+            }
+
             if (await _unitOfWork.SubjectRepository.IsExistSubjectName(subject.SubjectName))
             {
                 return new ApiResponse<Subject>()

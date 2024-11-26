@@ -7,7 +7,6 @@ using MultipleChoiceTest.Domain.Models;
 using MultipleChoiceTest.Domain.ModelViews;
 using MultipleChoiceTest.Web.Api;
 using Newtonsoft.Json;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
 {
@@ -36,7 +35,7 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
             this._notyfService.Error("Retrieving the list of type failed");
             return View();
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> Create()
         {
@@ -45,7 +44,7 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
         }
         // POST: Brand/Create
         [HttpPost]
-        public async Task<IActionResult> Create([Bind("Id,ExamName,Duration,TotalQuestions,SubjectId,LessonId")] CUExam exam)
+        public async Task<IActionResult> Create([Bind("Id,ExamName,Duration,TotalQuestions,SubjectId,LessonId,Code")] CUExam exam)
         {
             if (ModelState.IsValid)
             {
@@ -85,7 +84,7 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
         // POST: Brand/Edit/Id
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ExamName,Duration,TotalQuestions,SubjectId,LessonId")] CUExam exam)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ExamName,Duration,TotalQuestions,SubjectId,LessonId,Code")] CUExam exam)
         {
             if (ModelState.IsValid)
             {

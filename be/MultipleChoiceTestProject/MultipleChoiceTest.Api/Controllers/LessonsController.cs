@@ -71,6 +71,11 @@ namespace MultipleChoiceTest.Api.Controllers
         [HttpPut]
         public async Task<ActionResult<ApiResponse<Lesson>>> PutLesson([FromBody] CULesson lesson)
         {
+            if (await _unitOfWork.LessonRepository.IsExistCode(lesson.Code, lesson.Id))
+            {
+                return ApiResponse<Lesson>.ErrorResponse<Lesson>("Mã bài học đã tồn tại");
+            }
+
             if (await _unitOfWork.LessonRepository.IsExistLessonName(lesson.LessonName, lesson.SubjectId, lesson.Id))
             {
                 return new ApiResponse<Lesson>()
@@ -99,6 +104,7 @@ namespace MultipleChoiceTest.Api.Controllers
                 }
                 lessonUpdate.LessonName = lesson.LessonName;
                 lessonUpdate.SubjectId = lesson.SubjectId;
+                lessonUpdate.Code = lesson.Code;
                 await _unitOfWork.LessonRepository.UpdateAsync(lessonUpdate);
             }
             catch (DbUpdateConcurrencyException)
@@ -129,6 +135,11 @@ namespace MultipleChoiceTest.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<ApiResponse<Lesson>>> PostLesson(CULesson lesson)
         {
+            if (await _unitOfWork.LessonRepository.IsExistCode(lesson.Code))
+            {
+                return ApiResponse<Lesson>.ErrorResponse<Lesson>("Mã bài học đã tồn tại");
+            }
+
             if (await _unitOfWork.LessonRepository.IsExistLessonName(lesson.LessonName, lesson.SubjectId))
             {
                 return new ApiResponse<Lesson>()

@@ -11,11 +11,16 @@ namespace MultipleChoiceTest.Repository.Repository
         Task<bool> IsExistExamName(string name, int? lessonId, int? id = 0);
         Task<List<ExamItem>> GetAll();
 
+        Task<bool> IsExistCode(string code, int? id = 0);
     }
     public class ExamRepository : GenericRepository<Exam>, IExamRepository
     {
         public ExamRepository(MultipleChoiceTestDbContext dbContext, IUserContextService userContextService, IMapper mapper) : base(dbContext, userContextService, mapper)
         {
+        }
+        public Task<bool> IsExistCode(string code, int? id = 0)
+        {
+            return _dbContext.Exams.AnyAsync(x => x.Code == code && x.Id != id && x.IsDeleted != true);
         }
 
         public async Task<List<ExamItem>> GetAll()

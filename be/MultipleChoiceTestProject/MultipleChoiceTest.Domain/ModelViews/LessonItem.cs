@@ -3,6 +3,7 @@
     public class LessonItem
     {
         public int Id { get; set; }
+        public string? Code { get; set; }
         public string? LessonName { get; set; }
         public int? SubjectId { get; set; }
         public string? SubjectName { get; set; }

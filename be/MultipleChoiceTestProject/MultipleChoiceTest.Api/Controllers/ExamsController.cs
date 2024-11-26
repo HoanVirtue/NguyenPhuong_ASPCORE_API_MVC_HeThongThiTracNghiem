@@ -60,6 +60,11 @@ namespace MultipleChoiceTest.Api.Controllers
         [HttpPut]
         public async Task<ActionResult<ApiResponse<Exam>>> PutExam([FromBody] CUExam exam)
         {
+            if (await _unitOfWork.ExamRepository.IsExistCode(exam.Code, exam.Id))
+            {
+                return ApiResponse<Exam>.ErrorResponse<Exam>("Mã đề thi đã tồn tại");
+            }
+
             if (await _unitOfWork.ExamRepository.IsExistExamName(exam.ExamName, exam.LessonId, exam.Id))
             {
                 return new ApiResponse<Exam>()
@@ -90,6 +95,7 @@ namespace MultipleChoiceTest.Api.Controllers
                 examUpdate.TotalQuestions = exam.TotalQuestions;
                 examUpdate.SubjectId = exam.SubjectId;
                 examUpdate.LessonId = exam.LessonId;
+                examUpdate.Code = exam.Code;
                 await _unitOfWork.ExamRepository.UpdateAsync(examUpdate);
             }
             catch (DbUpdateConcurrencyException)
@@ -120,6 +126,11 @@ namespace MultipleChoiceTest.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<ApiResponse<Exam>>> PostExam(CUExam exam)
         {
+            if (await _unitOfWork.ExamRepository.IsExistCode(exam.Code))
+            {
+                return ApiResponse<Exam>.ErrorResponse<Exam>("Mã đề thi đã tồn tại");
+            }
+
             if (await _unitOfWork.ExamRepository.IsExistExamName(exam.ExamName, exam.LessonId))
             {
                 return new ApiResponse<Exam>()

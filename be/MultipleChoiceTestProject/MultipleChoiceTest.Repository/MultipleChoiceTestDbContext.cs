@@ -57,6 +57,9 @@ public partial class MultipleChoiceTestDbContext : DbContext
 
             entity.ToTable("Exam");
 
+            entity.Property(e => e.Code)
+                .HasMaxLength(100)
+                .IsUnicode(false);
             entity.Property(e => e.CreatedBy).HasMaxLength(100);
             entity.Property(e => e.ExamName).HasMaxLength(255);
             entity.Property(e => e.IsDeleted).HasDefaultValue(false);
@@ -137,6 +140,9 @@ public partial class MultipleChoiceTestDbContext : DbContext
 
             entity.ToTable("Lesson");
 
+            entity.Property(e => e.Code)
+                .HasMaxLength(100)
+                .IsUnicode(false);
             entity.Property(e => e.CreatedBy).HasMaxLength(100);
             entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.LessonName).HasMaxLength(255);
@@ -207,6 +213,9 @@ public partial class MultipleChoiceTestDbContext : DbContext
 
             entity.ToTable("Subject");
 
+            entity.Property(e => e.Code)
+                .HasMaxLength(100)
+                .IsUnicode(false);
             entity.Property(e => e.CreatedBy).HasMaxLength(100);
             entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.SubjectName).HasMaxLength(255);
