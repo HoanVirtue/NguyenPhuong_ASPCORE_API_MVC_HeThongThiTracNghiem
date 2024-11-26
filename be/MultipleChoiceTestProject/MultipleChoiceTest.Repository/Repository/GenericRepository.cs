@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using MultipleChoiceTest.Domain;
+using MultipleChoiceTest.Domain.ModelViews;
 using MultipleChoiceTest.Repository.Authorizations;
 using System.Linq.Expressions;
 
@@ -12,6 +13,12 @@ namespace MultipleChoiceTest.Repository.Repository
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             string includeProperties = "");
+        Task<Pagination<TEntity>> GetGridAsync(
+            Expression<Func<TEntity, bool>> filter = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            string includeProperties = "",
+            int? pageIndex = null,
+            int? pageSize = null);
         Task<IEnumerable<TEntity>> GetAllAsync();
         Task<TEntity?> GetByIdAsync(object id);
         Task<TEntity?> GetByIdAsync(object id, Expression<Func<TEntity, bool>> filter = null, string includeProperties = "");
@@ -72,6 +79,57 @@ namespace MultipleChoiceTest.Repository.Repository
             }
 
             return await query.ToListAsync();
+        }
+
+        public async Task<Pagination<TEntity>> GetGridAsync(
+            Expression<Func<TEntity, bool>> filter = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            string includeProperties = "",
+            int? pageIndex = null,
+            int? pageSize = null)
+        {
+            IQueryable<TEntity> query = _dbSet;
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            foreach (var includeProperty in includeProperties.Split
+                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty);
+            }
+
+            if (orderBy != null)
+            {
+                query = orderBy(query);
+            }
+
+            var totalItemsCount = await query.CountAsync();
+
+            if (pageIndex.HasValue && pageIndex.Value == -1)
+            {
+                pageSize = totalItemsCount; // Set pageSize to total count
+                pageIndex = 0; // Reset pageIndex to 0
+            }
+            else if (pageIndex.HasValue && pageSize.HasValue)
+            {
+                int validPageIndex = pageIndex.Value > 0 ? pageIndex.Value : 0;
+                int validPageSize = pageSize.Value > 0 ? pageSize.Value : 10; // Assuming a default pageSize of 10 if an invalid value is passed
+
+                query = query.Skip(validPageIndex * validPageSize).Take(validPageSize);
+            }
+
+            var items = await query.ToListAsync();
+
+            return new Pagination<TEntity>
+            {
+                TotalItemsCount = totalItemsCount,
+                PageSize = pageSize ?? totalItemsCount,
+                PageIndex = pageIndex ?? 0,
+                Items = items
+            };
         }
 
         public async Task<TEntity?> GetByIdAsync(object id)

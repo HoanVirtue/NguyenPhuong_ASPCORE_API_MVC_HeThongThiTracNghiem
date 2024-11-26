@@ -1,32 +1,36 @@
+using AspNetCoreHero.ToastNotification.Abstractions;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using MultipleChoiceTest.Web.Models;
+using MultipleChoiceTest.Domain.Constants.Api;
+using MultipleChoiceTest.Domain.ModelViews;
+using MultipleChoiceTest.Web.Api;
 using System.Diagnostics;
+using ErrorViewModel = MultipleChoiceTest.Domain.ModelViews.ErrorViewModel;
 
 namespace MultipleChoiceTest.Web.Controllers
 {
-	public class HomeController : Controller
-	{
-		private readonly ILogger<HomeController> _logger;
+    public class HomeController : BaseController
+    {
+        public HomeController(INotyfService notyfService, IHttpContextAccessor httpContextAccessor, ILogger<BaseController> logger, IMapper mapper) : base(notyfService, httpContextAccessor, logger, mapper)
+        {
+        }
 
-		public HomeController(ILogger<HomeController> logger)
-		{
-			_logger = logger;
-		}
+        [HttpGet]
+        public async Task<IActionResult> Index(int? pageIndex = 0)
+        {
+            var page = await ApiClient.GetAsync<Pagination<ExamItem>>(Request, $"Exams?type={(int)TypeGetSelectConstant.TypeGet.GetGrid}&pageIndex={pageIndex}");
+            if (!page.Success)
+            {
+                _notyfService.Warning(page.Message);
+            }
+            ViewData["PageIndex"] = pageIndex;
+            return View(page.Data);
+        }
 
-		public IActionResult Index()
-		{
-			return View();
-		}
-
-		public IActionResult Privacy()
-		{
-			return View();
-		}
-
-		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-		public IActionResult Error()
-		{
-			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-		}
-	}
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+    }
 }

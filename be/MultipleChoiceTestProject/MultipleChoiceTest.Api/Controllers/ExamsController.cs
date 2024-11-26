@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MultipleChoiceTest.Domain.ApiModel;
+using MultipleChoiceTest.Domain.Constants.Api;
 using MultipleChoiceTest.Domain.Models;
 using MultipleChoiceTest.Domain.ModelViews;
 using MultipleChoiceTest.Repository.UnitOfWork;
@@ -45,14 +46,36 @@ namespace MultipleChoiceTest.Api.Controllers
             });
         }
         [HttpGet]
-        public async Task<ActionResult<ApiResponse<List<ExamItem>>>> GetExam()
+        public async Task<IActionResult> GetExam(int? type = (int)TypeGetSelectConstant.TypeGet.GetList, int? pageIndex = 0, int? pageSize = 10)
         {
-            var exam = await _unitOfWork.ExamRepository.GetAll();
-            return Ok(new ApiResponse<List<ExamItem>>
+            if (type == (int)TypeGetSelectConstant.TypeGet.GetList)
             {
-                Success = exam != null && exam.Any(),
-                Data = exam,
-                Message = exam == null || !exam.Any() ? "không có dữ liệu" : ""
+                var exam = await _unitOfWork.ExamRepository.GetAll();
+                return Ok(new ApiResponse<List<ExamItem>>
+                {
+                    Success = exam != null && exam.Any(),
+                    Data = exam,
+                    Message = exam == null || !exam.Any() ? "không có dữ liệu" : ""
+                });
+            }
+            else if (type == (int)TypeGetSelectConstant.TypeGet.GetGrid)
+            {
+                var examRes = await _unitOfWork.ExamRepository.GetExamGrid(
+                    pageIndex: pageIndex,
+                    pageSize: pageSize);
+                return Ok(new ApiResponse<Pagination<ExamItem>>
+                {
+                    Success = examRes.Items != null && examRes.Items.Any(),
+                    Data = examRes,
+                    Message = examRes.Items == null || !examRes.Items.Any() ? "không có dữ liệu" : ""
+                });
+            }
+            var exams = await _unitOfWork.ExamRepository.GetAllAsync();
+            return Ok(new ApiResponse<IEnumerable<Exam>>
+            {
+                Success = exams != null && exams.Any(),
+                Data = exams,
+                Message = exams == null || !exams.Any() ? "không có dữ liệu" : ""
             });
         }
 

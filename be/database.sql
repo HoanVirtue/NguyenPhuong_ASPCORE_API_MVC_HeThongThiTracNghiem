@@ -3,6 +3,8 @@ CREATE DATABASE MultipleChoiceTestDB;
 
 USE MultipleChoiceTestDB;
 
+select * from exam
+
 -- Table Subject
 CREATE TABLE Subject (
     Id INT PRIMARY KEY IDENTITY(1,1),
