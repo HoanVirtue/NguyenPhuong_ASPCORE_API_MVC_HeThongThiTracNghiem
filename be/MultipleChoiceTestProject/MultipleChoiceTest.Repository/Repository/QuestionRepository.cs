@@ -10,11 +10,18 @@ namespace MultipleChoiceTest.Repository.Repository
     {
         Task<IEnumerable<QuestionItem>> GetQuestionList();
         Task<QuestionItem> GetDetail(int id);
+        Task<bool> CheckQuantityQuestionInLesson(int? quantity, int? lessonId);
     }
     public class QuestionRepository : GenericRepository<Question>, IQuestionRepository
     {
         public QuestionRepository(MultipleChoiceTestDbContext dbContext, IUserContextService userContextService, IMapper mapper) : base(dbContext, userContextService, mapper)
         {
+        }
+
+        public async Task<bool> CheckQuantityQuestionInLesson(int? quantity, int? lessonId)
+        {
+            var questions = await _dbContext.Questions.Where(x => x.LessonId == lessonId && x.IsDeleted != true).ToListAsync();
+            return questions.Count >= quantity;
         }
 
         public async Task<QuestionItem> GetDetail(int id)

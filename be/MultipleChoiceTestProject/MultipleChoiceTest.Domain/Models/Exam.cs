@@ -13,7 +13,7 @@ public partial class Exam : BaseEntity
 
     public int? LessonId { get; set; }
 
-
+    public string? Code { get; set; }
     public virtual ICollection<ExamAttempt> ExamAttempts { get; set; } = new List<ExamAttempt>();
 
     public virtual ICollection<ExamResult> ExamResults { get; set; } = new List<ExamResult>();

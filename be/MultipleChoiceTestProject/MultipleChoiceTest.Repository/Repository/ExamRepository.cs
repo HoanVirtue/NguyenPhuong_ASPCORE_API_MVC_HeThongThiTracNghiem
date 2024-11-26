@@ -10,6 +10,7 @@ namespace MultipleChoiceTest.Repository.Repository
     {
         Task<bool> IsExistExamName(string name, int? lessonId, int? id = 0);
         Task<List<ExamItem>> GetAll();
+
     }
     public class ExamRepository : GenericRepository<Exam>, IExamRepository
     {
@@ -19,7 +20,7 @@ namespace MultipleChoiceTest.Repository.Repository
 
         public async Task<List<ExamItem>> GetAll()
         {
-            var list = await _dbContext.Exams.Include(x => x.Subject).Include(x=>x.Lesson).Where(x => x.IsDeleted != true).ToListAsync();
+            var list = await _dbContext.Exams.Include(x => x.Subject).Include(x => x.Lesson).Where(x => x.IsDeleted != true).ToListAsync();
             return _mapper.Map<List<ExamItem>>(list);
         }
 

@@ -68,6 +68,10 @@ namespace MultipleChoiceTest.Api.Controllers
                     Message = "Tên bài thi đã tồn tại"
                 };
             }
+            if (!await _unitOfWork.QuestionRepository.CheckQuantityQuestionInLesson(exam.TotalQuestions, exam.LessonId))
+            {
+                return ApiResponse<Exam>.ErrorResponse<Exam>("Số lượng câu hỏi của bài học không đủ");
+            }
             var validateFK = await CheckValidateFK(exam);
             if (!validateFK.Success)
                 return validateFK;
@@ -124,6 +128,12 @@ namespace MultipleChoiceTest.Api.Controllers
                     Message = "Tên bài thi đã tồn tại"
                 };
             }
+
+            if (!await _unitOfWork.QuestionRepository.CheckQuantityQuestionInLesson(exam.TotalQuestions, exam.LessonId))
+            {
+                return ApiResponse<Exam>.ErrorResponse<Exam>("Số lượng câu hỏi của bài học không đủ");
+            }
+
             var validateFK = await CheckValidateFK(exam);
             if (!validateFK.Success)
                 return validateFK;

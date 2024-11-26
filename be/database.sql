@@ -6,6 +6,7 @@ USE MultipleChoiceTestDB;
 -- Table Subject
 CREATE TABLE Subject (
     Id INT PRIMARY KEY IDENTITY(1,1),
+	Code varchar(100),
     SubjectName NVARCHAR(255),
     CreatedDate DATE,
     CreatedBy NVARCHAR(100),
@@ -17,6 +18,7 @@ CREATE TABLE Subject (
 -- Table Lesson
 CREATE TABLE Lesson (
     Id INT PRIMARY KEY IDENTITY(1,1),
+	Code varchar(100),
     LessonName NVARCHAR(255),
     SubjectId INT, -- Foreign key linked to the Subject table
     CreatedDate DATE,
@@ -63,6 +65,7 @@ CREATE TABLE Question (
 -- Table Exam
 CREATE TABLE Exam (
     Id INT PRIMARY KEY IDENTITY(1,1),
+	Code varchar(100),
     ExamName NVARCHAR(255),
     Duration INT, -- Duration in minutes
     TotalQuestions INT,
