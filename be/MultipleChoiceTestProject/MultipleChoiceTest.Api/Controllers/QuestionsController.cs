@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using ClosedXML.Excel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MultipleChoiceTest.Domain;
 using MultipleChoiceTest.Domain.ApiModel;
 using MultipleChoiceTest.Domain.Models;
 using MultipleChoiceTest.Domain.ModelViews;
@@ -178,17 +180,17 @@ namespace MultipleChoiceTest.Api.Controllers
             if (await _unitOfWork.SubjectRepository.GetByIdAsync(question.SubjectId) == null)
             {
                 isSuccess = false;
-                message = string.Join("Không tìm thấy môn học", ",");
+                message = message.JoinUnique("Không tìm thấy môn học", ',');
             }
             if (await _unitOfWork.LessonRepository.GetByIdAsync(question.LessonId) == null)
             {
                 isSuccess = false;
-                message = string.Join("Không tìm thấy bài học", ",");
+                message = message.JoinUnique("Không tìm thấy bài học", ',');
             }
             if (await _unitOfWork.QuestionTypeRepository.GetByIdAsync(question.QuestionTypeId) == null)
             {
                 isSuccess = false;
-                message = string.Join("Không tìm thấy loại câu hỏi", ",");
+                message = message.JoinUnique("Không tìm thấy loại câu hỏi", ',');
             }
             return new ApiResponse<Question>
             {
@@ -196,5 +198,6 @@ namespace MultipleChoiceTest.Api.Controllers
                 Message = message
             };
         }
+
     }
 }

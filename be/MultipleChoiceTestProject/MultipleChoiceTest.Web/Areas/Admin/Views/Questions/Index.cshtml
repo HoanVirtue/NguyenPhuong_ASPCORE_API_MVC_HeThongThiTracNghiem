@@ -31,7 +31,10 @@
 
             <div class="col-lg-6 text-right m-v-10">
                 <a class="btn btn-primary" asp-controller="Questions" asp-action="Create"><i class="anticon anticon-plus-circle m-r-5"></i><span>Thêm mới</span></a>
-                <btn class="btn btn-success" type="button"><i class="fa-solid fa-file-import"></i> <span>Upload câu hỏi</span></btn>
+                <form class="form-upload" method="post" asp-controller="Questions" asp-action="ImportFromExcel" enctype="multipart/form-data" style="display: inline-block;">
+                    <input accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" type="file" name="file" class="form-control" style="display: none;" />
+                    <btn class="btn btn-success btn-upload-question" type="button" ><i class="fa-solid fa-file-import"></i> <span>Upload câu hỏi</span></btn>
+                </form>
             </div>
         </div>
         <div class="table-responsive">
@@ -114,3 +117,7 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script src="~/js/admin/upload_question.js"></script>
+}

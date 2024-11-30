@@ -24,7 +24,6 @@ namespace MultipleChoiceTest.Domain.ModelViews
         [Required(ErrorMessage = "Mã bài thi không được bỏ trống")]
         public string? Code { get; set; }
 
-
         public DateTime? CreatedDate { get; set; } = DateTime.UtcNow;
         public string? CreatedBy { get; set; }
         public DateTime? UpdatedDate { get; set; }

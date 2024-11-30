@@ -1,13 +1,17 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using AutoMapper;
+using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Office.SpreadSheetML.Y2023.MsForms;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using MultipleChoiceTest.Domain;
 using MultipleChoiceTest.Domain.Helpper;
 using MultipleChoiceTest.Domain.Models;
 using MultipleChoiceTest.Domain.ModelViews;
 using MultipleChoiceTest.Web.Api;
 using MultipleChoiceTest.Web.Constants;
 using Newtonsoft.Json;
+
 
 namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
 {
@@ -23,7 +27,24 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
         {
             _environment = hostingEnvironment;
         }
-
+        [HttpPost]
+        public async Task<IActionResult> ImportFromExcel(IFormFile file)
+        {
+            if (file != null && file.Length > 0)
+            {
+                List<ImportQuestionMessage> questionRes = await ParseExcelFileAsync(file.OpenReadStream());
+                if (questionRes != null && questionRes.Count > 0)
+                {
+                    _notyfService.Error(questionRes.FirstOrDefault().Message);
+                }
+                else
+                {
+                    _notyfService.Success("Upload câu hỏi thành công");
+                }
+                return RedirectToAction("Index", "Questions");
+            }
+            return BadRequest();
+        }
         [HttpGet]
         public async Task<IActionResult> Index(string searchKey = "")
         {
@@ -40,7 +61,6 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
                 ViewBag.SearchKey = searchKey;
                 return View(questions);
             }
-            this._notyfService.Error("Không có dữ liệu");
             return View();
         }
 
@@ -87,7 +107,7 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
                     }
                 }
 
-                var createRs = await ApiClient.PostAsync<Question>(Request, "Questions", JsonConvert.SerializeObject(question));
+                var createRs = await ApiClient.PostAsync<Domain.Models.Question>(Request, "Questions", JsonConvert.SerializeObject(question));
                 if (createRs.Success)
                 {
                     _notyfService.Success("Thêm dữ liệu thành công");
@@ -109,7 +129,7 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
         // GET: Brand/Edit/Id
         public async Task<IActionResult> Edit(int id)
         {
-            var detailRs = await ApiClient.GetAsync<Question>(Request, $"Questions/GetDetail/{id}");
+            var detailRs = await ApiClient.GetAsync<Domain.Models.Question>(Request, $"Questions/GetDetail/{id}");
             var data = _mapper.Map<CUQuestion>(detailRs.Data);
             if (detailRs.Success)
             {
@@ -165,7 +185,7 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
 
                 try
                 {
-                    var updRs = await ApiClient.PutAsync<Question>(Request, $"Questions", JsonConvert.SerializeObject(question));
+                    var updRs = await ApiClient.PutAsync<Domain.Models.Question>(Request, $"Questions", JsonConvert.SerializeObject(question));
                     if (updRs != null && updRs.Success)
                     {
                         _notyfService.Success("Cập nhật dữ liệu thành công");
@@ -194,7 +214,7 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
         {
             try
             {
-                var delRs = await ApiClient.DeleteAsync<Question>(Request, $"Questions/{id}");
+                var delRs = await ApiClient.DeleteAsync<Domain.Models.Question>(Request, $"Questions/{id}");
                 if (delRs.Success)
                 {
                     _notyfService.Success("Xóa dữ liệu thành công");
@@ -354,6 +374,149 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
                 return fileNameWithoutExtension + extension;
             }
             return null;
+        }
+
+        public async Task<List<ImportQuestionMessage>> ParseExcelFileAsync(Stream stream)
+        {
+            List<ImportQuestionMessage> errorList = new List<ImportQuestionMessage>();
+            using (var workbook = new XLWorkbook(stream))
+            {
+
+                var worksheet = workbook.Worksheet(1);
+                // bỏ qua dòng tiêu đề lấy từ dòng 2
+
+                var rows = worksheet.RangeUsed().RowsUsed().Skip(1);
+                string errors = "";
+                bool isCreate = true;
+                foreach (var row in rows)
+                {
+                    errors = "";
+                    isCreate = true;
+                    string questionText = row.Cell(2).GetValue<string>().ResolveExcelValue();
+                    string choices= row.Cell(3).GetValue<string>().ResolveExcelValue();
+                    string correctAnswer= row.Cell(4).GetValue<string>().ResolveExcelValue();
+                    string answerexplanation= row.Cell(5).GetValue<string>().ResolveExcelValue();
+                    string questionType =  row.Cell(6).GetValue<string>().ResolveExcelValue();
+                    string lessonCode= row.Cell(7).GetValue<string>().ResolveExcelValue();
+                    string subjectCode= row.Cell(8).GetValue<string>().ResolveExcelValue();
+
+                    #region validate
+                    if(!QuestionTypeExists(questionType))
+                    {
+                        errors = string.IsNullOrEmpty(errors)
+                            ? "Lựa chọn không được bỏ trống"
+                                : $"{errors}, Lựa chọn không được bỏ trống";
+                        isCreate = false;
+                    }
+
+                    if (questionType == "trac-nghiem" && isCreate)
+                    {
+                        if (string.IsNullOrEmpty(questionText))
+                        {
+                            errors = string.IsNullOrEmpty(errors)
+                            ? "Câu hỏi không được bỏ trống"
+                                : $"{errors}, Câu hỏi không được bỏ trống";
+                            isCreate = false;
+                        }
+                        if (string.IsNullOrEmpty(choices))
+                        {
+                            errors = string.IsNullOrEmpty(errors)
+                            ? "Lựa chọn không được bỏ trống"
+                                : $"{errors}, Lựa chọn không được bỏ trống";
+                            isCreate = false;
+                        }
+                        if (string.IsNullOrEmpty(correctAnswer))
+                        {
+                            errors = string.IsNullOrEmpty(errors)
+                            ? "Đáp án trắc nghiệm không được bỏ trống"
+                                : $"{errors}, Đáp án trắc nghiệm không được bỏ trống";
+                            isCreate = false;
+                        }
+                        answerexplanation = null;
+                    }
+                    else if (questionType == "tu-luan" && isCreate)
+                    {
+                        if (string.IsNullOrEmpty(questionText))
+                        {
+                            errors = string.IsNullOrEmpty(errors)
+                            ? "Câu hỏi không được bỏ trống"
+                                : $"{errors}, Câu hỏi không được bỏ trống";
+                            isCreate = false;
+                        }
+                        if (string.IsNullOrEmpty(answerexplanation))
+                        {
+                            errors = string.IsNullOrEmpty(errors)
+                            ? "Đáp án tự luận không được bỏ trống"
+                                : $"{errors}, Đáp án tự luận không được bỏ trống";
+                            isCreate = false;
+                        }
+                        choices = null;
+                    }
+                    if(string.IsNullOrEmpty(subjectCode))
+                    {
+                        errors = string.IsNullOrEmpty(errors)
+                            ? "Mã môn không dược để trống"
+                                : $"{errors}, Mã môn không dược để trống";
+                        isCreate = false;
+                    }
+                    if (string.IsNullOrEmpty(lessonCode))
+                    {
+                        errors = string.IsNullOrEmpty(errors)
+                            ? "Mã bài học không dược để trống"
+                                : $"{errors}, Mã bài học không dược để trống";
+                        isCreate = false;
+                    }
+                    var subjectRes = await ApiClient.GetAsync<Subject>(Request, $"Subjects/GetByCode/{subjectCode}");
+                    if (subjectRes.Data == null)
+                    {
+                        errors = string.IsNullOrEmpty(errors)
+                            ? "Mã môn học không tồn tại"
+                                : $"{errors}, Mã môn học không tồn tại";
+                        isCreate = false;
+                    }
+                    var lessonRes = await ApiClient.GetAsync<Lesson>(Request, $"Lessons/GetByCode/{lessonCode}");
+                    if (lessonRes.Data == null)
+                    {
+                        errors = string.IsNullOrEmpty(errors)
+                            ? "Mã bài học không tồn tại"
+                                : $"{errors}, Mã bài học không tồn tại";
+                        isCreate = false;
+                    }
+                    #endregion
+
+
+                    if (isCreate)
+                    {
+                        var questions = new CUQuestion
+                        {
+                            QuestionText = questionText,
+                            Choices = choices,
+                            CorrectAnswer = correctAnswer,
+                            AnswerExplanation = answerexplanation,
+                            SubjectId = subjectRes.Data.Id,
+                            LessonId = lessonRes.Data.Id,
+                            QuestionTypeId = questionType == "trac-nghiem" ? 1 : 2,
+                        };
+                        var createRs = await ApiClient.PostAsync<Domain.Models.Question>(Request, $"Questions", JsonConvert.SerializeObject(questions));
+                        if(!createRs.Success)
+                        {
+                            errors = string.IsNullOrEmpty(errors)
+                            ? createRs.Message
+                                : $"{errors}, {createRs.Message}";
+                            errorList.Add(new ImportQuestionMessage(row.RowNumber(), errors + "\n"));
+                        }
+                    }
+                    else
+                    {
+                        errorList.Add(new ImportQuestionMessage(row.RowNumber(), errors+"\n"));
+                    }    
+                }
+            }
+            return errorList;
+        }
+        public bool QuestionTypeExists(string questionTypeID)
+        {
+            return questionTypeID == "trac-nghiem" || questionTypeID == "tu-luan";
         }
     }
 }

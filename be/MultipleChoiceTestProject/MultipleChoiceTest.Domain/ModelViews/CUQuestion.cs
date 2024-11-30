@@ -29,4 +29,16 @@ namespace MultipleChoiceTest.Domain.ModelViews
         public string? UpdatedBy { get; set; }
         public bool? IsDeleted { get; set; } = false;
     }
+
+    public class ImportQuestionMessage
+    {
+        public int? Row { get; set; }
+        public string? Message { get; set; }
+        public ImportQuestionMessage(int? row, string? message)
+        {
+            Row = row;
+            Message = message;
+        }
+        public ImportQuestionMessage() { }
+    }
 }

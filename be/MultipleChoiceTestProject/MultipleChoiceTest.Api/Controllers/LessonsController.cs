@@ -67,6 +67,19 @@ namespace MultipleChoiceTest.Api.Controllers
             });
         }
 
+        [HttpGet("GetByCode/{code}")]
+        public async Task<ActionResult<ApiResponse<Lesson>>> GetLessonByCode(string code)
+        {
+            var lesson = await _unitOfWork.LessonRepository.GetDataByCode(code);
+
+            return Ok(new ApiResponse<Lesson>
+            {
+                Success = lesson != null,
+                Data = lesson,
+                Message = lesson == null ? "Không tìm thấy bài học" : ""
+            });
+        }
+
         // PUT: api/Lessons/5
         [HttpPut]
         public async Task<ActionResult<ApiResponse<Lesson>>> PutLesson([FromBody] CULesson lesson)

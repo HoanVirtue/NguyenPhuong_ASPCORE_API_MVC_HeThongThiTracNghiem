@@ -10,6 +10,7 @@ namespace MultipleChoiceTest.Repository.Repository
     {
         Task<IEnumerable<QuestionItem>> GetQuestionList();
         Task<QuestionItem> GetDetail(int id);
+
         Task<bool> CheckQuantityQuestionInLesson(int? quantity, int? lessonId);
     }
     public class QuestionRepository : GenericRepository<Question>, IQuestionRepository

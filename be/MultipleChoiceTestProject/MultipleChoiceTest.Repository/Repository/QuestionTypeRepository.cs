@@ -19,5 +19,7 @@ namespace MultipleChoiceTest.Repository.Repository
         {
             return _dbContext.QuestionTypes.AnyAsync(x => x.TypeName == name && x.IsDeleted != true);
         }
+
+        
     }
 }

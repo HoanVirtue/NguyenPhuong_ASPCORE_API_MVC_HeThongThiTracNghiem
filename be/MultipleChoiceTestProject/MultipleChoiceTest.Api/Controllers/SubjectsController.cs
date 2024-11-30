@@ -43,6 +43,19 @@ namespace MultipleChoiceTest.Api.Controllers
             });
         }
 
+        [HttpGet("GetByCode/{code}")]
+        public async Task<ActionResult<ApiResponse<Subject>>> GetSubjectByCode(string code)
+        {
+            var subject = await _unitOfWork.SubjectRepository.GetDataByCode(code);
+
+            return Ok(new ApiResponse<Subject>
+            {
+                Success = subject != null,
+                Data = subject,
+                Message = subject == null ? "Không tìm thấy môn học" : ""
+            });
+        }
+
         // PUT: api/Subjects/5
         [HttpPut]
         public async Task<ActionResult<ApiResponse<Subject>>> PutSubject([FromBody] CUSubject subject)
