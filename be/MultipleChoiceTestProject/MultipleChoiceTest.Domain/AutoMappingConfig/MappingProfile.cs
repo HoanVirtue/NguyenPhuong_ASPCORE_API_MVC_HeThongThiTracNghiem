@@ -10,6 +10,7 @@ namespace MultipleChoiceTest.Domain.AutoMappingConfig
         {
             CreateMap<CUSubject, Subject>();
             CreateMap<Subject, CUSubject>();
+            CreateMap<Subject, SubjectItem>();
 
             CreateMap<CULesson, Lesson>();
             CreateMap<Lesson, CULesson>();
@@ -30,8 +31,8 @@ namespace MultipleChoiceTest.Domain.AutoMappingConfig
             CreateMap<User, UserItem>();
 
             CreateMap<ExamResult, CUExamResult>();
-            CreateMap<ExamResult,ResultItem>().ForMember(dest=>dest.UserName,opt=>opt.MapFrom(src=>src.User.UserName))
-                                                .ForMember(dest=>dest.ExamName,opt=>opt.MapFrom(src=>src.Exam.ExamName));
+            CreateMap<ExamResult, ResultItem>().ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName))
+                                                .ForMember(dest => dest.ExamName, opt => opt.MapFrom(src => src.Exam.ExamName));
             CreateMap<Exam, CUExam>();
             CreateMap<CUExam, Exam>();
             CreateMap<Exam, ExamItem>()

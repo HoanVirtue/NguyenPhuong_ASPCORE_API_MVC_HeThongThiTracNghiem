@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MultipleChoiceTest.Domain.ApiModel;
+using MultipleChoiceTest.Domain.Constants.Api;
 using MultipleChoiceTest.Domain.Models;
 using MultipleChoiceTest.Domain.ModelViews;
 using MultipleChoiceTest.Repository.UnitOfWork;
@@ -18,15 +19,28 @@ namespace MultipleChoiceTest.Api.Controllers
 
         // GET: api/Subjects
         [HttpGet]
-        public async Task<ActionResult<ApiResponse<IEnumerable<Subject>>>> GetSubjects()
+        public async Task<IActionResult> GetSubjects(int? type = (int)TypeGetSelectConstant.TypeGet.GetAll)
         {
-            var subjects = await _unitOfWork.SubjectRepository.GetAllAsync();
-            return Ok(new ApiResponse<IEnumerable<Subject>>
+            if (type == (int)TypeGetSelectConstant.TypeGet.GetAll)
             {
-                Success = subjects != null && subjects.Any(),
-                Data = subjects,
-                Message = subjects == null || !subjects.Any() ? "Không có dữ liệu" : ""
-            });
+                var subjects = await _unitOfWork.SubjectRepository.GetAllAsync();
+                return Ok(new ApiResponse<IEnumerable<Subject>>
+                {
+                    Success = subjects != null && subjects.Any(),
+                    Data = subjects,
+                    Message = subjects == null || !subjects.Any() ? "Không có dữ liệu" : ""
+                });
+            }
+            else
+            {
+                var subjects = await _unitOfWork.SubjectRepository.GetListAsync();
+                return Ok(new ApiResponse<List<SubjectItem>>
+                {
+                    Success = subjects != null && subjects.Any(),
+                    Data = subjects,
+                    Message = subjects == null || !subjects.Any() ? "Không có dữ liệu" : ""
+                });
+            }
         }
 
         // GET: api/Subjects/5
