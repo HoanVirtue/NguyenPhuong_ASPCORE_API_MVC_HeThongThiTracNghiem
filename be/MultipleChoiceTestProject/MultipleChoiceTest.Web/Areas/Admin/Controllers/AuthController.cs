@@ -27,7 +27,7 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
             if (Request.Cookies.ContainsKey(UserConstant.AccessToken))
             {
                 string role = Request.Cookies[UserConstant.Role];
-                if (!string.IsNullOrEmpty(role) && role == TypeUserConstant.Role.ADMIN.ToString())
+                if (!string.IsNullOrEmpty(role) && role == ((int)TypeUserConstant.Role.ADMIN).ToString())
                 {
                     return RedirectToAction("Index", "Dashboard");
                 }

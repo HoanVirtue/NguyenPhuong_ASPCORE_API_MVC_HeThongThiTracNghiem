@@ -18,8 +18,7 @@
                                 <div class="panel panel-default">
                                     <div class="panel-body">
                                         <h2>
-                                            <a href="#"
-                                               title="@item.ExamName">
+                                            <a href="/Exams/InfoExam?id=@item.Id" title="@item.ExamName">
                                                 <strong>
                                                     @item.ExamName
                                                 </strong>
@@ -89,6 +88,7 @@
         </div>
     </div>
     <div class="col-md-3">
-        @await Component.InvokeAsync("RightPage")
+        @await Component.InvokeAsync("RightPage", new {type = "ranking"})
+        @await Component.InvokeAsync("RightPage", new {type = "access"})
     </div>
 </div>

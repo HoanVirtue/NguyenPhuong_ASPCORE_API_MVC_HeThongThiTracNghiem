@@ -38,7 +38,8 @@
                         <div class="panel-body">
                             <div class="powered fr">
                                 © Bản quyền thuộc về <a href="https://fb.com/buiphukhuyen" style="color:#ffff00"
-                                                        title="Bùi Phú Khuyên" target="_blank" rel="noopener noreferrer nofollow">
+                                                        title="Tạ Đức
+                                    Hoàn" target="_blank" rel="noopener noreferrer nofollow">
                                     Tạ Đức
                                     Hoàn
                                 </a>.
@@ -61,5 +62,6 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    @await Component.InvokeAsync("Notyf")
 </body>
 </html>

@@ -4,9 +4,13 @@ namespace MultipleChoiceTest.Web.Components
 {
     public class RightPageViewComponent : ViewComponent
     {
-        public async Task<IViewComponentResult> InvokeAsync()
+        public async Task<IViewComponentResult> InvokeAsync(string? type)
         {
-            return View();
+            if (type == "ranking")
+            {
+                return View("Ranking");
+            }
+            return View("Access");
         }
     }
 }

@@ -20,6 +20,8 @@ namespace MultipleChoiceTest.Repository.Repository
             string includeProperties = "",
             int? pageIndex = null,
             int? pageSize = null);
+
+        Task<ExamItem> GetDetail(int id);
     }
     public class ExamRepository : GenericRepository<Exam>, IExamRepository
     {
@@ -91,6 +93,12 @@ namespace MultipleChoiceTest.Repository.Repository
                 PageIndex = pageIndex ?? 0,
                 Items = _mapper.Map<List<ExamItem>>(items)
             };
+        }
+
+        public async Task<ExamItem> GetDetail(int id)
+        {
+            var exam = await _dbContext.Exams.SingleOrDefaultAsync(x => x.Id == id && x.IsDeleted != true);
+            return _mapper.Map<ExamItem>(exam);
         }
     }
 }

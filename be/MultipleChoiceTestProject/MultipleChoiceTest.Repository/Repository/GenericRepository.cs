@@ -78,7 +78,7 @@ namespace MultipleChoiceTest.Repository.Repository
                 query = orderBy(query);
             }
 
-            return await query.ToListAsync();
+            return await query.Where(x => x.IsDeleted != true).ToListAsync();
         }
 
         public async Task<Pagination<TEntity>> GetGridAsync(
@@ -121,7 +121,7 @@ namespace MultipleChoiceTest.Repository.Repository
                 query = query.Skip(validPageIndex * validPageSize).Take(validPageSize);
             }
 
-            var items = await query.ToListAsync();
+            var items = await query.Where(x => x.IsDeleted != true).ToListAsync();
 
             return new Pagination<TEntity>
             {

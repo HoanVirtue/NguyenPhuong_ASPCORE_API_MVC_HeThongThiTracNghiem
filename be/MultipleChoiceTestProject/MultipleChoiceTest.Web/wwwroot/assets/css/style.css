@@ -810,8 +810,12 @@ input:focus {
     top: 100%;
 }
 
+.dropdown-menu.pop-profile {
+    background: #fff;
+}
+
 .pop-profile {
-    width: 270px;
+    width: 251px;
 }
 
 .p-b-15 {
@@ -897,4 +901,16 @@ input:focus {
 
 .pointer {
     cursor: pointer;
+}
+
+.btn:focus {
+    box-shadow: unset;
+}
+
+.btn-check:focus + .btn-primary, .btn-primary:focus {
+    box-shadow: unset;
+}
+
+.btn-check:focus + .btn, .btn:focus {
+    box-shadow: unset;
 }

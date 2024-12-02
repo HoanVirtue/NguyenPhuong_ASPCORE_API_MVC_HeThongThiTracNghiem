@@ -85,8 +85,8 @@ namespace MultipleChoiceTest.Api.Controllers
                      new Claim(JwtRegisteredClaimNames.Aud,
                                _configuration["JWT:Audience"]),
                      new Claim("id", user.Id.ToString()),
-                     new Claim(ClaimTypes.Name, user.AccountName ?? "Auth")
-
+                     new Claim(ClaimTypes.Name, user.AccountName ?? "Auth"),
+                     new Claim(ClaimTypes.Role, user.IsAdmin == true ? "1" : "0")
                 }),
                 Expires = expirationUtc,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

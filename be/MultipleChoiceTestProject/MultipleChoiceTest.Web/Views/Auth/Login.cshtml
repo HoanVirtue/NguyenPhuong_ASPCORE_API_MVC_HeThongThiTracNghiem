@@ -1,8 +1,5 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@using MultipleChoiceTest.Domain.ModelViews
+@model Login
 
 
 <ol class="breadcrumb" itemscope="" itemtype="https://schema.org/BreadcrumbList">
@@ -31,7 +28,7 @@
                         <div class="page panel panel-default margin-top-lg box-shadow bg-lavender">
                             <div class="panel-body">
                                 <h2 class="text-center margin-bottom-lg">Thành viên đăng nhập</h2>
-                                <form action="/vi/users/login/" method="post">
+                                <form action="/Auth/Login" method="post">
                                     <div class="form-detail">
                                         <div class="form-group loginstep1">
                                             <div class="input-group">
@@ -39,8 +36,8 @@
                                                     <em class="fa fa-user fa-lg"></em>
                                                 </span>
                                                 <input type="text" class="required form-control"
-                                                       placeholder="Tên đăng nhập hoặc email" value=""
-                                                       name="nv_login" maxlength="100"
+                                                       placeholder="Tên đăng nhập" value=""
+                                                       asp-for="AccountName" maxlength="100"
                                                        data-pattern="/^(.){3,}$/"
                                                        data-mess="Tên đăng nhập chưa được khai báo">
                                             </div>
@@ -53,7 +50,7 @@
                                                 </span>
                                                 <input type="password" autocomplete="off"
                                                        class="required form-control" placeholder="Mật khẩu"
-                                                       value="" name="nv_password" maxlength="100"
+                                                       asp-for="Password" maxlength="100"
                                                        data-pattern="/^(.){3,}$/"
                                                        data-mess="Mật khẩu đăng nhập chưa được khai báo">
                                             </div>
@@ -66,7 +63,7 @@
                                 </form>
                                 <hr>
                                 <div class="text-center">
-                                    <p>Nếu bạn chưa có tài khoản <a href="./register.html" class="tag-underline">Đăng ký ngay</a></p>
+                                    <p>Nếu bạn chưa có tài khoản <a href="/Auth/Register" class="tag-underline">Đăng ký ngay</a></p>
 
                                 </div>
                             </div>
@@ -77,44 +74,6 @@
         </div>
     </div>
     <div class="col-md-3">
-        <div class="panel panel-primary-two">
-            <div class="panel-heading">
-                <div class="panel-heading-left clearfix">
-                    <div class="title-block">
-                        <span>Thống kê truy cập</span>
-                    </div>
-                </div>
-            </div>
-            <div class="panel-body">
-                <ul class="nv-list-item">
-                    <li>
-                        <em class="fa fa-bolt fa-lg">&nbsp;</em> Đang truy cập <span class="pull-right">47</span>
-                    </li>
-                    <li>
-                        <em class="fa fa-user fa-lg">&nbsp;</em> Thành viên online <span class="pull-right">14</span>
-                    </li>
-                    <li>
-                        <em class="fa fa-magic fa-lg">&nbsp;</em> Máy chủ tìm kiếm <span class="pull-right">14</span>
-                    </li>
-                    <li>
-                        <em class="fa fa-bullseye fa-lg">&nbsp;</em> Khách viếng thăm <span class="pull-right">19</span>
-                    </li>
-                </ul>
-                <div class="nv-hr">&nbsp;</div>
-                <ul class="nv-list-item">
-                    <li>
-                        <em class="fa fa-filter fa-lg">&nbsp;</em> Hôm nay <span class="pull-right">13,331</span>
-                    </li>
-                    <li>
-                        <em class="fa fa-calendar-o fa-lg">&nbsp;</em> Tháng hiện tại <span class="pull-right">344,050</span>
-                    </li>
-                    <li>
-                        <em class="fa fa-bars fa-lg">&nbsp;</em> Tổng lượt truy cập <span class="pull-right">17,174,297</span>
-                    </li>
-                </ul>
-
-            </div>
-        </div>
-
+        @await Component.InvokeAsync("RightPage", new { type = "access" })
     </div>
 </div>

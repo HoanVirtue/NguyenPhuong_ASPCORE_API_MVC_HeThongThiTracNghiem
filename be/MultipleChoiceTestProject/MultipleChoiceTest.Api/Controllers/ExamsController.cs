@@ -33,17 +33,28 @@ namespace MultipleChoiceTest.Api.Controllers
 
         // GET: api/Exams/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ApiResponse<Exam>>> GetExam(int id)
+        public async Task<IActionResult> GetExam(int id, int? type = (int)TypeGetSelectConstant.TypeGetDetail.Get)
         {
-            var exam = await _unitOfWork.ExamRepository.GetByIdAsync(id);
-
-
-            return Ok(new ApiResponse<Exam>
+            if (type == (int)TypeGetSelectConstant.TypeGetDetail.Get)
             {
-                Success = exam != null,
-                Data = exam,
-                Message = exam == null ? "Không tìm thấy bài thi" : ""
-            });
+                var exam = await _unitOfWork.ExamRepository.GetByIdAsync(id);
+                return Ok(new ApiResponse<Exam>
+                {
+                    Success = exam != null,
+                    Data = exam,
+                    Message = exam == null ? "Không tìm thấy bài thi" : ""
+                });
+            }
+            else
+            {
+                var exam = await _unitOfWork.ExamRepository.GetDetail(id);
+                return Ok(new ApiResponse<ExamItem>
+                {
+                    Success = exam != null,
+                    Data = exam,
+                    Message = exam == null ? "Không tìm thấy bài thi" : ""
+                });
+            }
         }
         [HttpGet]
         public async Task<IActionResult> GetExam(int? type = (int)TypeGetSelectConstant.TypeGet.GetList, int? pageIndex = 0, int? pageSize = 10)
