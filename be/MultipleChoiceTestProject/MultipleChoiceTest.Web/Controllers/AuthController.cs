@@ -60,6 +60,31 @@ namespace MultipleChoiceTest.Web.Controllers
             return View(model);
         }
 
+
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(Login model)
+        {
+            if (ModelState.IsValid)
+            {
+
+            }
+            else
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors);
+                foreach (var error in errors)
+                {
+                    this._notyfService.Error(error.ErrorMessage);
+                }
+            }
+            return View(model);
+        }
+
         [User]
         public IActionResult Logout()
         {
@@ -79,10 +104,6 @@ namespace MultipleChoiceTest.Web.Controllers
             ApiClient.SetCookie(Response, UserConstant.AccountName, loginRes.User.Email);
         }
 
-        [HttpGet]
-        public IActionResult Register()
-        {
-            return View();
-        }
+
     }
 }
