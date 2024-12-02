@@ -3,19 +3,12 @@
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
+
 <ol class="breadcrumb" itemscope="" itemtype="https://schema.org/BreadcrumbList">
-    <li class="home" itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem">
-        <em class="fa fa-lg fa-home">&nbsp;</em><a href="/vi/" itemprop="item" title="Trang nhất">
-            <span itemprop="name">Trang nhất</span>
-        </a><i class="hidden" itemprop="position" content="1"></i>
-    </li>
-    <li itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem">
-        <a href="/vi/users/" itemprop="item" title="Tài khoản Sinh viên">
-            <span itemprop="name">
-                Liên hệ
-            </span>
-        </a><i class="hidden" itemprop="position" content="2"></i>
-    </li>
+    <li class="home"><em class="fa fa-lg fa-home">&nbsp;</em><a href="/vi/" title="Trang chủ"><span itemprop="name">Trang nhất</span></a><i class="hidden" itemprop="position" content="1"></i></li>
+    <li><a href="" itemprop="item" title="@Model.SubjectName"><span itemprop="name">@Model.SubjectName</span></a><i class="hidden" itemprop="position" content="3"></i></li>
+    <li><a href="" itemprop="item" title="@Model.LessonName"><span itemprop="name">@Model.LessonName</span></a><i class="hidden" itemprop="position" content="4"></i></li>
+    <li><a href="" itemprop="item" title="@Model.ExamName"><span itemprop="name">@Model.ExamName</span></a><i class="hidden" itemprop="position" content="5"></i></li>
 </ol>
 <div class="row">
     <div class="col-md-9">

@@ -97,7 +97,7 @@ namespace MultipleChoiceTest.Repository.Repository
 
         public async Task<ExamItem> GetDetail(int id)
         {
-            var exam = await _dbContext.Exams.SingleOrDefaultAsync(x => x.Id == id && x.IsDeleted != true);
+            var exam = await _dbContext.Exams.Include(x => x.Subject).Include(x => x.Lesson).SingleOrDefaultAsync(x => x.Id == id && x.IsDeleted != true);
             return _mapper.Map<ExamItem>(exam);
         }
     }

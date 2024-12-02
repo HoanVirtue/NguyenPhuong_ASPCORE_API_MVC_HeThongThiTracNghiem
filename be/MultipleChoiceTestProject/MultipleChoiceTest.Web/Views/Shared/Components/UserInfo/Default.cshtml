@@ -1,14 +1,11 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@using MultipleChoiceTest.Domain.Models
+@model User
 
 
 <div class="panel panel-primary-two">
     <div class="panel-heading">
         <div class="panel-heading-left clearfix">
-            <div class="title-block">
+            <div class="title-block text-center">
                 <span>Đăng nhập thành viên</span>
             </div>
         </div>
@@ -18,31 +15,31 @@
             <div class="nv-info" style="display:none"></div>
             <div class="userBlock">
                 <h3 class="text-center margin-bottom-lg">
-                    <span class="lev-user text-normal margin-right">Tài khoản:</span>Tạ Đức Hoàn
+                    <span class="lev-user text-normal margin-right">Tài khoản:</span>@Model.UserName
                 </h3>
                 <div class="row margin-bottom-lg">
-                    <div class="col-xs-8 text-center">
+                    <div class="col-md-4 text-center">
                         <a title="" href="#">
-                            <img src="~/Adminassets/images/logo/user.png" alt="Tạ Đức Hoàn"
+                            <img src="~/Adminassets/images/logo/user-1.png" alt="@Model.UserName"
                                  class="img-thumbnail bg-gainsboro">
                         </a>
                     </div>
-                    <div class="col-xs-16">
+                    <div class="col-md-8">
                         <ul class="nv-list-item sm">
                             <li class="active">
-                                <a href="/vi/users/">Thông tin thành viên</a>
+                                <a href="#">Thông tin thành viên</a>
                             </li>
                             <li>
-                                <a href="/vi/users/editinfo/">Thiết lập tài khoản</a>
+                                <a href="#">Thiết lập tài khoản</a>
                             </li>
                         </ul>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-16 small">
+                    <div class="col-md-8 small">
                         <em class="fa fa-clock-o" title="Đăng nhập vào">&nbsp;</em>03/11, 00:36
                     </div>
-                    <div class="col-xs-8 text-right">
+                    <div class="col-md-4 text-right">
                         <button type="button" class="btn btn-default btn-sm active">
                             <em class="fa fa-sign-out"></em>&nbsp;Thoát&nbsp;
                         </button>
