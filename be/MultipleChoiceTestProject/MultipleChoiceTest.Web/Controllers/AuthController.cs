@@ -1,6 +1,7 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using MultipleChoiceTest.Domain.Models;
 using MultipleChoiceTest.Domain.ModelViews;
 using MultipleChoiceTest.Web.Api;
 using MultipleChoiceTest.Web.Constants;
@@ -64,24 +65,34 @@ namespace MultipleChoiceTest.Web.Controllers
         [HttpGet]
         public IActionResult Register()
         {
+            if (Request.Cookies.ContainsKey(UserConstant.AccessToken))
+            {
+                string role = Request.Cookies[UserConstant.Role];
+                if (!string.IsNullOrEmpty(role) && role == ((int)TypeUserConstant.Role.CUSTOMER).ToString())
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+            }
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(Login model)
+        public async Task<IActionResult> Register(Register model)
         {
             if (ModelState.IsValid)
             {
-
-            }
-            else
-            {
-                var errors = ModelState.Values.SelectMany(v => v.Errors);
-                foreach (var error in errors)
+                var result = await ApiClient.PostAsync<User>(Request, "Auth/RegisterForUser", JsonConvert.SerializeObject(model));
+                if (result.Success)
                 {
-                    this._notyfService.Error(error.ErrorMessage);
+                    this._notyfService.Success("Đăng ký thành công!");
+                    return RedirectToAction("Login", "Auth");
+                }
+                else
+                {
+                    this._notyfService.Error(result.Message);
                 }
             }
+
             return View(model);
         }
 

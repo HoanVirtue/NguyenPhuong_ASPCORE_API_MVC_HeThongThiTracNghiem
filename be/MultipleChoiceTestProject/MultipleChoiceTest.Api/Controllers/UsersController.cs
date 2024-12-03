@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MultipleChoiceTest.Domain.ApiModel;
+using MultipleChoiceTest.Domain.Constants.Api;
 using MultipleChoiceTest.Domain.Models;
 using MultipleChoiceTest.Domain.ModelViews;
 using MultipleChoiceTest.Repository.UnitOfWork;
-using System.Collections.Generic;
 
 namespace MultipleChoiceTest.Api.Controllers
 {
@@ -43,14 +43,23 @@ namespace MultipleChoiceTest.Api.Controllers
 
         // GET: api/Users/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ApiResponse<User>>> GetUsers(int id)
+        public async Task<IActionResult> GetUsers(int id, int? type = (int)TypeGetSelectConstant.TypeGetDetail.Get)
         {
             var user = await _unitOfWork.UserRepository.GetByIdAsync(id);
 
-            return Ok(new ApiResponse<User>
+            if (type == (int)TypeGetSelectConstant.TypeGetDetail.Get)
+            {
+                return Ok(new ApiResponse<User>
+                {
+                    Success = user != null,
+                    Data = user,
+                    Message = user == null ? "Không tìm thấy người dùng" : ""
+                });
+            }
+            return Ok(new ApiResponse<UserItem>
             {
                 Success = user != null,
-                Data = user,
+                Data = _mapper.Map<UserItem>(user),
                 Message = user == null ? "Không tìm thấy người dùng" : ""
             });
         }
@@ -66,7 +75,7 @@ namespace MultipleChoiceTest.Api.Controllers
                     Message = "Tên tài khoản đã tồn tại"
                 };
             }
-            if(await _unitOfWork.UserRepository.IsExistEmail(user.Email))
+            if (await _unitOfWork.UserRepository.IsExistEmail(user.Email))
             {
                 return new ApiResponse<User>()
                 {
@@ -85,12 +94,12 @@ namespace MultipleChoiceTest.Api.Controllers
                     Message = "Thêm dữ liệu thành công"
                 });
         }
-       
+
         // PUT: api/Users/5
         [HttpPut]
         public async Task<ActionResult<ApiResponse<User>>> PutUsers([FromBody] CUUser user)
         {
-            if (await _unitOfWork.UserRepository.IsExistAccountName(user.AccountName ,user.Id))
+            if (await _unitOfWork.UserRepository.IsExistAccountName(user.AccountName, user.Id))
             {
                 return new ApiResponse<User>()
                 {
@@ -123,7 +132,7 @@ namespace MultipleChoiceTest.Api.Controllers
                 userUpdate.Phone = user.Phone;
                 userUpdate.UserName = user.UserName;
                 userUpdate.PasswordHash = user.PasswordHash;
-                userUpdate.IsAdmin= user.IsAdmin;
+                userUpdate.IsAdmin = user.IsAdmin;
                 await _unitOfWork.UserRepository.UpdateAsync(userUpdate);
             }
             catch (DbUpdateConcurrencyException)

@@ -29,6 +29,8 @@ namespace MultipleChoiceTest.Domain.AutoMappingConfig
             CreateMap<CUUser, User>();
             CreateMap<User, CUUser>();
             CreateMap<User, UserItem>();
+            CreateMap<Register, User>();
+            CreateMap<Login, User>();
 
             CreateMap<ExamResult, CUExamResult>();
             CreateMap<ExamResult, ResultItem>().ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName))

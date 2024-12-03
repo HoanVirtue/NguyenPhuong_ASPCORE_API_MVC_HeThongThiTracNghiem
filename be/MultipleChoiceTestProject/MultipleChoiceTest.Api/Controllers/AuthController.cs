@@ -25,10 +25,6 @@ namespace MultipleChoiceTest.Api.Controllers
         {
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
                 User user = await _unitOfWork.UserRepository.CheckLogin(model);
                 if (user != null)
                 {
@@ -50,6 +46,24 @@ namespace MultipleChoiceTest.Api.Controllers
                     Data = null,
                     Message = "Login fail"
                 });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [Route("RegisterForUser")]
+        [HttpPost]
+        public async Task<IActionResult> RegisterAsync(Register model)
+        {
+            try
+            {
+                var userModel = _mapper.Map<User>(model);
+                userModel.IsAdmin = false;
+                var userRs = await _unitOfWork.UserRepository.RegisterUser(userModel);
+                return Ok(userRs);
             }
             catch (Exception ex)
             {

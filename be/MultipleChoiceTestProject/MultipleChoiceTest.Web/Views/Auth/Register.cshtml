@@ -1,15 +1,15 @@
-﻿@using MultipleChoiceTest.Domain.Models
-@model User
+﻿@using MultipleChoiceTest.Domain.ModelViews
+@model Register
 
 
 <ol class="breadcrumb" itemscope="" itemtype="https://schema.org/BreadcrumbList">
-    <li class="home" itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem">
-        <em class="fa fa-lg fa-home">&nbsp;</em><a href="/vi/" itemprop="item" title="Trang nhất">
+    <li class="home">
+        <em class="fa fa-lg fa-home">&nbsp;</em><a href="/Home/Inex" itemprop="item" title="Trang nhất">
             <span itemprop="name">Trang nhất</span>
         </a><i class="hidden" itemprop="position" content="1"></i>
     </li>
     <li itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem">
-        <a href="/vi/users/" itemprop="item" title="Tài khoản Sinh viên">
+        <a href="/Auth" itemprop="item" title="Tài khoản Sinh viên">
             <span itemprop="name">
                 Tài khoản
                 Sinh
@@ -27,12 +27,12 @@
                         <div class="page panel panel-default margin-top-lg box-shadow bg-lavender">
                             <div class="panel-body">
                                 <h2 class="text-center margin-bottom-lg">Đăng ký thành viên</h2>
-                                <form action="/vi/users/login/" method="post">
+                                <form action="/Auth/Register" method="post">
                                     <div class="form-detail register-form">
                                         <div class="form-group">
                                             <div>
                                                 <input type="text" class="form-control required input"
-                                                       placeholder="Họ và tên" value="" asp-for="UserName"
+                                                       placeholder="Họ và tên" asp-for="UserName"
                                                        maxlength="100" data-mess="">
                                                 <span asp-validation-for="UserName" class="text-danger"></span>
                                             </div>
@@ -40,7 +40,7 @@
                                         <div class="form-group">
                                             <div>
                                                 <input type="text" class="required form-control"
-                                                       placeholder="Tên đăng nhập" value="" asp-for="AccountName"
+                                                       placeholder="Tên đăng nhập" asp-for="AccountName"
                                                        maxlength="20" data-pattern="/^(.){4,20}$/"
                                                        data-mess="Tên đăng nhập không hợp lệ: Tên đăng nhập chỉ được sử dụng Unicode, không có các ký tự đặc biệt và có từ 4 đến 20 ký tự">
                                                 <span asp-validation-for="AccountName" class="text-danger"></span>
@@ -62,11 +62,21 @@
                                             <div>
                                                 <input type="password" autocomplete="off"
                                                        class="re-password required form-control"
-                                                       placeholder="Lặp lại mật khẩu" value=""
-                                                       asp-for="PasswordHash" maxlength="32"
+                                                       placeholder="Lặp lại mật khẩu"
+                                                       asp-for="EnterPassword" maxlength="32"
                                                        data-pattern="/^(.){1,}$/"
                                                        data-mess="Bạn chưa viết lại mật khẩu vào ô nhập lại mật khẩu">
-                                                <span asp-validation-for="UserName" class="text-danger"></span>
+                                                <span asp-validation-for="EnterPassword" class="text-danger"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div>
+                                                <input type="email"
+                                                       class="email required form-control"
+                                                       placeholder="Email"
+                                                       asp-for="Email" maxlength="52">
+                                                <span asp-validation-for="Email" class="text-danger"></span>
                                             </div>
                                         </div>
 
@@ -96,18 +106,17 @@
                                         <div class="form-group">
                                             <div class="input-group">
                                                 <input type="date"
-                                                       class="form-control datepicker bg-white input"
-                                                       data-provide="datepicker"
-                                                       placeholder="Ngày tháng năm sinh" value=""
-                                                       asp-for="DateOfBirth" readonly="readonly">
+                                                       class="form-control bg-white input"
+                                                       placeholder="Ngày tháng năm sinh"
+                                                       asp-for="DateOfBirth" style="width: 100%;">
                                                 <span asp-validation-for="DateOfBirth" class="text-danger"></span>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="form-group">
                                             <div>
                                                 <input type="text" class="form-control  input"
-                                                       placeholder="Điện thoại" value=""
+                                                       placeholder="Điện thoại"
                                                        asp-for="Phone" id="nvcf-phone">
                                                 <span asp-validation-for="Phone" class="text-danger"></span>
                                             </div>
@@ -136,7 +145,7 @@
         </div>
     </div>
     <div class="col-md-3">
-        @await Component.InvokeAsync("RightPage", new {type = "access"})
+        @await Component.InvokeAsync("RightPage", new { type = "access" })
 
     </div>
 </div>
