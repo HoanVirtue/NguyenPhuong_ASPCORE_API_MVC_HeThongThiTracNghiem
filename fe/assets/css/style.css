@@ -761,3 +761,28 @@ input[type=radio] {
 
 
 /* user info */
+.margin-bottom {
+    margin-bottom: 10px;
+}
+
+.nav>li {
+    padding: 2px 0px 1px;
+}
+.nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
+    background: #009edb url(/assets/images/bg-menu.png) repeat-x;
+}
+
+.nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
+    color: #fff;
+    background-color: #428bca;
+}
+.users-menu > li > a {
+    padding: 8px !important;
+}
+.nav-pills>li>a {
+    border-radius: 4px;
+}
+.nav>li>a:hover, .nav>li>a:focus {
+    text-decoration: none;
+    background-color: #eee;
+}
