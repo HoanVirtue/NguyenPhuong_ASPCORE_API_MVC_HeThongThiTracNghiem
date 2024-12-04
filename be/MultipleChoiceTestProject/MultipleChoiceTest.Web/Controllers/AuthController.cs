@@ -44,6 +44,10 @@ namespace MultipleChoiceTest.Web.Controllers
                         this._notyfService.Success("Đăng nhập thành công!");
                         return RedirectToAction("Index", "Home");
                     }
+                    else
+                    {
+                        this._notyfService.Error("Không tồn tại tài khoản");
+                    }
                 }
                 else
                 {
