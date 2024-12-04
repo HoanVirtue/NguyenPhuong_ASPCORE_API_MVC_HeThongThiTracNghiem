@@ -144,20 +144,11 @@
                             <div class="page">
                                 <h2 class="margin-bottom-lg margin-top-lg">Thiết lập tài khoản</h2>
                                 <ul class="users-menu nav nav-pills margin-bottom">
-                                    <li class="active">
-                                        <a data-toggle="tab" data-bs-toggle="tab" data-bs-target="#edit_basic">Cơ bản</a>
+                                    <li >
+                                        <a class="nav-link active"data-toggle="tab" data-bs-toggle="tab" aria-selected="false" href="#edit_basic">Cơ bản</a>
                                     </li>
-                                    <li class="">
-                                        <a data-toggle="tab"  data-bs-toggle="tab" data-bs-target="#edit_username"
-                                            href="#edit_username">Tên đăng nhập</a>
-                                    </li>
-                                    <li class="">
-                                        <a data-toggle="tab" data-location="/vi/users/editinfo/email/"
-                                            href="#edit_email">Email</a>
-                                    </li>
-                                    <li class="">
-                                        <a data-toggle="tab" data-location="/vi/users/editinfo/password/"
-                                            href="#edit_password">Mật khẩu</a>
+                                    <li >
+                                        <a class="nav-link" data-toggle="tab" data-bs-toggle="tab" aria-selected="false" href="#edit_password">Mật khẩu</a>
                                     </li>
                                 </ul>
 
@@ -186,7 +177,7 @@
                                                                 class="control-label col-md-6 text-normal">Giới
                                                                 tính</label>
                                                             <div class="col-md-12">
-                                                                <div class="clearfix radio-box  input" data-mess="">
+                                                                <div class="clearfix radio-box  input" data-mess="" style="margin-top: 5px;">
                                                                     <label class="radio-box"> <input type="radio"
                                                                             name="gender" value="M" class="input"> Nam
                                                                     </label>
@@ -205,15 +196,15 @@
                                                                 năm sinh</label>
                                                             <div class="col-md-4">
                                                                 <input type="text"
-                                                                    class="form-control calendar-icon datepicker  input"
+                                                                    class="form-control calendar-icon datepicker  input" style="margin-left: 30px;"
                                                                     name="birthday" value="" readonly="readonly">
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
-                                                            <label for="view_mail"
-                                                                class="control-label col-md-6 text-normal">Hiển thị
+                                                            <label for="view_mail" 
+                                                                class="control-label col-md-6 text-normal" >Hiển thị
                                                                 email</label>
-                                                            <div class="col-md-4">
+                                                            <div class="col-md-4" style="margin-left: 30px;">
                                                                 <select name="view_mail" class="form-control">
                                                                     <option value="0">Không</option>
                                                                     <option value="1">Có</option>
@@ -221,179 +212,13 @@
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
-                                                            <div class="col-md-6">
+                                                            <div class="col-md-6" style="margin-left: 30px;">
                                                                 <input type="hidden" name="checkss"
                                                                     value="a11fef01161cc59e5580548d908237c5">
                                                             </div>
-                                                            <div class="col-md-10">
-                                                                <input type="button" value="Thiết lập lại"
-                                                                    class="btn btn-default"
-                                                                <input type="submit" class="btn btn-primary"
-                                                                    value="Chấp nhận">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div id="edit_username" class="tab-pane fade">
-                                        <div class="page panel panel-default">
-                                            <div class="panel-body bg-lavender">
-                                                <form action="/vi/users/editinfo/username/" method="post" role="form"
-                                                    class="form-horizontal">
-                                                    <div class="nv-info margin-bottom"
-                                                        data-default="Để thay đổi tên đăng nhập, bạn cần khai báo lại mật khẩu.">
-                                                        Để thay đổi tên đăng nhập, bạn cần khai báo lại mật khẩu.
-                                                    </div>
-
-                                                    <div class="form-detail">
-                                                        <div class="form-group">
-                                                            <div class="col-md-6 text-right">
-                                                                Tên đăng nhập hiện tại:
-                                                            </div>
-                                                            <div class="col-md-12">
-                                                                <strong>taduchoan</strong>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label for="username"
-                                                                class="control-label col-md-6 text-normal">Tên đăng nhập
-                                                                mới</label>
-                                                            <div class="col-md-12">
-                                                                <input type="text" class="required form-control"
-                                                                    placeholder="Tên đăng nhập mới" value=""
-                                                                    name="username" maxlength="20"
-                                                                    data-pattern="/^(.){4,20}$/"
-                                                                    onkeypress="validErrorHidden(this);"
-                                                                    data-mess="Tên đăng nhập chưa được khai báo">
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label for="password"
-                                                                class="control-label col-md-6 text-normal">Mật
-                                                                khẩu</label>
-                                                            <div class="col-md-12">
-                                                                <input type="password" autocomplete="off"
-                                                                    class="required form-control" placeholder="Mật khẩu"
-                                                                    value="" name="password" maxlength="32"
-                                                                    data-pattern="/^(.){8,32}$/"
-                                                                    onkeypress="validErrorHidden(this);"
-                                                                    data-mess="Mật khẩu đăng nhập chưa được khai báo">
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <div class="col-md-6">
-                                                                <input type="hidden" name="checkss"
-                                                                    value="a11fef01161cc59e5580548d908237c5">
-                                                            </div>
-                                                            <div class="col-md-10">
-                                                                <input type="button" value="Thiết lập lại"
-                                                                    class="btn btn-default"
-                                                                    onclick="validReset(this.form);return!1;">
-                                                                <input type="submit" class="btn btn-primary"
-                                                                    value="Chấp nhận">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div id="edit_email" class="tab-pane fade ">
-                                        <div class="page panel panel-default">
-                                            <div class="panel-body bg-lavender">
-                                                <form action="/vi/users/editinfo/email/" method="post" role="form"
-                                                    class="form-horizontal"
-                                                    onsubmit="return changemail_validForm(this);" autocomplete="off"
-                                                    novalidate="">
-                                                    <div class="nv-info margin-bottom">
-                                                        <p>Để thay đổi email, bạn cần thực hiện tuần tự các bước sau
-                                                            đây:</p>
-                                                        <p>1.Khai báo lại mật khẩu<br>2.Khai báo địa chỉ email
-                                                            mới<br>3.Click vào nút Gửi Mã xác minh<br>4.Kiểm tra mail
-                                                            thông báo Mã xác minh được gửi đến địa chỉ mà bạn vừa khai
-                                                            báo, sau đó nhập mã này vào ô Mã xác minh<br>5.Click vào nút
-                                                            Chấp nhận.</p>
-                                                    </div>
-                                                    <div class="nv-info-default hidden">
-                                                        <p>Để thay đổi email, bạn cần thực hiện tuần tự các bước sau
-                                                            đây:</p>
-                                                        <p>1.Khai báo lại mật khẩu<br>2.Khai báo địa chỉ email
-                                                            mới<br>3.Click vào nút Gửi Mã xác minh<br>4.Kiểm tra mail
-                                                            thông báo Mã xác minh được gửi đến địa chỉ mà bạn vừa khai
-                                                            báo, sau đó nhập mã này vào ô Mã xác minh<br>5.Click vào nút
-                                                            Chấp nhận.</p>
-                                                    </div>
-
-                                                    <div class="form-detail">
-                                                        <div class="form-group">
-                                                            <div class="col-md-6 text-right">
-                                                                Email hiện tại:
-                                                            </div>
-                                                            <div class="col-md-12">
-                                                                <strong>taduchoan5503@gmail.com</strong>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label for="password"
-                                                                class="control-label col-md-6 text-normal">Mật
-                                                                khẩu</label>
-                                                            <div class="col-md-12">
-                                                                <input type="password" autocomplete="off"
-                                                                    class="required form-control" placeholder="Mật khẩu"
-                                                                    value="" name="password" maxlength="32"
-                                                                    data-pattern="/^(.){8,32}$/"
-                                                                    data-mess="Mật khẩu đăng nhập chưa được khai báo">
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label for="email"
-                                                                class="control-label col-md-6 text-normal">Email
-                                                                mới</label>
-                                                            <div class="col-md-12">
-                                                                <input type="email" class="required form-control"
-                                                                    placeholder="Email mới" value="" name="email"
-                                                                    data-mess="Email chưa được khai báo">
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label for="verifykey"
-                                                                class="control-label col-md-6 text-normal">Mã xác
-                                                                minh</label>
-                                                            <div class="col-md-12">
-                                                                <div class="input-group">
-                                                                    <input type="text" class="form-control"
-                                                                        placeholder="Mã xác minh" value=""
-                                                                        name="verifykey" maxlength="32"
-                                                                        data-pattern="/^[a-zA-Z0-9]{32,32}$/"
-                                                                        data-mess="Mã xác minh chưa được khai báo">
-                                                                    <span class="input-group-btn">
-                                                                        <button type="button"
-                                                                            class="send-bt btn btn-warning pointer">
-                                                                            Gửi mã xác minh
-                                                                        </button></span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <div class="col-md-6">
-                                                                <input type="hidden" name="checkss"
-                                                                    value="a11fef01161cc59e5580548d908237c5">
-                                                                <input type="hidden" name="vsend" value="0">
-                                                            </div>
-                                                            <div class="col-md-10">
-                                                                <input type="button" value="Thiết lập lại"
-                                                                    class="btn btn-default">
-                                                                <input type="submit" class="btn btn-primary"
-                                                                    value="Chấp nhận">
+                                                            <div class="col-md-10" > 
+                                                                <input type="button" value="Thiết lập lại" class="btn btn-default" onclick="validReset(this.form);return!1;">
+                                                                <input type="submit" class="btn btn-primary" value="Chấp nhận">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -458,7 +283,7 @@
                                                                     value="a11fef01161cc59e5580548d908237c5">
                                                             </div>
                                                             <div class="col-md-10">
-                                                                <input type="button" value="Thiết lập lại"
+                                                                <input type="button" value="Thiết lập lại"style="margin-left: 30px;"
                                                                     class="btn btn-default">
                                                                 <input type="submit" class="btn btn-primary"
                                                                     value="Chấp nhận">
@@ -473,12 +298,12 @@
 
                                 <ul class="nav navbar-nav">
                                     <li>
-                                        <a href="/vi/users/"><em class="fa fa-caret-right margin-right-sm"></em>Thông
+                                        <a href="/vi/users/"><em class="fa fa-caret-right margin-right-sm" style="margin-right: 10px;"></em>Thông
                                             tin thành viên</a>
                                     </li>
                                     <li>
                                         <a href="/vi/users/logout/"><em
-                                                class="fa fa-caret-right margin-right-sm"></em>Thoát</a>
+                                                class="fa fa-caret-right margin-right-sm" style="margin-right: 10px;"></em>Thoát</a>
                                     </li>
                                 </ul>
                             </div>
