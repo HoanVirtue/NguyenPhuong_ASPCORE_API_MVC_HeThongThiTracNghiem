@@ -1,4 +1,9 @@
-﻿<ol class="breadcrumb" itemscope="" itemtype="https://schema.org/BreadcrumbList">
+﻿@using MultipleChoiceTest.Domain.ModelViews
+@model List<ExamResultItem>
+@{
+    ViewData["Title"] = "Lịch sử thi";
+}
+<ol class="breadcrumb" itemscope="" itemtype="https://schema.org/BreadcrumbList">
     <li class="home" itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem">
         <em class="fa fa-lg fa-home">&nbsp;</em><a href="/vi/" itemprop="item" title="Trang nhất">
             <span itemprop="name">Trang nhất</span>
@@ -35,7 +40,6 @@
                         <table class="table table-striped table-bordered table-hover table-middle">
                             <colgroup>
                                 <col width="50">
-                                <col>
                                 <col width="150">
                                 <col width="150">
                                 <col width="80">
@@ -49,8 +53,7 @@
                                 <tr>
                                     <th class="text-center">STT</th>
                                     <th class="text-center">Đề thi</th>
-                                    <th class="text-center">Thời gian bắt đầu</th>
-                                    <th class="text-center">Thời gian làm bài</th>
+                                    <th class="text-center">Ngày làm bài</th>
                                     <th class="text-center">Điểm</th>
                                     <th class="text-center">Xếp loại trắc nghiệm</th>
                                     <th class="text-center">Đúng</th>
@@ -58,7 +61,23 @@
                                     <th class="text-center">Không TL</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id=" records_table">
+                                @if(Model!= null && Model.Count > 0 )
+                                {
+                                    foreach(var item in Model)
+                                    {
+                                        <tr>
+                                            <td scope="row" class="text-center">@item.Id</td>
+                                            <td scope="row" class="text-center">@item.ExamName</td>
+                                            <td scope="row" class="text-center">@item.CompletionTime</td>
+                                            <td scope="row" class="text-center">@item.Score</td>
+                                            <td scope="row" class="text-center">@item.Rank</td>
+                                            <td scope="row" class="text-center">@item.CorrectAnswersCount</td>
+                                            <td scope="row" class="text-center">@item.IncorrectAnswersCount</td>
+                                            <td scope="row" class="text-center">@item.UnansweredQuestionsCount</td>
+                                        </tr>
+                                    }
+                                }
                             </tbody>
                         </table>
                     </div>

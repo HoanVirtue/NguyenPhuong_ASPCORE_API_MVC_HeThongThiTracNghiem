@@ -26,6 +26,20 @@ namespace MultipleChoiceTest.Api.Controllers
                 Message = exams == null || !exams.Any() ? "không có dữ liệu" : ""
             });
         }
+
+        [HttpGet("GetByUsserID/{id}")]
+        public async Task<ActionResult<ApiResponse<IEnumerable<ExamResultItem>>>> GetByUserID(int id) 
+        {
+            var user = await _unitOfWork.ExamResultRepository.GetDataByUserId(id);
+            return Ok(new ApiResponse<IEnumerable<ExamResultItem>> 
+            {
+                Success = user != null && user.Any(), 
+                Data = user,
+                Message = user==null|| !user.Any() ?"Không có dữ liệu":""
+
+            });
+        }
+
         // DELETE: api/examresult/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<ApiResponse<ExamResult>>> DeleteResult(int id)
