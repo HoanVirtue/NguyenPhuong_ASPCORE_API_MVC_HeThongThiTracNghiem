@@ -32,16 +32,13 @@ namespace MultipleChoiceTest.Api.Controllers
         [HttpGet("GetBySubjectId/{subjectId}")]
         public async Task<ActionResult<ApiResponse<IEnumerable<Lesson>>>> GetDataBySubject(int subjectId)
         {
-            _unitOfWork.LessonRepository.GetDataBySubjectId(subjectId);
-
-
-
-            //return Ok(new ApiResponse<IEnumerable<Lesson>>
-            //{
-            //    Success = lessons != null && lessons.Any(),
-            //    Data = lessons,
-            //    Message = lessons == null || !lessons.Any() ? "không có dữ liệu" : ""
-            //});
+            var lessons = await _unitOfWork.LessonRepository.GetDataBySubjectId(subjectId);
+            return Ok(new ApiResponse<IEnumerable<Lesson>>
+            {
+                Success = lessons != null && lessons.Any(),
+                Data = lessons,
+                Message = lessons == null || !lessons.Any() ? "không có dữ liệu" : ""
+            });
         }
 
 
