@@ -22,6 +22,11 @@ namespace MultipleChoiceTest.Repository.Repository
             int? pageSize = null);
 
         Task<ExamItem> GetDetail(int id);
+        Task<Pagination<ExamItem>> GetExamByLessonGrid(int lessonId, int? pageIndex, int? pageSize);
+        Task<Pagination<ExamItem>> GetExamBySubjectGrid(int subjectId, int? pageIndex, int? pageSize);
+        Task<List<ExamItem>> GetExamByLesson(int lessonId);
+        Task<List<ExamItem>> GetExamBySubject(int subjectId);
+
     }
     public class ExamRepository : GenericRepository<Exam>, IExamRepository
     {
@@ -99,6 +104,48 @@ namespace MultipleChoiceTest.Repository.Repository
         {
             var exam = await _dbContext.Exams.Include(x => x.Subject).Include(x => x.Lesson).SingleOrDefaultAsync(x => x.Id == id && x.IsDeleted != true);
             return _mapper.Map<ExamItem>(exam);
+        }
+
+        public async Task<Pagination<ExamItem>> GetExamByLessonGrid(int lessonId, int? pageIndex, int? pageSize)
+        {
+            var exams = await GetGridAsync(
+                filter: e => e.LessonId == lessonId,
+                includeProperties: "Lesson,Subject",
+                pageIndex: pageIndex,
+                pageSize: pageSize);
+
+            return _mapper.Map<Pagination<ExamItem>>(exams);
+        }
+
+        public async Task<Pagination<ExamItem>> GetExamBySubjectGrid(int subjectId, int? pageIndex, int? pageSize)
+        {
+            var exams = await GetGridAsync(
+                filter: e => e.SubjectId == subjectId,
+                includeProperties: "Lesson,Subject",
+                pageIndex: pageIndex,
+                pageSize: pageSize);
+
+            return _mapper.Map<Pagination<ExamItem>>(exams);
+        }
+
+        public async Task<List<ExamItem>> GetExamByLesson(int lessonId)
+        {
+            var exams = await _dbContext.Exams
+                .Where(x => x.LessonId == lessonId && x.IsDeleted != true)
+                .Include(x => x.Subject)
+                .Include(x => x.Lesson)
+                .ToListAsync();
+            return _mapper.Map<List<ExamItem>>(exams);
+        }
+
+        public async Task<List<ExamItem>> GetExamBySubject(int subjectId)
+        {
+            var exams = await _dbContext.Exams
+                .Where(x => x.SubjectId == subjectId && x.IsDeleted != true)
+                .Include(x => x.Subject)
+                .Include(x => x.Lesson)
+                .ToListAsync();
+            return _mapper.Map<List<ExamItem>>(exams);
         }
     }
 }

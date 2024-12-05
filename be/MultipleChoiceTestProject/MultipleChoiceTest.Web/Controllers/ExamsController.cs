@@ -17,6 +17,48 @@ namespace MultipleChoiceTest.Web.Controllers
 
         }
 
+        [HttpGet]
+        public async Task<IActionResult> InfoExamByLesson(int lessonId, int? pageIndex = 0, int? pageSize = 10)
+        {
+            if (lessonId != null && lessonId > 0)
+            {
+                var examPage = await ApiClient.GetAsync<Pagination<ExamItem>>(Request, $"Exams/GetExamByLesson/{lessonId}?type={(int)TypeGetSelectConstant.TypeGet.GetGrid}&pageIndex={pageIndex}&pageSize={pageSize}");
+                if (examPage.Data.Items == null || examPage.Data.Items.Count == 0)
+                {
+                    _notyfService.Warning("Không có dữ liệu");
+                    return RedirectToAction("Index", "Home");
+                }
+                if (!examPage.Success)
+                {
+                    _notyfService.Warning(examPage.Message);
+                }
+                ViewData["PageIndex"] = pageIndex;
+                return View(examPage.Data);
+            }
+            return BadRequest();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> InfoExamBySubject(int subjectId, int? pageIndex = 0, int? pageSize = 10)
+        {
+            if (subjectId != null && subjectId > 0)
+            {
+                var examPage = await ApiClient.GetAsync<Pagination<ExamItem>>(Request, $"Exams/GetExamBySubject/{subjectId}?type={(int)TypeGetSelectConstant.TypeGet.GetGrid}&pageIndex={pageIndex}&pageSize={pageSize}");
+                if (examPage.Data.Items == null || examPage.Data.Items.Count == 0)
+                {
+                    _notyfService.Warning("Không có dữ liệu");
+                    return RedirectToAction("Index", "Home");
+                }
+                if (!examPage.Success)
+                {
+                    _notyfService.Warning(examPage.Message);
+                }
+                ViewData["PageIndex"] = pageIndex;
+                return View(examPage.Data);
+            }
+            return BadRequest();
+        }
+
         [User]
         [HttpGet]
         public async Task<IActionResult> InfoExam(int id)

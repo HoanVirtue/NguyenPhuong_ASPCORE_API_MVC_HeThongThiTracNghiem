@@ -90,6 +90,36 @@ namespace MultipleChoiceTest.Api.Controllers
             });
         }
 
+        [HttpGet("GetExamByLesson/{lessonId}")]
+        public async Task<IActionResult> GetExamByLessonAsync(int lessonId, int? type = (int)TypeGetSelectConstant.TypeGet.GetList, int? pageIndex = 0, int? pageSize = 10)
+        {
+            if (type == (int)TypeGetSelectConstant.TypeGet.GetList)
+            {
+                return Ok(ApiResponse<List<ExamItem>>.SuccessWithData(await _unitOfWork.ExamRepository.GetExamByLesson(lessonId)));
+            }
+            else if (type == (int)TypeGetSelectConstant.TypeGet.GetGrid)
+            {
+                var exams = await _unitOfWork.ExamRepository.GetExamByLessonGrid(lessonId, pageIndex, pageSize);
+                return Ok(ApiResponse<Pagination<ExamItem>>.SuccessWithData(exams));
+            }
+            return BadRequest();
+        }
+
+        [HttpGet("GetExamBySubject/{subjectId}")]
+        public async Task<IActionResult> GetExamBySubjectAsync(int subjectId, int? type = (int)TypeGetSelectConstant.TypeGet.GetList, int? pageIndex = 0, int? pageSize = 10)
+        {
+            if (type == (int)TypeGetSelectConstant.TypeGet.GetList)
+            {
+                return Ok(ApiResponse<List<ExamItem>>.SuccessWithData(await _unitOfWork.ExamRepository.GetExamBySubject(subjectId)));
+            }
+            else if (type == (int)TypeGetSelectConstant.TypeGet.GetGrid)
+            {
+                var exams = await _unitOfWork.ExamRepository.GetExamBySubjectGrid(subjectId, pageIndex, pageSize);
+                return Ok(ApiResponse<Pagination<ExamItem>>.SuccessWithData(exams));
+            }
+            return BadRequest();
+        }
+
         // PUT: api/Exams/5
         [HttpPut]
         public async Task<ActionResult<ApiResponse<Exam>>> PutExam([FromBody] CUExam exam)
