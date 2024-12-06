@@ -1,0 +1,60 @@
+﻿@using MultipleChoiceTest.Domain.ModelViews
+@model QuestionItem
+
+<div id="question_1" class="listquestion question-box" style="">
+    <div class="panel panel-default question-item" data-question-number="1">
+        <div class="panel-body">
+            <div class="question">
+                <strong class="text-red m-bottom">
+                    Câu hỏi 1.
+                </strong>
+                <span style=" ">
+                    @Model.QuestionText
+                </span>
+            </div>
+            <div class="row answer">
+                <div class="flex">
+                    @foreach(var item in Model.Choices.Split(";"))
+                    {
+                        <div class="answer-item col-md-6">
+                            <label class="">
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td class="letter">
+                                                <p>
+                                                    <input class="radio_answer_1" type="radio" name="answer[2191]" value="@item.Split(":")[0].Trim()">
+                                                    <strong>@(item.Split(":")[0].Trim()).</strong>
+                                                </p>
+                                            </td>
+                                            <td>
+                                                <span>@item.Split(":")[1].Trim()</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </label>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="form-check">
+    <input type="checkbox" id="auto_next_question">
+    <label for="auto_next_question">Tự động chuyển câu khi chọn xong đáp án</label>
+</div>
+<div class="text-center clear">
+    <button type="button"
+            class="btn btn-danger item-prev" title="Trước đó"
+            style="display:none">
+        <span>Trước đó</span>
+    </button>
+    &nbsp;
+    <button type="button"
+            class="btn btn-primary item-next" title="Kế tiếp">
+        <span class="btn-label">Kế tiếp</span>
+    </button>
+</div>

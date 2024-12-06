@@ -1,21 +1,14 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using MultipleChoiceTest.Domain.ModelViews
+@model ExamItem
+
+
 <ol class="breadcrumb" itemscope="" itemtype="https://schema.org/BreadcrumbList">
-    <li class="home" itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem">
-        <em class="fa fa-lg fa-home">&nbsp;</em><a href="/vi/" itemprop="item" title="Trang nhất">
-            <span itemprop="name">Trang nhất</span>
-        </a><i class="hidden" itemprop="position" content="1"></i>
-    </li>
-    <li itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem">
-        <a href="/vi/users/" itemprop="item" title="Tài khoản Sinh viên">
-            <span itemprop="name">
-                Liên
-                hệ
-            </span>
-        </a><i class="hidden" itemprop="position" content="2"></i>
-    </li>
+    <li class="home"><em class="fa fa-lg fa-home">&nbsp;</em><a href="/Home/Index" title="Trang chủ"><span itemprop="name">Trang nhất</span></a><i class="hidden" itemprop="position" content="1"></i></li>
+    <li><a href="/Exams/InfoExamBySubject?subjectId=@Model?.SubjectId" itemprop="item" title="@Model?.SubjectName"><span itemprop="name">@Model?.SubjectName</span></a><i class="hidden" itemprop="position" content="3"></i></li>
+    <li><a href="/Exams/InfoExamByLesson?lessonId=@Model?.LessonId" itemprop="item" title="@Model?.LessonName"><span itemprop="name">@Model?.LessonName</span></a><i class="hidden" itemprop="position" content="4"></i></li>
+    <li><a href="#" itemprop="item" title="@Model.ExamName"><span itemprop="name">@Model.ExamName</span></a><i class="hidden" itemprop="position" content="5"></i></li>
 </ol>
+
 <div class="row">
     <div class="col-md-9">
         <div class="content">
@@ -236,16 +229,19 @@
                             <div class="col-md-4 sticky-exams">
                                 <div id="timer-box" class="template2">
                                     <span>Thời gian còn lại</span>
-                                    <div id="countdown" data-seconds-left="1799">
-                                        <div class="jst-hours">00:</div><div class="jst-minutes">08:</div><div class="jst-seconds">45</div><div class="jst-clearDiv"></div>
+                                    <div id="countdown" data-minute="@Model.Duration">
+                                        <div class="jst-hours">00:</div>
+                                        <div class="jst-minutes">08:</div>
+                                        <div class="jst-seconds">45</div>
+                                        <div class="jst-clearDiv"></div>
                                     </div>
                                 </div>
                                 <div class="template2">
-                                    <h1>Pháp Luật Đại Cương (Luyện phần 1)</h1>
+                                    <h1>@Model.ExamName</h1>
                                     <ul class="exam-info">
-                                        <li><label>Số câu</label>: 40</li>
-                                        <li><label>Thời gian</label>: 30 phút</li>
-                                        <li><label>Họ và tên</label>: Tạ Đức Hoàn</li>
+                                        <li><label>Số câu</label>: @Model.TotalQuestions</li>
+                                        <li><label>Thời gian</label>: @Model.Duration phút</li>
+                                        <li><label>Họ và tên</label>: @ViewData["Username"]</li>
                                     </ul>
                                 </div>
                                 <div class="template2">
@@ -258,155 +254,22 @@
                             <div class="col-md-8">
                                 <div class="testing test-gird m-bottom">
                                     <form action="" method="post" id="frm-submit">
-                                        <input type="hidden" value="1" name="save_test"> <input type="hidden" value="83" name="exam_id"> <input type="hidden"
-                                                                                                                                                id="current_page"> <input type="hidden" id="show_per_page">
-                                        <div id="questionlist" data-exam-id="83" class="m-bottom"
-                                             style="font-size: 16px;">
-                                            <div id="question_1" class="listquestion question-box" style="">
-                                                <div class="panel panel-default question-item "
-                                                     data-question-number="1">
-                                                    <div class="panel-body">
-                                                        <div class="question">
-                                                            <strong class="text-red m-bottom">
-                                                                Câu hỏi
-                                                                1.
-                                                            </strong>
-                                                            <span style=" ">
-                                                                Chức danh nào sau đây không bắt
-                                                                buộc phải là Đại biểu Quốc hội:
-                                                            </span>
-                                                        </div>
-                                                        <div class="row answer">
-                                                            <div class="flex">
-                                                                <div class="answer-item col-md-6">
-                                                                    <label class="">
-                                                                        <table>
-                                                                            <tbody>
-                                                                                <tr>
-                                                                                    <td class="letter">
-                                                                                        <p>
-                                                                                            <input class="radio_answer_1"
-                                                                                                   type="radio"
-                                                                                                   name="answer[2191]"
-                                                                                                   value="1">
-                                                                                            <strong>A.</strong>
-                                                                                        </p>
-                                                                                    </td>
-                                                                                    <td>
-                                                                                        <span></span><span>
-                                                                                            Bộ
-                                                                                            trưởng
-                                                                                        </span>
-                                                                                    </td>
-                                                                                </tr>
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </label>
-                                                                </div>
-                                                                <div class="answer-item answer-item col-md-6">
-                                                                    <label class="">
-                                                                        <table>
-                                                                            <tbody>
-                                                                                <tr>
-                                                                                    <td class="letter">
-                                                                                        <p>
-                                                                                            <input class="radio_answer_1"
-                                                                                                   type="radio"
-                                                                                                   name="answer[2191]"
-                                                                                                   value="2">
-                                                                                            <strong>B.</strong>
-                                                                                        </p>
-                                                                                    </td>
-                                                                                    <td>
-                                                                                        <span style=" ">
-                                                                                            Chủ
-                                                                                            tịch nước
-                                                                                        </span>
-                                                                                    </td>
-                                                                                </tr>
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </label>
-                                                                </div>
-                                                                <div class="answer-item answer-item col-md-6">
-                                                                    <label class="">
-                                                                        <table>
-                                                                            <tbody>
-                                                                                <tr>
-                                                                                    <td class="letter">
-                                                                                        <p>
-                                                                                            <input class="radio_answer_1"
-                                                                                                   type="radio"
-                                                                                                   name="answer[2191]"
-                                                                                                   value="3">
-                                                                                            <strong>C.</strong>
-                                                                                        </p>
-                                                                                    </td>
-                                                                                    <td>
-                                                                                        <span style=" ">
-                                                                                            Thủ
-                                                                                            tướng Chính
-                                                                                            phủ
-                                                                                        </span>
-                                                                                    </td>
-                                                                                </tr>
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </label>
-                                                                </div>
-                                                                <div class="answer-item answer-item col-md-6">
-                                                                    <label class="">
-                                                                        <table>
-                                                                            <tbody>
-                                                                                <tr>
-                                                                                    <td class="letter">
-                                                                                        <p>
-                                                                                            <input class="radio_answer_1"
-                                                                                                   type="radio"
-                                                                                                   name="answer[2191]"
-                                                                                                   value="4">
-                                                                                            <strong>D.</strong>
-                                                                                        </p>
-                                                                                    </td>
-                                                                                    <td>
-                                                                                        <span style=" ">
-                                                                                            Chủ
-                                                                                            tịch Quốc
-                                                                                            hội
-                                                                                        </span>
-                                                                                    </td>
-                                                                                </tr>
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-check">
-                                                <input type="checkbox" id="auto_next_question">
-                                                <label for="auto_next_question">Tự động chuyển câu khi chọn xong đáp án</label>
-                                            </div>
-                                            <div class="text-center clear">
-                                                <button type="button"
-                                                        class="btn btn-danger item-prev" title="Trước đó"
-                                                        style="display:none">
-                                                    <span>Trước đó</span>
-                                                </button>
-                                                &nbsp;
-                                                <button type="button"
-                                                        class="btn btn-primary item-next" title="Kế tiếp">
-                                                    <span class="btn-label">Kế tiếp</span>
-                                                </button>
-                                            </div>
+                                        <input type="hidden" value="1" name="save_test"> <input type="hidden" value="83" name="exam_id">
+                                        <input type="hidden" id="current_page"> <input type="hidden" id="show_per_page">
+                                        <div id="questionlist" data-exam-id="83" class="m-bottom" style="font-size: 16px;">
+                                            
                                         </div>
                                     </form>
 
                                     <div class="col-md-12">
                                         <ul class="slides-vertical-pagination">
-                                            <li class="question_number pagination-active"
+                                            @for(int i = 1; i <= Model.TotalQuestions; i++)
+                                            {
+                                                <li class="question_number pagination-active" id="question_number_1">
+                                                    <span class="pagination-item-name" aria-hidden="true" data-value="@i">Câu&nbsp;@i</span>
+                                                </li>
+                                            }
+                                            @* <li class="question_number pagination-active"
                                                 id="question_number_1">
                                                 <span class="pagination-item-name"
                                                       aria-hidden="true">Câu&nbsp;1</span>
@@ -418,7 +281,7 @@
                                             <li class="question_number" id="question_number_3">
                                                 <span class="pagination-item-name"
                                                       aria-hidden="true">Câu&nbsp;3</span>
-                                            </li>
+                                            </li> *@
                                         </ul>
                                     </div>
                                     <div class="text-center">
@@ -437,3 +300,8 @@
         @await Component.InvokeAsync("RightPage", new {type = "access"})
     </div>
 </div>
+
+
+@section Scripts {
+    <script src="~/js/user/quiz_question.js"></script>
+}

@@ -120,6 +120,17 @@ namespace MultipleChoiceTest.Api.Controllers
             return BadRequest();
         }
 
+        [HttpGet("GetQuestionByExam/{examId}")]
+        public async Task<IActionResult> GetQuestionsByExam(int examId)
+        {
+            if (await _unitOfWork.ExamRepository.GetByIdAsync(examId) == null)
+            {
+                return Ok(ApiResponse<List<QuestionItem>>.ErrorResponse<List<QuestionItem>>("Bài thi không tồn tại"));
+            }
+            var questionRs = await _unitOfWork.QuestionRepository.GetDataOfExam(examId);
+            return Ok(questionRs);
+        }
+
         // PUT: api/Exams/5
         [HttpPut]
         public async Task<ActionResult<ApiResponse<Exam>>> PutExam([FromBody] CUExam exam)

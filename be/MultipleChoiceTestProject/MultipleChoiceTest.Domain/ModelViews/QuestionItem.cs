@@ -3,6 +3,7 @@
     public class QuestionItem
     {
         public int Id { get; set; }
+        public int Index { get; set; }
         public string QuestionText { get; set; } = null!;
 
         public string? Choices { get; set; }

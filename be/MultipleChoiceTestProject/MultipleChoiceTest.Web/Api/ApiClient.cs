@@ -31,6 +31,29 @@ namespace MultipleChoiceTest.Web.Api
         {
             Response.Cookies.Append(key, value);
         }
+
+        public static void SetSession<T>(ISession session, string key, T value)
+        {
+            var serializedValue = System.Text.Json.JsonSerializer.Serialize(value);
+            session.SetString(key, serializedValue);
+        }
+
+        public static T GetSession<T>(ISession session, string key)
+        {
+            var serializedValue = session.GetString(key);
+            if (string.IsNullOrEmpty(serializedValue))
+            {
+                return default;
+            }
+            return System.Text.Json.JsonSerializer.Deserialize<T>(serializedValue);
+        }
+
+        public static void RemoveSession(ISession session, string key)
+        {
+            session.Remove(key);
+        }
+
+
         public static async Task<ApiResponse<T>> GetAsync<T>(HttpRequest request, string requestUri)
         {
             var token = GetCookie(request, UserConstant.AccessToken);

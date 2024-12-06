@@ -106,10 +106,12 @@ body {
 }
 
 .navbar-collapse.collapse {
-    display: block !important;
+    display: flex !important;
     height: auto !important;
     padding-bottom: 0;
     overflow: visible !important;
+    justify-content: space-between;
+    padding-right: 10px;
 }
 
 .navbar-nav > li {
@@ -794,6 +796,7 @@ input[type=radio] {
 
 
 /* user info */
+/*
 .margin-bottom {
     margin-bottom: 10px;
 }
@@ -912,3 +915,4 @@ a, a:link, a:active, a:visited {
     -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
     transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
+    */
