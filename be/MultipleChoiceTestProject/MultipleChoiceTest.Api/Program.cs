@@ -6,6 +6,7 @@ using MultipleChoiceTest.Domain.AutoMappingConfig;
 using MultipleChoiceTest.Repository;
 using MultipleChoiceTest.Repository.Authorizations;
 using MultipleChoiceTest.Repository.Repository;
+using MultipleChoiceTest.Repository.Service;
 using MultipleChoiceTest.Repository.UnitOfWork;
 using System.Text;
 
@@ -116,6 +117,16 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod();                    // Cho phép tất cả các phương thức (GET, POST,...)
     });
 });
+
+//builder.Services.AddSingleton<OpenAIClient>(new OpenAIClient(builder.Configuration["OpenAI:ApiKey"]));
+
+builder.Services.AddHttpClient("ChtpGPT", client =>
+{
+    client.BaseAddress = new Uri("https://api.openai.com/v1/");
+    client.DefaultRequestHeaders.Add("User-Agent", "OpenAI-ChatGPT");
+});
+
+builder.Services.AddTransient<IGPTService, GPTService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

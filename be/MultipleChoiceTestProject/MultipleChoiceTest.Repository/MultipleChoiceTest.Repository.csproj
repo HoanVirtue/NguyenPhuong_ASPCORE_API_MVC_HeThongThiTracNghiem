@@ -9,7 +9,10 @@
   <ItemGroup>
     <PackageReference Include="EPPlus" Version="7.5.1" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.0" />
+    <PackageReference Include="Microsoft.SqlServer.SqlManagementObjects" Version="172.52.0" />
     <PackageReference Include="NPOI" Version="2.7.2" />
+    <PackageReference Include="OpenAI" Version="2.1.0" />
   </ItemGroup>
 
   <ItemGroup>

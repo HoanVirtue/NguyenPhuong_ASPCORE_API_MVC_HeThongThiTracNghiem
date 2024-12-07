@@ -131,6 +131,12 @@ namespace MultipleChoiceTest.Api.Controllers
             return Ok(questionRs);
         }
 
+        [HttpPost("SubmitExam/{examId}")]
+        public IActionResult SubmitExam(int examId, [FromBody] List<CandidateAnswer> answers)
+        {
+            return default;
+        }
+
         // PUT: api/Exams/5
         [HttpPut]
         public async Task<ActionResult<ApiResponse<Exam>>> PutExam([FromBody] CUExam exam)

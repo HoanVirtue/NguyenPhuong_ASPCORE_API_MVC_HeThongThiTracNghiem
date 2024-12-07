@@ -13,45 +13,14 @@
     <div class="col-md-9">
         <div class="content">
             <div class="content-heading row">
-                <div class="modal fade modal-fullscreen " id="alert-not-in-site" tabindex="-1" role="dialog"
-                     aria-labelledby="myModalLabel">
+                <div class="modal fade modal-fullscreen" id="submit-confirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-xs" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
+                                <h3 class="modal-title">Thông báo!</h3>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">×</span>
                                 </button>
-                                <h3 class="modal-title">Thông báo!</h3>
-                            </div>
-                            <div class="modal-body">
-                                <div style="padding:20px 10px; border: 1px solid #9d9797; border-radius: 4px">
-                                    <p>
-                                        Bạn không phải Thành viên chính thức nên khi tham gia thi sẽ không
-                                        lưu lại Kết quả và Lịch sử thi!
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <a type="button" class="btn btn-success">
-                                    Đồng ý
-                                </a>
-                                <button type="button" class="btn btn-warning" data-dismiss="modal">
-                                    Bỏ
-                                    qua
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal fade modal-fullscreen " id="test-submit-confirm" tabindex="-1"
-                     role="dialog" aria-labelledby="myModalLabel">
-                    <div class="modal-dialog modal-xs" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">×</span>
-                                </button>
-                                <h3 class="modal-title">Thông báo!</h3>
                             </div>
                             <div class="modal-body">
                                 <div style="padding:20px 10px; border: 1px solid #9d9797; border-radius: 4px">
@@ -62,98 +31,7 @@
                                 <button id="submit-button" type="button" class="btn btn-primary">
                                     Đồng ý
                                 </button>
-                                <button type="button" class="btn" data-dismiss="modal">Bỏ qua</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal fade modal-fullscreen " id="alert-not-enough-money" tabindex="-1"
-                     role="dialog" aria-labelledby="myModalLabel">
-                    <div class="modal-dialog modal-xs" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">×</span>
-                                </button>
-                                <h3 class="modal-title">Thông báo!</h3>
-                            </div>
-                            <div class="modal-body">
-                                <div style="padding:20px 10px; border: 1px solid #9d9797; border-radius: 4px">
-                                    <ul style="list-style-type:disc">
-                                        <li style="line-height: 25px">
-                                            <strong>Số dư trong tài khoản</strong>
-                                            của bạn còn <strong>
-                                                <span class="text-danger"
-                                                      id="remain_money">0</span><span class="text-danger">đ</span>
-                                            </strong> <strong>
-                                                không
-                                                đủ
-                                            </strong> để làm đề thi này!
-                                        </li>
-                                        <li style="line-height: 25px">
-                                            Vui lòng nạp tiền vào tài khoản để
-                                            tiếp tục
-                                        </li>
-                                        <li style="line-height: 25px">
-                                            Bạn có thể sử dụng số tiền còn lại để
-                                            làm các đề thi khác
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <a type="button" class="btn btn-success" href="/vi/wallet-pri/recharge/">
-                                    Nạp tiền
-                                </a>
-                                <button type="button" class="btn btn-warning" data-dismiss="modal">
-                                    Bỏ
-                                    qua
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal fade modal-fullscreen " id="alert-before-exam" tabindex="-1" role="dialog"
-                     aria-labelledby="myModalLabel">
-                    <div class="modal-dialog modal-xs" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">×</span>
-                                </button>
-                                <h3 class="modal-title">Thông báo!</h3>
-                            </div>
-                            <div class="modal-body">
-                                <div class="text-center"
-                                     style="padding:20px 10px; border: 1px solid #9d9797; border-radius: 4px">
-                                    <p>Đề thi: <strong>Pháp Luật Đại Cương (Luyện phần 1)</strong></p>
-                                    <p><label>Số câu</label>: 40 - <label>Thời gian</label>: 30 phút</p>
-                                    <p>
-                                        Số dư trong tài khoản của bạn còn <strong>
-                                            <span class="text-danger"
-                                                  id="remain_money">%s</span><span class="text-danger">đ</span>
-                                        </strong>
-                                    </p>
-                                    <p>
-                                        Phí làm bài là <strong>
-                                            <span class="text-danger">%s</span>
-                                        </strong><span class="text-danger">đ</span>/1 lượt thi.
-                                    </p>
-                                    <p>
-                                        Trong quá trình làm bài <strong class="text-danger">
-                                            tuyệt đối không
-                                            thoát khỏi Website
-                                        </strong> cho đến khi nộp bài thành công. Hệ
-                                        thống <strong class="text-danger">không hỗ trợ hoàn tiền</strong>
-                                        nếu bạn cố tình thoát trong quá trình thi.<br><br> Chọn <strong class="text-danger">Đồng ý</strong> để vào bài làm ngay!
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button id="start-exams-button" type="button" class="btn btn-primary">
-                                    Đồng ý
-                                </button>
-                                <button type="button" class="btn" data-dismiss="modal">Bỏ qua</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Bỏ qua</button>
                             </div>
                         </div>
                     </div>
@@ -245,7 +123,7 @@
                                     </ul>
                                 </div>
                                 <div class="template2">
-                                    <button type="submit" name="submit" class="btn btn-success">
+                                    <button type="button" name="submit" class="btn btn-success">
                                         <i class="fa-solid fa-floppy-disk"></i> &nbsp;Nộp bài
                                     </button>
                                     &nbsp; <a href="" class="cancelLink">Thoát </a>
@@ -257,7 +135,27 @@
                                         <input type="hidden" value="1" name="save_test"> <input type="hidden" value="83" name="exam_id">
                                         <input type="hidden" id="current_page"> <input type="hidden" id="show_per_page">
                                         <div id="questionlist" data-exam-id="83" class="m-bottom" style="font-size: 16px;">
-                                            
+                                            @foreach(var ques in ViewData["Questions"] as List<QuestionItem>)
+                                            {
+                                                @await Html.PartialAsync("~/Views/Shared/QuestionView/_QuestionMultipleChoice.cshtml", ques)
+                                            }
+
+                                            <div class="form-check">
+                                                <input type="checkbox" id="auto_next_question">
+                                                <label for="auto_next_question">Tự động chuyển câu khi chọn xong đáp án</label>
+                                            </div>
+                                            <div class="text-center clear">
+                                                <button type="button"
+                                                        class="btn btn-danger item-prev" title="Trước đó"
+                                                        style="display:none">
+                                                    <span>Trước đó</span>
+                                                </button>
+                                                &nbsp;
+                                                <button type="button"
+                                                        class="btn btn-primary item-next" title="Kế tiếp">
+                                                    <span class="btn-label">Kế tiếp</span>
+                                                </button>
+                                            </div>
                                         </div>
                                     </form>
 
@@ -265,7 +163,7 @@
                                         <ul class="slides-vertical-pagination">
                                             @for(int i = 1; i <= Model.TotalQuestions; i++)
                                             {
-                                                <li class="question_number pagination-active" id="question_number_1">
+                                                <li class="question_number" id="question_number_@i">
                                                     <span class="pagination-item-name" aria-hidden="true" data-value="@i">Câu&nbsp;@i</span>
                                                 </li>
                                             }
@@ -283,8 +181,6 @@
                                                       aria-hidden="true">Câu&nbsp;3</span>
                                             </li> *@
                                         </ul>
-                                    </div>
-                                    <div class="text-center">
                                     </div>
                                 </div>
                             </div>

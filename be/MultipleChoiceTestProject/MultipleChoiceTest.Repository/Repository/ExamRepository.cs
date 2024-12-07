@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using MultipleChoiceTest.Domain.Constants;
 using MultipleChoiceTest.Domain.Models;
 using MultipleChoiceTest.Domain.ModelViews;
 using MultipleChoiceTest.Repository.Authorizations;
+using MultipleChoiceTest.Repository.Service;
 using System.Linq.Expressions;
 
 namespace MultipleChoiceTest.Repository.Repository
@@ -26,12 +28,19 @@ namespace MultipleChoiceTest.Repository.Repository
         Task<Pagination<ExamItem>> GetExamBySubjectGrid(int subjectId, int? pageIndex, int? pageSize);
         Task<List<ExamItem>> GetExamByLesson(int lessonId);
         Task<List<ExamItem>> GetExamBySubject(int subjectId);
-
+        Task ExamFinish(List<CandidateAnswer> answers, int examId);
     }
     public class ExamRepository : GenericRepository<Exam>, IExamRepository
     {
-        public ExamRepository(MultipleChoiceTestDbContext dbContext, IUserContextService userContextService, IMapper mapper) : base(dbContext, userContextService, mapper)
+        //private readonly IUnitOfWork _unitOfWork;
+        private readonly IGPTService _gptService;
+        public ExamRepository(
+            IGPTService gptService,
+            MultipleChoiceTestDbContext dbContext,
+            IUserContextService userContextService,
+            IMapper mapper) : base(dbContext, userContextService, mapper)
         {
+            _gptService = gptService;
         }
         public Task<bool> IsExistCode(string code, int? id = 0)
         {
@@ -146,6 +155,93 @@ namespace MultipleChoiceTest.Repository.Repository
                 .Include(x => x.Lesson)
                 .ToListAsync();
             return _mapper.Map<List<ExamItem>>(exams);
+        }
+
+        public async Task ExamFinish(List<CandidateAnswer> answers, int examId)
+        {
+            // lấy question
+            int correct = 0;
+            int inCorrect = 0;
+            int unanswered = 0;
+            var examInfo = await _dbContext.Exams.FindAsync(examId);
+            if (examInfo == null)
+                return;
+            foreach (var an in answers)
+            {
+                var question = await _dbContext.Questions.FindAsync(an.QuestionId);
+                //if (question == null)
+                //    return;
+                ExamAttempt result = null;
+                if (an.QuestionTypeId == (int)QuestionTypeConstant.Type.MultipleChoice || an.QuestionTypeId == (int)QuestionTypeConstant.Type.Audio)
+                {
+                    result = new ExamAttempt()
+                    {
+                        UserId = _userContext.GetCurrentUserId(),
+                        ExamId = examId,
+                        QuestionId = an.QuestionId,
+                        Answer = an.AnswerText,
+                        IsCorrect = an.AnswerText == question.CorrectAnswer.Trim(),
+                    };
+                }
+                else if (an.QuestionTypeId == (int)QuestionTypeConstant.Type.Essay)
+                {
+                    result = new ExamAttempt()
+                    {
+                        UserId = _userContext.GetCurrentUserId(),
+                        ExamId = examId,
+                        QuestionId = an.QuestionId,
+                        Answer = an.AnswerText,
+                        IsCorrect = await _gptService.GradeEssay(question.QuestionText, question.AnswerExplanation, an.AnswerText),
+                    };
+                }
+
+                if (result != null)
+                {
+                    if (result.IsCorrect == true)
+                    {
+                        correct++;
+                    }
+                    else if (!string.IsNullOrEmpty(an.AnswerText) && result.IsCorrect != true)
+                    {
+                        inCorrect++;
+                    }
+                    else
+                    {
+                        unanswered++;
+                    }
+                    //await _unitOfWork.ExamAttemptRepository.AddAsync(result);
+                }
+                else
+                {
+
+                }
+            }
+
+            decimal score = (decimal)(((correct * 1.0) / (examInfo.TotalQuestions * 1.0)) * 10);
+            var examResult = new ExamResult()
+            {
+                ExamId = examId,
+                UserId = _userContext.GetCurrentUserId(),
+                CompletionTime = DateOnly.FromDateTime(DateTime.Now),
+                CorrectAnswersCount = correct,
+                IncorrectAnswersCount = inCorrect,
+                UnansweredQuestionsCount = unanswered,
+                Score = score,
+                Rank = score >= 9 ? "Xuất sắc" :
+                        score >= 8 ? "Giỏi" :
+                        score >= 7 ? "Khá" :
+                        score >= 5 ? "Trung bình" :
+                        "Kém"
+            };
+            try
+            {
+                //await _unitOfWork.ExamResultRepository.AddAsync(examResult);
+            }
+            catch (
+            Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
     }
 }

@@ -108,6 +108,7 @@ namespace MultipleChoiceTest.Web.Controllers
                     return RedirectToAction("InfoExam", "Exams", new { id = id });
                 }
                 ApiClient.SetSession<List<QuestionItem>>(HttpContext.Session, SessionDataConstant.FormatKey(SessionDataConstant.ListQuestion, userCurrentId), questions.Data);
+                ViewData["Questions"] = questions.Data;
                 ViewData["Username"] = (await ApiClient.GetAsync<User>(Request, $"Users/{userCurrentId}")).Data.UserName;
                 return View(infoExam.Data);
             }
@@ -125,6 +126,22 @@ namespace MultipleChoiceTest.Web.Controllers
             var questions = ApiClient.GetSession<List<QuestionItem>>(HttpContext.Session, SessionDataConstant.FormatKey(SessionDataConstant.ListQuestion, userCurrentId));
             var question = questions.FirstOrDefault(x => x.Index == index);
             return PartialView("~/Views/Shared/QuestionView/_QuestionMultipleChoice.cshtml", question);
+        }
+
+        [HttpPost]
+        public IActionResult SubmitExam([FromBody] List<CandidateAnswer> answers)
+        {
+            if (answers == null || !answers.Any())
+            {
+                return BadRequest("Không có câu trả lời nào");
+            }
+
+            var questionItems = ApiClient.GetSession<List<QuestionItem>>(HttpContext.Session, SessionDataConstant.FormatKey(SessionDataConstant.ListQuestion, userCurrentId));
+            foreach (var answer in answers)
+            {
+                answer.QuestionId = questionItems.FirstOrDefault(x => x.Index == answer.QuestionIndex).Id;
+            }
+            return default;
         }
     }
 }
