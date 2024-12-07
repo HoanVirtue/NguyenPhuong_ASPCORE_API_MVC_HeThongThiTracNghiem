@@ -18,6 +18,10 @@ namespace MultipleChoiceTest.Web.Controllers
 
             return View(history.Data);
         }
-       
+        [HttpGet]
+        public IActionResult ExamResults()
+        {
+            return View();
+        }
     }
 }

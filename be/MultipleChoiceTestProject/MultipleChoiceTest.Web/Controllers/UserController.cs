@@ -12,5 +12,6 @@ namespace MultipleChoiceTest.Web.Controllers
         {
             return View();
         }
+
     }
 }

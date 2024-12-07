@@ -71,5 +71,6 @@ namespace MultipleChoiceTest.Repository.Repository
             }
             return ApiResponse<User>.ErrorResponse<User>(errorMessage);
         }
+        //public Task<ApiResponse<User>> UpdateUser(User model) { }
     }
 }
