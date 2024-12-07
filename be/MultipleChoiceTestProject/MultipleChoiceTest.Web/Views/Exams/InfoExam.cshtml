@@ -5,10 +5,10 @@
 *@
 
 <ol class="breadcrumb" itemscope="" itemtype="https://schema.org/BreadcrumbList">
-    <li class="home"><em class="fa fa-lg fa-home">&nbsp;</em><a href="/vi/" title="Trang chủ"><span itemprop="name">Trang nhất</span></a><i class="hidden" itemprop="position" content="1"></i></li>
-    <li><a href="" itemprop="item" title="@Model.SubjectName"><span itemprop="name">@Model.SubjectName</span></a><i class="hidden" itemprop="position" content="3"></i></li>
-    <li><a href="" itemprop="item" title="@Model.LessonName"><span itemprop="name">@Model.LessonName</span></a><i class="hidden" itemprop="position" content="4"></i></li>
-    <li><a href="" itemprop="item" title="@Model.ExamName"><span itemprop="name">@Model.ExamName</span></a><i class="hidden" itemprop="position" content="5"></i></li>
+    <li class="home"><em class="fa fa-lg fa-home">&nbsp;</em><a href="/Home/Index" title="Trang chủ"><span itemprop="name">Trang nhất</span></a><i class="hidden" itemprop="position" content="1"></i></li>
+    <li><a href="/Exams/InfoExamBySubject?subjectId=@Model?.SubjectId" itemprop="item" title="@Model?.SubjectName"><span itemprop="name">@Model?.SubjectName</span></a><i class="hidden" itemprop="position" content="3"></i></li>
+    <li><a href="/Exams/InfoExamByLesson?lessonId=@Model?.LessonId" itemprop="item" title="@Model?.LessonName"><span itemprop="name">@Model?.LessonName</span></a><i class="hidden" itemprop="position" content="4"></i></li>
+    <li><a href="#" itemprop="item" title="@Model.ExamName"><span itemprop="name">@Model.ExamName</span></a><i class="hidden" itemprop="position" content="5"></i></li>
 </ol>
 <div class="row">
     <div class="col-md-9">
@@ -149,9 +149,9 @@
                                         Lưu đề
                                         thi
                                     </button>
-                                    <button class="btn btn-primary m-bottom" id="btn-start">
+                                    <a href="/Exams/StartExam?id=@Model.Id" class="btn btn-primary m-bottom" id="btn-start">
                                         Bắt đầu làm bài
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
                             <div class="col-md-8">

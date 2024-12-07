@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using MultipleChoiceTest.Domain.Constants;
 using MultipleChoiceTest.Domain.Models;
 using MultipleChoiceTest.Domain.ModelViews;
 using MultipleChoiceTest.Repository.Authorizations;
+using MultipleChoiceTest.Repository.Service;
 using System.Linq.Expressions;
 
 namespace MultipleChoiceTest.Repository.Repository
@@ -22,11 +24,28 @@ namespace MultipleChoiceTest.Repository.Repository
             int? pageSize = null);
 
         Task<ExamItem> GetDetail(int id);
+        Task<Pagination<ExamItem>> GetExamByLessonGrid(int lessonId, int? pageIndex, int? pageSize);
+        Task<Pagination<ExamItem>> GetExamBySubjectGrid(int subjectId, int? pageIndex, int? pageSize);
+        Task<List<ExamItem>> GetExamByLesson(int lessonId);
+        Task<List<ExamItem>> GetExamBySubject(int subjectId);
+        Task ExamFinish(List<CandidateAnswer> answers, int examId);
     }
     public class ExamRepository : GenericRepository<Exam>, IExamRepository
     {
-        public ExamRepository(MultipleChoiceTestDbContext dbContext, IUserContextService userContextService, IMapper mapper) : base(dbContext, userContextService, mapper)
+        private readonly IGPTService _gptService;
+        private readonly IExamAttemptRepository _attemptRepository;
+        private readonly IExamResultRepository _resultRepository;
+        public ExamRepository(
+            IGPTService gptService,
+            IExamAttemptRepository attemptRepository,
+            IExamResultRepository examResultRepository,
+            MultipleChoiceTestDbContext dbContext,
+            IUserContextService userContextService,
+            IMapper mapper) : base(dbContext, userContextService, mapper)
         {
+            _gptService = gptService;
+            _attemptRepository = attemptRepository;
+            _resultRepository = examResultRepository;
         }
         public Task<bool> IsExistCode(string code, int? id = 0)
         {
@@ -99,6 +118,135 @@ namespace MultipleChoiceTest.Repository.Repository
         {
             var exam = await _dbContext.Exams.Include(x => x.Subject).Include(x => x.Lesson).SingleOrDefaultAsync(x => x.Id == id && x.IsDeleted != true);
             return _mapper.Map<ExamItem>(exam);
+        }
+
+        public async Task<Pagination<ExamItem>> GetExamByLessonGrid(int lessonId, int? pageIndex, int? pageSize)
+        {
+            var exams = await GetGridAsync(
+                filter: e => e.LessonId == lessonId,
+                includeProperties: "Lesson,Subject",
+                pageIndex: pageIndex,
+                pageSize: pageSize);
+
+            return _mapper.Map<Pagination<ExamItem>>(exams);
+        }
+
+        public async Task<Pagination<ExamItem>> GetExamBySubjectGrid(int subjectId, int? pageIndex, int? pageSize)
+        {
+            var exams = await GetGridAsync(
+                filter: e => e.SubjectId == subjectId,
+                includeProperties: "Lesson,Subject",
+                pageIndex: pageIndex,
+                pageSize: pageSize);
+
+            return _mapper.Map<Pagination<ExamItem>>(exams);
+        }
+
+        public async Task<List<ExamItem>> GetExamByLesson(int lessonId)
+        {
+            var exams = await _dbContext.Exams
+                .Where(x => x.LessonId == lessonId && x.IsDeleted != true)
+                .Include(x => x.Subject)
+                .Include(x => x.Lesson)
+                .ToListAsync();
+            return _mapper.Map<List<ExamItem>>(exams);
+        }
+
+        public async Task<List<ExamItem>> GetExamBySubject(int subjectId)
+        {
+            var exams = await _dbContext.Exams
+                .Where(x => x.SubjectId == subjectId && x.IsDeleted != true)
+                .Include(x => x.Subject)
+                .Include(x => x.Lesson)
+                .ToListAsync();
+            return _mapper.Map<List<ExamItem>>(exams);
+        }
+
+        public async Task ExamFinish(List<CandidateAnswer> answers, int examId)
+        {
+            // lấy question
+            int correct = 0;
+            int inCorrect = 0;
+            int unanswered = 0;
+            var examInfo = await _dbContext.Exams.FindAsync(examId);
+            if (examInfo == null)
+                return;
+            foreach (var an in answers)
+            {
+                var question = await _dbContext.Questions.FindAsync(an.QuestionId);
+                //if (question == null)
+                //    return;
+                ExamAttempt result = null;
+                if (an.QuestionTypeId == (int)QuestionTypeConstant.Type.MultipleChoice || an.QuestionTypeId == (int)QuestionTypeConstant.Type.Audio)
+                {
+                    result = new ExamAttempt()
+                    {
+                        UserId = _userContext.GetCurrentUserId(),
+                        ExamId = examId,
+                        QuestionId = an.QuestionId,
+                        Answer = an.AnswerText,
+                        IsCorrect = an.AnswerText == question.CorrectAnswer.Trim(),
+                    };
+                }
+                else if (an.QuestionTypeId == (int)QuestionTypeConstant.Type.Essay)
+                {
+                    result = new ExamAttempt()
+                    {
+                        UserId = _userContext.GetCurrentUserId(),
+                        ExamId = examId,
+                        QuestionId = an.QuestionId,
+                        Answer = an.AnswerText,
+                        IsCorrect = await _gptService.GradeEssay(question.QuestionText, question.AnswerExplanation, an.AnswerText),
+                    };
+                }
+
+                if (result != null)
+                {
+                    if (result.IsCorrect == true)
+                    {
+                        correct++;
+                    }
+                    else if (!string.IsNullOrEmpty(an.AnswerText) && result.IsCorrect != true)
+                    {
+                        inCorrect++;
+                    }
+                    else
+                    {
+                        unanswered++;
+                    }
+                    await _attemptRepository.AddAsync(result);
+                }
+                else
+                {
+
+                }
+            }
+
+            decimal score = (decimal)(((correct * 1.0) / (examInfo.TotalQuestions * 1.0)) * 10);
+            var examResult = new ExamResult()
+            {
+                ExamId = examId,
+                UserId = _userContext.GetCurrentUserId(),
+                CompletionTime = DateOnly.FromDateTime(DateTime.Now),
+                CorrectAnswersCount = correct,
+                IncorrectAnswersCount = inCorrect,
+                UnansweredQuestionsCount = unanswered,
+                Score = score,
+                Rank = score >= 9 ? "Xuất sắc" :
+                        score >= 8 ? "Giỏi" :
+                        score >= 7 ? "Khá" :
+                        score >= 5 ? "Trung bình" :
+                        "Kém"
+            };
+            try
+            {
+                await _resultRepository.AddAsync(examResult);
+            }
+            catch (
+            Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
     }
 }

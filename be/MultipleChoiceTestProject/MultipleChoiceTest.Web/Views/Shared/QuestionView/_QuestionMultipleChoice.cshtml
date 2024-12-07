@@ -1,0 +1,43 @@
+﻿@using MultipleChoiceTest.Domain.ModelViews
+@model QuestionItem
+
+<div id="question_@Model.Index" class="listquestion question-box d-none">
+    <div class="panel panel-default question-item" data-question-number="1">
+        <div class="panel-body">
+            <div class="question">
+                <strong class="text-red m-bottom">
+                    Câu hỏi @Model.Index.
+                </strong>
+                <span style=" ">
+                    @Model.QuestionText
+                </span>
+            </div>
+            <div class="row answer">
+                <div class="flex">
+                    @foreach(var item in Model.Choices.Split(";"))
+                    {
+                        <div class="answer-item col-md-6">
+                            <label class="">
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td class="letter">
+                                                <p>
+                                                    <input class="radio_answer_@Model.Index" type="radio" name="answer[@Model.Index]" value="@item.Split(":")[0].Trim()" data-questiontype="@Model.QuestionTypeId">
+                                                    <strong>@(item.Split(":")[0].Trim()).</strong>
+                                                </p>
+                                            </td>
+                                            <td>
+                                                <span>@item.Split(":")[1].Trim()</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </label>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

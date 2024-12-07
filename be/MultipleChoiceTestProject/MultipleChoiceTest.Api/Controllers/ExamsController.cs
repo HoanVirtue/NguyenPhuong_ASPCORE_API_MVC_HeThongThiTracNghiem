@@ -90,6 +90,58 @@ namespace MultipleChoiceTest.Api.Controllers
             });
         }
 
+        [HttpGet("GetExamByLesson/{lessonId}")]
+        public async Task<IActionResult> GetExamByLessonAsync(int lessonId, int? type = (int)TypeGetSelectConstant.TypeGet.GetList, int? pageIndex = 0, int? pageSize = 10)
+        {
+            if (type == (int)TypeGetSelectConstant.TypeGet.GetList)
+            {
+                return Ok(ApiResponse<List<ExamItem>>.SuccessWithData(await _unitOfWork.ExamRepository.GetExamByLesson(lessonId)));
+            }
+            else if (type == (int)TypeGetSelectConstant.TypeGet.GetGrid)
+            {
+                var exams = await _unitOfWork.ExamRepository.GetExamByLessonGrid(lessonId, pageIndex, pageSize);
+                return Ok(ApiResponse<Pagination<ExamItem>>.SuccessWithData(exams));
+            }
+            return BadRequest();
+        }
+
+        [HttpGet("GetExamBySubject/{subjectId}")]
+        public async Task<IActionResult> GetExamBySubjectAsync(int subjectId, int? type = (int)TypeGetSelectConstant.TypeGet.GetList, int? pageIndex = 0, int? pageSize = 10)
+        {
+            if (type == (int)TypeGetSelectConstant.TypeGet.GetList)
+            {
+                return Ok(ApiResponse<List<ExamItem>>.SuccessWithData(await _unitOfWork.ExamRepository.GetExamBySubject(subjectId)));
+            }
+            else if (type == (int)TypeGetSelectConstant.TypeGet.GetGrid)
+            {
+                var exams = await _unitOfWork.ExamRepository.GetExamBySubjectGrid(subjectId, pageIndex, pageSize);
+                return Ok(ApiResponse<Pagination<ExamItem>>.SuccessWithData(exams));
+            }
+            return BadRequest();
+        }
+
+        [HttpGet("GetQuestionByExam/{examId}")]
+        public async Task<IActionResult> GetQuestionsByExam(int examId)
+        {
+            if (await _unitOfWork.ExamRepository.GetByIdAsync(examId) == null)
+            {
+                return Ok(ApiResponse<List<QuestionItem>>.ErrorResponse<List<QuestionItem>>("Bài thi không tồn tại"));
+            }
+            var questionRs = await _unitOfWork.QuestionRepository.GetDataOfExam(examId);
+            return Ok(questionRs);
+        }
+
+        [HttpPost("SubmitExam/{examId}")]
+        public IActionResult SubmitExam(int examId, [FromBody] List<CandidateAnswer> answers)
+        {
+            if (examId == 0 || examId == null)
+            {
+                return Ok(ApiResponse<ExamResultItem>.ErrorResponse<ExamResultItem>("Mã bài thi không được bỏ trống"));
+            }
+            //if(answers == null )
+            return default;
+        }
+
         // PUT: api/Exams/5
         [HttpPut]
         public async Task<ActionResult<ApiResponse<Exam>>> PutExam([FromBody] CUExam exam)

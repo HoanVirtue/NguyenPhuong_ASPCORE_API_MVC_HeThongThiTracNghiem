@@ -1,15 +1,24 @@
 ﻿@using MultipleChoiceTest.Domain.ModelViews
 @model Pagination<ExamItem>
 @{
-    ViewData["Title"] = "Trang chủ";
+    ExamItem? examFirst = Model.Items.FirstOrDefault();
+    ViewData["Title"] = examFirst?.LessonName;
     int? PageIndex = ViewData["PageIndex"] as int?;
 }
+
+<ol class="breadcrumb" itemscope="" itemtype="https://schema.org/BreadcrumbList">
+    <li class="home"><em class="fa fa-lg fa-home">&nbsp;</em><a href="/Home/Index" title="Trang chủ"><span itemprop="name">Trang nhất</span></a><i class="hidden" itemprop="position" content="1"></i></li>
+    <li><a href="/Exams/InfoExamBySubject?subjectId=@examFirst?.SubjectId" itemprop="item" title="@examFirst?.SubjectName"><span itemprop="name">@examFirst?.SubjectName</span></a><i class="hidden" itemprop="position" content="3"></i></li>
+    <li><a href="/Exams/InfoExamByLesson?lessonId=@examFirst?.LessonId" itemprop="item" title="@examFirst?.LessonName"><span itemprop="name">@examFirst?.LessonName</span></a><i class="hidden" itemprop="position" content="4"></i></li>
+</ol>
 
 <div class="row">
     <div class="col-md-9">
         <div class="content">
             <div class="content-heading">
                 <div class="exam">
+                    <h1 class="hidden-xs hidden-sm">@examFirst.LessonName</h1>
+                    <hr style="margin-top: 0;">
                     <div class="exam viewlist">
                         @if (Model.Items != null && Model.Items.Count > 0)
                         {
@@ -56,12 +65,12 @@
                             else
                             {
                                 <li>
-                                    <a href="/Home/Index?pageIndex=@(Model.PageIndex - 1)">«</a>
+                                    <a href="/Exams/Index?pageIndex=@(Model.PageIndex - 1)">«</a>
                                 </li>
                             }
                             @for (int i = 0; i < Model.TotalPagesCount; i++)
                             {
-                                <li class="@(i == Model.PageIndex ? "active" : "")"><a href="/Home/Index?pageIndex=@i">@(i + 1)</a></li>
+                                <li class="@(i == Model.PageIndex ? "active" : "")"><a href="/">@(i + 1)</a></li>
                             }
 
                             @if (!Model.Next)
@@ -88,7 +97,7 @@
         </div>
     </div>
     <div class="col-md-3">
-        @await Component.InvokeAsync("RightPage", new {type = "ranking"})
-        @await Component.InvokeAsync("RightPage", new {type = "access"})
+        @await Component.InvokeAsync("RightPage", new { type = "ranking" })
+        @await Component.InvokeAsync("RightPage", new { type = "access" })
     </div>
 </div>

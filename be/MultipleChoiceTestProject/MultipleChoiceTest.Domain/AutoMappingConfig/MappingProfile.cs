@@ -42,6 +42,9 @@ namespace MultipleChoiceTest.Domain.AutoMappingConfig
                 .ForMember(dest => dest.LessonName, opt => opt.MapFrom(src => src.Lesson.LessonName));
 
 
+            CreateMap(typeof(Pagination<>), typeof(Pagination<>));
+
+
             CreateMap<ExamResult, ExamResultItem>()
                 .ForMember(dest => dest.ExamName, opt => opt.MapFrom(src => src.Exam.ExamName));
         }
