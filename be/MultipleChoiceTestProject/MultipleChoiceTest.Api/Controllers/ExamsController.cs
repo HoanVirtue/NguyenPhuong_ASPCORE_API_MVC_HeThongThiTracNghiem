@@ -134,6 +134,11 @@ namespace MultipleChoiceTest.Api.Controllers
         [HttpPost("SubmitExam/{examId}")]
         public IActionResult SubmitExam(int examId, [FromBody] List<CandidateAnswer> answers)
         {
+            if (examId == 0 || examId == null)
+            {
+                return Ok(ApiResponse<ExamResultItem>.ErrorResponse<ExamResultItem>("Mã bài thi không được bỏ trống"));
+            }
+            //if(answers == null )
             return default;
         }
 

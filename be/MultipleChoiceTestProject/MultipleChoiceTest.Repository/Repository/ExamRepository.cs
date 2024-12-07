@@ -32,15 +32,20 @@ namespace MultipleChoiceTest.Repository.Repository
     }
     public class ExamRepository : GenericRepository<Exam>, IExamRepository
     {
-        //private readonly IUnitOfWork _unitOfWork;
         private readonly IGPTService _gptService;
+        private readonly IExamAttemptRepository _attemptRepository;
+        private readonly IExamResultRepository _resultRepository;
         public ExamRepository(
             IGPTService gptService,
+            IExamAttemptRepository attemptRepository,
+            IExamResultRepository examResultRepository,
             MultipleChoiceTestDbContext dbContext,
             IUserContextService userContextService,
             IMapper mapper) : base(dbContext, userContextService, mapper)
         {
             _gptService = gptService;
+            _attemptRepository = attemptRepository;
+            _resultRepository = examResultRepository;
         }
         public Task<bool> IsExistCode(string code, int? id = 0)
         {
@@ -209,7 +214,7 @@ namespace MultipleChoiceTest.Repository.Repository
                     {
                         unanswered++;
                     }
-                    //await _unitOfWork.ExamAttemptRepository.AddAsync(result);
+                    await _attemptRepository.AddAsync(result);
                 }
                 else
                 {
@@ -235,7 +240,7 @@ namespace MultipleChoiceTest.Repository.Repository
             };
             try
             {
-                //await _unitOfWork.ExamResultRepository.AddAsync(examResult);
+                await _resultRepository.AddAsync(examResult);
             }
             catch (
             Exception ex)

@@ -27,6 +27,10 @@
     });
 
     $(document).on('click', 'button[name="submit"]', function () {
+        validateData();
+    });
+
+    $(document).on('click', '#submit-button', function () {
         sumitExam();
     });
 
