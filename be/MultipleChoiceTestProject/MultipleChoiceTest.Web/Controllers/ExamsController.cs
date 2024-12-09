@@ -143,6 +143,5 @@ namespace MultipleChoiceTest.Web.Controllers
             }
             return default;
         }
-        
     }
 }

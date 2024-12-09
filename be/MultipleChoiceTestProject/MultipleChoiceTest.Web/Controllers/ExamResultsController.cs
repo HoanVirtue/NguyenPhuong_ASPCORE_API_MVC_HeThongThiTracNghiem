@@ -18,9 +18,11 @@ namespace MultipleChoiceTest.Web.Controllers
 
             return View(history.Data);
         }
+
         [HttpGet]
-        public IActionResult ExamResults()
+        public IActionResult ExamResult(int id)
         {
+
             return View();
         }
     }
