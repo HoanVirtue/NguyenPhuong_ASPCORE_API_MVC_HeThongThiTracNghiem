@@ -5,6 +5,7 @@ using MultipleChoiceTest.Domain.ApiModel;
 using MultipleChoiceTest.Domain.Constants.Api;
 using MultipleChoiceTest.Domain.Models;
 using MultipleChoiceTest.Domain.ModelViews;
+using MultipleChoiceTest.Repository.Repository;
 using MultipleChoiceTest.Repository.UnitOfWork;
 
 namespace MultipleChoiceTest.Api.Controllers
