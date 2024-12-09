@@ -14,7 +14,7 @@ namespace MultipleChoiceTest.Web.Controllers
         public async Task<IActionResult> Index()
         {
             var userId = ApiClient.GetCookie(Request, UserConstant.UserId);
-            var history = await ApiClient.GetAsync<List<ExamResultItem>>(Request, $"ExamResults/GetByUsserID/{userId}");
+            var history = await ApiClient.GetAsync<List<ExamResultItem>>(Request, $"ExamResults/GetByUsserID/{userId}");// "ExamResults/GetByUsserID/{userId}" hàm gọi api 
 
             return View(history.Data);
         }
