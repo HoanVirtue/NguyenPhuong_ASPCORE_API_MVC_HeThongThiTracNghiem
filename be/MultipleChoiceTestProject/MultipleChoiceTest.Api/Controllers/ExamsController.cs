@@ -132,14 +132,19 @@ namespace MultipleChoiceTest.Api.Controllers
         }
 
         [HttpPost("SubmitExam/{examId}")]
-        public IActionResult SubmitExam(int examId, [FromBody] List<CandidateAnswer> answers)
+        public async Task<IActionResult> SubmitExamAsync(int examId, [FromBody] List<CandidateAnswer> answers)
         {
             if (examId == 0 || examId == null)
             {
                 return Ok(ApiResponse<ExamResultItem>.ErrorResponse<ExamResultItem>("Mã bài thi không được bỏ trống"));
             }
-            //if(answers == null )
-            return default;
+            if (answers == null || !answers.Any())
+            {
+                return Ok(ApiResponse<ExamResultItem>.ErrorResponse<ExamResultItem>("Không có câu trả lời"));
+            }
+
+            var examResult = await _unitOfWork.ExamRepository.ExamFinish(examId, answers);
+            return Ok(examResult);
         }
 
         // PUT: api/Exams/5

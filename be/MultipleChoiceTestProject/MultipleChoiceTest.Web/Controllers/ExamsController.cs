@@ -8,6 +8,7 @@ using MultipleChoiceTest.Domain.ModelViews;
 using MultipleChoiceTest.Web.Api;
 using MultipleChoiceTest.Web.Constants;
 using MultipleChoiceTest.Web.Controllers.Guard;
+using Newtonsoft.Json;
 
 namespace MultipleChoiceTest.Web.Controllers
 {
@@ -129,19 +130,21 @@ namespace MultipleChoiceTest.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult SubmitExam([FromBody] List<CandidateAnswer> answers)
+        public async Task<IActionResult> SubmitExam([FromBody] SubmitExamRequest request)
         {
-            if (answers == null || !answers.Any())
+            if (request.Answers == null || !request.Answers.Any())
             {
                 return BadRequest("Không có câu trả lời nào");
             }
 
             var questionItems = ApiClient.GetSession<List<QuestionItem>>(HttpContext.Session, SessionDataConstant.FormatKey(SessionDataConstant.ListQuestion, userCurrentId));
-            foreach (var answer in answers)
+            foreach (var answer in request.Answers)
             {
                 answer.QuestionId = questionItems.FirstOrDefault(x => x.Index == answer.QuestionIndex).Id;
             }
-            return default;
+            var result = await ApiClient.PostAsync<ExamResultItem>(Request, $"Exams/SubmitExam/{request.ExamId}", JsonConvert.SerializeObject(request.Answers));
+
+            return Json(result);
         }
     }
 }

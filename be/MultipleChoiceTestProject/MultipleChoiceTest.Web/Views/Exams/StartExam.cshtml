@@ -109,8 +109,8 @@
                                     <span>Thời gian còn lại</span>
                                     <div id="countdown" data-minute="@Model.Duration">
                                         <div class="jst-hours">00:</div>
-                                        <div class="jst-minutes">08:</div>
-                                        <div class="jst-seconds">45</div>
+                                        <div class="jst-minutes">00:</div>
+                                        <div class="jst-seconds">00</div>
                                         <div class="jst-clearDiv"></div>
                                     </div>
                                 </div>
@@ -132,8 +132,7 @@
                             <div class="col-md-8">
                                 <div class="testing test-gird m-bottom">
                                     <form action="" method="post" id="frm-submit">
-                                        <input type="hidden" value="1" name="save_test"> <input type="hidden" value="83" name="exam_id">
-                                        <input type="hidden" id="current_page"> <input type="hidden" id="show_per_page">
+                                        <input type="hidden" value="@Model.Id" name="exam_id">
                                         <div id="questionlist" data-exam-id="83" class="m-bottom" style="font-size: 16px;">
                                             @foreach(var ques in ViewData["Questions"] as List<QuestionItem>)
                                             {

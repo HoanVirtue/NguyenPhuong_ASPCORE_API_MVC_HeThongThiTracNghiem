@@ -39,11 +39,16 @@
 
 
 function sumitExam() {
+    var examId = $('input[name="exam_id"]').val();
     var answers = [];
     $('input[type="radio"]').each(function () {
         var questionName = $(this).attr('name');
         var questionType = $(this).data('questiontype');
         var questionIndex = questionName.match(/\d+/)[0];
+        if (answers.some(a => a.questionIndex == questionIndex)) {
+            return;
+        }
+
         var answer = $(`input[name="${questionName}"]:checked`).val();
         if (!answer) {
             answer = "";
@@ -53,19 +58,27 @@ function sumitExam() {
             answerText: answer,
             questionTypeId: questionType
         })
+    });
 
-        $.ajax({
-            url: '',
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(answers),
-            success: function (res) {
-
-            },
-            error: function (err) {
-                alert('Đã có lỗi xảy ra! Vui lòng liên hệ trung tâm tư vấn');
+    $.ajax({
+        url: '/Exams/SubmitExam',
+        type: 'POST',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify({
+            examId: examId,
+            answers: answers
+        }),
+        success: function (res) {
+            if (res.success) {
+                alert('Nộp bài thi thành công');
+            } else {
+                alert(res.message);
             }
-        })
+        },
+        error: function (err) {
+            alert('Đã có lỗi xảy ra! Vui lòng liên hệ trung tâm tư vấn');
+        }
     });
 }
 
@@ -86,7 +99,6 @@ function validateData() {
     } else {
         sumitExam();
     }
-    return unansweredQuestion.length == 0;
 }
 
 

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using MultipleChoiceTest.Domain.ApiModel;
 using MultipleChoiceTest.Domain.Constants;
 using MultipleChoiceTest.Domain.Models;
 using MultipleChoiceTest.Domain.ModelViews;
@@ -28,7 +29,7 @@ namespace MultipleChoiceTest.Repository.Repository
         Task<Pagination<ExamItem>> GetExamBySubjectGrid(int subjectId, int? pageIndex, int? pageSize);
         Task<List<ExamItem>> GetExamByLesson(int lessonId);
         Task<List<ExamItem>> GetExamBySubject(int subjectId);
-        Task ExamFinish(List<CandidateAnswer> answers, int examId);
+        Task<ApiResponse<ExamResultItem>> ExamFinish(int examId, List<CandidateAnswer> answers);
     }
     public class ExamRepository : GenericRepository<Exam>, IExamRepository
     {
@@ -162,7 +163,7 @@ namespace MultipleChoiceTest.Repository.Repository
             return _mapper.Map<List<ExamItem>>(exams);
         }
 
-        public async Task ExamFinish(List<CandidateAnswer> answers, int examId)
+        public async Task<ApiResponse<ExamResultItem>> ExamFinish(int examId, List<CandidateAnswer> answers)
         {
             // lấy question
             int correct = 0;
@@ -170,7 +171,7 @@ namespace MultipleChoiceTest.Repository.Repository
             int unanswered = 0;
             var examInfo = await _dbContext.Exams.FindAsync(examId);
             if (examInfo == null)
-                return;
+                return ApiResponse<ExamResultItem>.ErrorResponse<ExamResultItem>("Bài thi không tồn tại");
             foreach (var an in answers)
             {
                 var question = await _dbContext.Questions.FindAsync(an.QuestionId);
@@ -218,7 +219,7 @@ namespace MultipleChoiceTest.Repository.Repository
                 }
                 else
                 {
-
+                    return ApiResponse<ExamResultItem>.ErrorResponse<ExamResultItem>("Lỗi không tìm thấy loại câu hỏi");
                 }
             }
 
@@ -241,11 +242,12 @@ namespace MultipleChoiceTest.Repository.Repository
             try
             {
                 await _resultRepository.AddAsync(examResult);
+                return ApiResponse<ExamResultItem>.SuccessWithData(_mapper.Map<ExamResultItem>(examResult));
             }
             catch (
             Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                return ApiResponse<ExamResultItem>.ErrorResponse<ExamResultItem>(ex.Message);
             }
         }
     }

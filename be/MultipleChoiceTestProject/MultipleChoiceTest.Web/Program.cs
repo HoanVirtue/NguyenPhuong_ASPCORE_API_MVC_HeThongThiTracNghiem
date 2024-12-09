@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
 builder.Services.AddNotyf(config => { config.DurationInSeconds = 10; config.IsDismissable = true; config.Position = NotyfPosition.TopRight; });
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddHttpContextAccessor();

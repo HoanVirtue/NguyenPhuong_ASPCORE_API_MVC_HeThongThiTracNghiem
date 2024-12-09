@@ -1,7 +1,6 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using AutoMapper;
 using ClosedXML.Excel;
-using DocumentFormat.OpenXml.Office.SpreadSheetML.Y2023.MsForms;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MultipleChoiceTest.Domain;
@@ -393,15 +392,15 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
                     errors = "";
                     isCreate = true;
                     string questionText = row.Cell(2).GetValue<string>().ResolveExcelValue();
-                    string choices= row.Cell(3).GetValue<string>().ResolveExcelValue();
-                    string correctAnswer= row.Cell(4).GetValue<string>().ResolveExcelValue();
-                    string answerexplanation= row.Cell(5).GetValue<string>().ResolveExcelValue();
-                    string questionType =  row.Cell(6).GetValue<string>().ResolveExcelValue();
-                    string lessonCode= row.Cell(7).GetValue<string>().ResolveExcelValue();
-                    string subjectCode= row.Cell(8).GetValue<string>().ResolveExcelValue();
+                    string choices = row.Cell(3).GetValue<string>().ResolveExcelValue();
+                    string correctAnswer = row.Cell(4).GetValue<string>().ResolveExcelValue();
+                    string answerexplanation = row.Cell(5).GetValue<string>().ResolveExcelValue();
+                    string questionType = row.Cell(6).GetValue<string>().ResolveExcelValue();
+                    string lessonCode = row.Cell(7).GetValue<string>().ResolveExcelValue();
+                    //string subjectCode= row.Cell(8).GetValue<string>().ResolveExcelValue();
 
                     #region validate
-                    if(!QuestionTypeExists(questionType))
+                    if (!QuestionTypeExists(questionType))
                     {
                         errors = string.IsNullOrEmpty(errors)
                             ? "Lựa chọn không được bỏ trống"
@@ -452,13 +451,13 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
                         }
                         choices = null;
                     }
-                    if(string.IsNullOrEmpty(subjectCode))
-                    {
-                        errors = string.IsNullOrEmpty(errors)
-                            ? "Mã môn không dược để trống"
-                                : $"{errors}, Mã môn không dược để trống";
-                        isCreate = false;
-                    }
+                    //if(string.IsNullOrEmpty(subjectCode))
+                    //{
+                    //    errors = string.IsNullOrEmpty(errors)
+                    //        ? "Mã môn không dược để trống"
+                    //            : $"{errors}, Mã môn không dược để trống";
+                    //    isCreate = false;
+                    //}
                     if (string.IsNullOrEmpty(lessonCode))
                     {
                         errors = string.IsNullOrEmpty(errors)
@@ -466,14 +465,14 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
                                 : $"{errors}, Mã bài học không dược để trống";
                         isCreate = false;
                     }
-                    var subjectRes = await ApiClient.GetAsync<Subject>(Request, $"Subjects/GetByCode/{subjectCode}");
-                    if (subjectRes.Data == null)
-                    {
-                        errors = string.IsNullOrEmpty(errors)
-                            ? "Mã môn học không tồn tại"
-                                : $"{errors}, Mã môn học không tồn tại";
-                        isCreate = false;
-                    }
+                    //var subjectRes = await ApiClient.GetAsync<Subject>(Request, $"Subjects/GetByCode/{subjectCode}");
+                    //if (subjectRes.Data == null)
+                    //{
+                    //    errors = string.IsNullOrEmpty(errors)
+                    //        ? "Mã môn học không tồn tại"
+                    //            : $"{errors}, Mã môn học không tồn tại";
+                    //    isCreate = false;
+                    //}
                     var lessonRes = await ApiClient.GetAsync<Lesson>(Request, $"Lessons/GetByCode/{lessonCode}");
                     if (lessonRes.Data == null)
                     {
@@ -493,12 +492,12 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
                             Choices = choices,
                             CorrectAnswer = correctAnswer,
                             AnswerExplanation = answerexplanation,
-                            SubjectId = subjectRes.Data.Id,
+                            SubjectId = lessonRes.Data.SubjectId ?? 0,
                             LessonId = lessonRes.Data.Id,
                             QuestionTypeId = questionType == "trac-nghiem" ? 1 : 2,
                         };
                         var createRs = await ApiClient.PostAsync<Domain.Models.Question>(Request, $"Questions", JsonConvert.SerializeObject(questions));
-                        if(!createRs.Success)
+                        if (!createRs.Success)
                         {
                             errors = string.IsNullOrEmpty(errors)
                             ? createRs.Message
@@ -508,8 +507,8 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
                     }
                     else
                     {
-                        errorList.Add(new ImportQuestionMessage(row.RowNumber(), errors+"\n"));
-                    }    
+                        errorList.Add(new ImportQuestionMessage(row.RowNumber(), errors + "\n"));
+                    }
                 }
             }
             return errorList;
