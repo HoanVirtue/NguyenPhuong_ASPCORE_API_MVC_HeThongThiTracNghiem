@@ -5,8 +5,9 @@
         public int Id { get; set; }
         public int? ExamId { get; set; }
         public string? ExamName { get; set; }
+        public int? Duration { get; set; }
+        public int? TotalQuestions { get; set; }
         public int? UserId { get; set; }
-
         public DateOnly? CompletionTime { get; set; }
 
         public int? CorrectAnswersCount { get; set; }
@@ -23,5 +24,6 @@
         public DateTime? UpdatedDate { get; set; }
         public string? UpdatedBy { get; set; }
         public bool? IsDeleted { get; set; } = false;
+
     }
 }

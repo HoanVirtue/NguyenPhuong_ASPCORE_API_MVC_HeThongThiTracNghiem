@@ -1,7 +1,6 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
 using MultipleChoiceTest.Domain.Constants.Api;
 using MultipleChoiceTest.Domain.Models;
 using MultipleChoiceTest.Domain.ModelViews;
@@ -15,16 +14,15 @@ namespace MultipleChoiceTest.Web.Controllers
     [User]
     public class ExamsController : BaseController
     {
-        private string userCurrentId;
         public ExamsController(INotyfService notyfService, IHttpContextAccessor httpContextAccessor, ILogger<BaseController> logger, IMapper mapper) : base(notyfService, httpContextAccessor, logger, mapper)
         {
         }
-        public override void OnActionExecuting(ActionExecutingContext context)
-        {
-            base.OnActionExecuting(context);
+        //public override void OnActionExecuting(ActionExecutingContext context)
+        //{
+        //    base.OnActionExecuting(context);
 
-            userCurrentId = ApiClient.GetCookie(Request, UserConstant.UserId);
-        }
+        //    userCurrentId = ApiClient.GetCookie(Request, UserConstant.UserId);
+        //}
 
         [HttpGet]
         public async Task<IActionResult> InfoExamByLesson(int lessonId, int? pageIndex = 0, int? pageSize = 10)
@@ -93,18 +91,12 @@ namespace MultipleChoiceTest.Web.Controllers
                 var infoExam = await ApiClient.GetAsync<ExamItem>(Request, $"Exams/{id}?type={(int)TypeGetSelectConstant.TypeGetDetail.GetDetail}");
                 if (!infoExam.Success)
                 {
-                    //return Json(new ApiResponse<string>
-                    //{
-                    //    Success = false,
-                    //    Message = "Không tìm thấy bài thi"
-                    //});
                     return NotFound();
                 }
 
                 var questions = await ApiClient.GetAsync<List<QuestionItem>>(Request, $"Exams/GetQuestionByExam/{id}");
                 if (!questions.Success)
                 {
-                    //return Json(questions);
                     _notyfService.Warning(questions.Message);
                     return RedirectToAction("InfoExam", "Exams", new { id = id });
                 }
@@ -113,17 +105,11 @@ namespace MultipleChoiceTest.Web.Controllers
                 ViewData["Username"] = (await ApiClient.GetAsync<User>(Request, $"Users/{userCurrentId}")).Data.UserName;
                 return View(infoExam.Data);
             }
-            //return Json(new ApiResponse<string>
-            //{
-            //    Success = false,
-            //    Message = "Không tìm thấy bài thi"
-            //});
             return NotFound();
         }
 
         public PartialViewResult UserQuestionAnswer(int index)
         {
-            //var cadAnswer = ApiClient.GetSession<List<CandidateAnswer>>(HttpContext.Session, SessionDataConstant.FormatKey(SessionDataConstant.QuestionAnswer, userCurrentId));
             var questions = ApiClient.GetSession<List<QuestionItem>>(HttpContext.Session, SessionDataConstant.FormatKey(SessionDataConstant.ListQuestion, userCurrentId));
             var question = questions.FirstOrDefault(x => x.Index == index);
             return PartialView("~/Views/Shared/QuestionView/_QuestionMultipleChoice.cshtml", question);
@@ -142,8 +128,8 @@ namespace MultipleChoiceTest.Web.Controllers
             {
                 answer.QuestionId = questionItems.FirstOrDefault(x => x.Index == answer.QuestionIndex).Id;
             }
-            var result = await ApiClient.PostAsync<ExamResultItem>(Request, $"Exams/SubmitExam/{request.ExamId}", JsonConvert.SerializeObject(request.Answers));
-
+            var result = await ApiClient.PostAsync<ExamResultResponse>(Request, $"Exams/SubmitExam/{request.ExamId}", JsonConvert.SerializeObject(request.Answers));
+            ApiClient.SetSession<List<CandidateAnswer>>(HttpContext.Session, SessionDataConstant.FormatKey(SessionDataConstant.QuestionAnswer, userCurrentId), result.Data.Answers);
             return Json(result);
         }
     }

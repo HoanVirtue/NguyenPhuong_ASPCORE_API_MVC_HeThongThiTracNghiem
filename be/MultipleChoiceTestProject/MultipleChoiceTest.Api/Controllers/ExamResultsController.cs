@@ -27,15 +27,27 @@ namespace MultipleChoiceTest.Api.Controllers
             });
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetExamResult(int id)
+        {
+            var exams = await _unitOfWork.ExamResultRepository.GetById(id);
+            return Ok(new ApiResponse<ExamResultItem>
+            {
+                Success = exams != null,
+                Data = exams,
+                Message = exams == null ? "không có dữ liệu" : ""
+            });
+        }
+
         [HttpGet("GetByUsserID/{id}")]
-        public async Task<ActionResult<ApiResponse<IEnumerable<ExamResultItem>>>> GetByUserID(int id) 
+        public async Task<ActionResult<ApiResponse<IEnumerable<ExamResultItem>>>> GetByUserID(int id)
         {
             var user = await _unitOfWork.ExamResultRepository.GetDataByUserId(id);
-            return Ok(new ApiResponse<IEnumerable<ExamResultItem>> 
+            return Ok(new ApiResponse<IEnumerable<ExamResultItem>>
             {
-                Success = user != null && user.Any(), 
+                Success = user != null && user.Any(),
                 Data = user,
-                Message = user==null|| !user.Any() ?"Không có dữ liệu":""
+                Message = user == null || !user.Any() ? "Không có dữ liệu" : ""
 
             });
         }

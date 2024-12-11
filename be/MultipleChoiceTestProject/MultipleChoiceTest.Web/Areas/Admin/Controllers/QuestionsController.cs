@@ -34,7 +34,7 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
                 List<ImportQuestionMessage> questionRes = await ParseExcelFileAsync(file.OpenReadStream());
                 if (questionRes != null && questionRes.Count > 0)
                 {
-                    _notyfService.Error(questionRes.FirstOrDefault().Message);
+                    TempData["error"] = string.Join("", questionRes.Select(x => x.Message));
                 }
                 else
                 {
@@ -49,6 +49,12 @@ namespace MultipleChoiceTest.Web.Areas.Admin.Controllers
         {
             var questionRs = await ApiClient.GetAsync<IEnumerable<QuestionItem>>(Request, "Questions/GetGridQuestions");
 
+            string message = TempData["error"] as string;
+            if (!string.IsNullOrEmpty(message))
+            {
+                message = message.Replace("\n", "<br/>");
+                ViewData["error"] = message;
+            }
             if (questionRs.Success)
             {
                 var questions = questionRs.Data;

@@ -882,6 +882,42 @@ button.close {
     margin-left: -1px;
 }
 
+#questionlist .is_success {
+    border: solid 2px green;
+}
+
+#questionlist .is_danger {
+    border: solid 2px red;
+    padding: 10px;
+}
+
+ul.slides-vertical-pagination li.is_danger span {
+    background-color: red;
+    color: #fff;
+}
+
+.score-box .score {
+    font-size: 40px;
+    line-height: 40px;
+}
+
+.exam-info {
+    color: #428bca;
+    font-size: 16px;
+}
+
+.exam-result {
+    color: #428bca;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+#questionlist {
+    font-size: 16px;
+}
+.istrue {
+    background: yellow;
+}
 /* user info */
 /*
 .margin-bottom {

@@ -102,6 +102,7 @@ builder.Services.AddScoped<IQuestionTypeRepository, QuestionTypeRepository>();
 builder.Services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
 builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IUserContextService, UserContextService>();
+builder.Services.AddTransient<IGPTService, GPTService>();
 
 
 builder.Services.AddDomainMappings();
@@ -112,9 +113,9 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin", policy =>
     {
-        policy.WithOrigins("https://localhost:7294") // Nguồn gốc được phép
-              .AllowAnyHeader()                     // Cho phép tất cả các header
-              .AllowAnyMethod();                    // Cho phép tất cả các phương thức (GET, POST,...)
+        policy.WithOrigins("https://localhost:7294")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
     });
 });
 
@@ -126,7 +127,6 @@ builder.Services.AddHttpClient("ChtpGPT", client =>
     client.DefaultRequestHeaders.Add("User-Agent", "OpenAI-ChatGPT");
 });
 
-builder.Services.AddTransient<IGPTService, GPTService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

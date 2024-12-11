@@ -1,16 +1,16 @@
-﻿
+﻿@using MultipleChoiceTest.Domain.Constants
+@using MultipleChoiceTest.Domain.ModelViews
+@model ExamResultItem
+
+@{
+    List<CandidateAnswer> answers = ViewData["ListAnswer"] as List<CandidateAnswer>;
+}
 
 <ol class="breadcrumb" itemscope="" itemtype="https://schema.org/BreadcrumbList">
-    <li class="home" itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem">
-        <em class="fa fa-lg fa-home">&nbsp;</em><a href="/vi/" itemprop="item" title="Trang nhất">
-            <span itemprop="name">Trang nhất</span>
-        </a><i class="hidden" itemprop="position" content="1"></i>
-    </li>
-    <li itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem">
-        <a href="/vi/users/" itemprop="item" title="Tài khoản Sinh viên">
-            <span itemprop="name">Kết quả thi</span>
-        </a><i class="hidden" itemprop="position" content="2"></i>
-    </li>
+    <li class="home"><em class="fa fa-lg fa-home">&nbsp;</em><a href="/Home/Index" title="Trang chủ"><span itemprop="name">Trang nhất</span></a><i class="hidden" itemprop="position" content="1"></i></li>
+    @* <li><a href="/Exams/InfoExamBySubject?subjectId=@Model?.SubjectId" itemprop="item" title="@Model?.SubjectName"><span itemprop="name">@Model?.SubjectName</span></a><i class="hidden" itemprop="position" content="3"></i></li>
+    <li><a href="/Exams/InfoExamByLesson?lessonId=@Model?.LessonId" itemprop="item" title="@Model?.LessonName"><span itemprop="name">@Model?.LessonName</span></a><i class="hidden" itemprop="position" content="4"></i></li> *@
+    <li><a href="#" itemprop="item" title="@Model.ExamName"><span itemprop="name">@Model.ExamName</span></a><i class="hidden" itemprop="position" content="5"></i></li>
 </ol>
 <div class="row">
     <div class="col-md-9">
@@ -18,41 +18,33 @@
             <div class="content-heading row">
                 <div class="col-md-4 sticky-exams">
                     <div class="template2">
-                        <h1>Pháp Luật Đại Cương (Luyện phần 1)</h1>
+                        <h1>@Model.ExamName</h1>
                         <ul class="exam-info">
-                            <li><label>Số câu</label>: 40</li>
-                            <li><label>Thời gian</label>: 30 phút</li>
-                            <li><label>Họ và tên</label>: Tạ Đức Hoàn</li>
+                            <li><label>Số câu</label>: @Model.TotalQuestions</li>
+                            <li><label>Thời gian</label>: @Model.Duration phút</li>
+                            <li><label>Họ và tên</label>: @ViewData["Username"]</li>
                         </ul>
-                    </div>
-                    <div class="template2">
-                        <div id="timer-box">
-                            <p>Thời gian</p>
-                            7 giây
-                        </div>
                     </div>
                 </div>
                 <div class="col-md-8">
                     <div class="testing test-gird m-bottom">
                         <div class="row">
-                            <div class="col-xs-24 col-md-24">
+                            <div class="col-md-12">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">Kết quả</div>
                                     <div class="panel-body">
                                         <div class="row exam-result">
-                                            <div class="col-xs-24 col-sm-15 col-md-18">
+                                            <div class="col-md-9">
                                                 <ul class="exam-info">
-                                                    <li><label>Thời gian hoàn thành</label>: 7 giây</li>
-                                                    <li><label>Số câu đúng</label>: 0</li>
-                                                    <li><label>Số câu sai</label>: 0</li>
-                                                    <li><label>Số câu chưa làm</label>: 40</li>
-                                                    <li><label>Số câu chưa chấm</label>: 0</li>
-                                                    <li><label>Xếp loại</label>: Yếu</li>
+                                                    <li><label>Số câu đúng</label>: @Model.CorrectAnswersCount</li>
+                                                    <li><label>Số câu sai</label>: @Model.IncorrectAnswersCount</li>
+                                                    <li><label>Số câu chưa làm</label>: @Model.UnansweredQuestionsCount</li>
+                                                    <li><label>Xếp loại</label>: @Model.Rank</li>
                                                 </ul>
                                             </div>
-                                            <div class="col-xs-24 col-sm-9 col-md-6 text-center score-box">
+                                            <div class="col-md-3 text-center score-box">
                                                 <p>Điểm</p>
-                                                <span class="score">0</span>
+                                                <span class="score">@Model.Score</span>
                                             </div>
                                         </div>
                                     </div>
@@ -63,186 +55,73 @@
                             <input type="hidden" value="83" name="exam_id">
                             <div id="questionlist" data-exam-id="83" class="m-bottom">
 
-                                <div id="question_1" class="listquestion question-box" style="">
-                                    <div class="panel panel-default question-item is_danger" data-question-number="1">
-                                        <div class="panel-body">
-                                            <div class="question">
-                                                <strong class="text-red m-bottom">Câu hỏi 1.</strong>
-                                                <span style=" ">Mất năng lực hành vi dân sự theo quy định của Bộ luật Dân sự Việt Nam là người:</span>
-                                            </div>
-                                            <div class="row answer">
-                                                <div class="flex">
-                                                    <div class="answer-item col-xs-24 col-sm-12 col-md-12">
-                                                        <label class="">
-                                                            <table>
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td class="letter">
-                                                                            <p>
-                                                                                <input class="radio_answer_1" type="radio" name="answer[2183]" value="1" disabled="disabled" onclick="autonextquestion()">
-                                                                                <strong>A.</strong>
-                                                                            </p>
-                                                                        </td>
-                                                                        <td>
-                                                                            <span style="">Bị bệnh tâm thần</span>
-                                                                        </td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </label>
-                                                    </div>
-                                                    <div class="answer-item col-xs-24 col-sm-12 col-md-12">
-                                                        <label class="">
-                                                            <table>
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td class="letter">
-                                                                            <p>
-                                                                                <input class="radio_answer_1" type="radio" name="answer[2183]" value="2" disabled="disabled" onclick="autonextquestion()">
-                                                                                <strong>B.</strong>
-                                                                            </p>
-                                                                        </td>
-                                                                        <td>
-                                                                            <span style=" ">Bị các bệnh làm mất khả năng nhận thức và điều chỉnh hành vi</span>
-                                                                        </td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </label>
-                                                    </div>
-                                                    <div class="answer-item col-xs-24 col-sm-12 col-md-12">
-                                                        <label class="">
-                                                            <table>
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td class="letter">
-                                                                            <p>
-                                                                                <input class="radio_answer_1" type="radio" name="answer[2183]" value="3" disabled="disabled" onclick="autonextquestion()">
-                                                                                <strong>C.</strong>
-                                                                            </p>
-                                                                        </td>
-                                                                        <td>
-                                                                            <span style=" ">A và B đều sai</span>
-                                                                        </td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </label>
-                                                    </div>
-                                                    <div class="answer-item col-xs-24 col-sm-12 col-md-12">
-                                                        <label class="istrue">
-                                                            <table>
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td class="letter">
-                                                                            <p>
-                                                                                <input class="radio_answer_1" type="radio" name="answer[2183]" value="4" disabled="disabled" onclick="autonextquestion()">
-                                                                                <strong>D.</strong>
-                                                                            </p>
-                                                                        </td>
-                                                                        <td>
-                                                                            <span style=" ">A và B đều đúng</span>
-                                                                        </td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </label>
-                                                    </div>
+                                @foreach (var item in ViewData["ListQuestion"] as List<QuestionItem>)
+                                {
+                                    var answer = answers.SingleOrDefault(x => x.QuestionIndex == item.Index);
+                                    <div id="question_@item.Index" class="listquestion question-box d-none">
+                                        <div class="panel panel-default question-item @(answer.IsCorrect == true ? "is_success" : "is_danger")" data-question-number="1">
+                                            <div class="panel-body">
+                                                <div class="question">
+                                                    <strong class="text-red m-bottom">
+                                                        Câu hỏi @item.Index.
+                                                    </strong>
+                                                    @if (item.QuestionTypeId == (int)QuestionTypeConstant.Type.MultipleChoice || item.QuestionTypeId == (int)QuestionTypeConstant.Type.Essay)
+                                                    {
+                                                        <span style="">
+                                                            @item.QuestionText
+                                                        </span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div style="display: block">
+                                                            <audio controls>
+                                                                <source src="~/Audios/@item.AudioFilePath" />
+                                                            </audio>
+                                                        </div>
+                                                    }
+                                                </div>
+                                                <div class="row answer">
+                                                    @if (item.QuestionTypeId == (int)QuestionTypeConstant.Type.MultipleChoice || item.QuestionTypeId == (int)QuestionTypeConstant.Type.Audio)
+                                                    {
+                                                        <div class="flex">
+                                                            @foreach (var choice in item.Choices.Split(";"))
+                                                            {
+                                                                <div class="answer-item col-md-6">
+                                                                    <label class="@(choice.Split(":")[0].Trim() == item.CorrectAnswer ? "istrue" : "")">
+                                                                        <table>
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td class="letter">
+                                                                                        <p>
+                                                                                            <input class="radio_answer_@item.Index" type="radio" name="answer[@item.Index]" value="@choice.Split(":")[0].Trim()" data-questiontype="@item.QuestionTypeId" @(choice.Split(":")[0].Trim() == answer.AnswerText ? "checked" : "") disabled>
+                                                                                            <strong>@(choice.Split(":")[0].Trim()).</strong>
+                                                                                        </p>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <span>@choice.Split(":")[1].Trim()</span>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </label>
+                                                                </div>
+                                                            }
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="istrue">
+                                                            <textarea class="textarea-answer" name="answer[@item.Index]" data-questiontype="@item.QuestionTypeId" readonly>@item.AnswerExplanation</textarea>
+                                                        </div>
+                                                        <div>
+                                                            <textarea class="textarea-answer" name="answer[@item.Index]" data-questiontype="@item.QuestionTypeId" readonly>@answer.AnswerText</textarea>
+                                                        </div>
+                                                    }
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div id="question_2" class="listquestion question-box" style="display: none">
-                                    <div class="panel panel-default question-item is_danger" data-question-number="2">
-                                        <div class="panel-body">
-                                            <div class="question">
-                                                <strong class="text-red m-bottom">Câu hỏi 2.</strong>
-                                                <span style=" ">Pháp luật thể hiện ý chí của ...... trong xã hội:</span>
-                                            </div>
-                                            <div class="row answer">
-                                                <div class="flex">
-                                                    <div class="answer-item col-xs-24 col-sm-12 col-md-12">
-                                                        <label class="">
-                                                            <table>
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td class="letter">
-                                                                            <p>
-                                                                                <input class="radio_answer_2" type="radio" name="answer[2189]" value="1" disabled="disabled" onclick="autonextquestion()">
-                                                                                <strong>A.</strong>
-                                                                            </p>
-                                                                        </td>
-                                                                        <td>
-                                                                            <span style=" ">Tất cả các giai cấp</span>
-                                                                        </td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </label>
-                                                    </div>
-                                                    <div class="answer-item col-xs-24 col-sm-12 col-md-12">
-                                                        <label class="">
-                                                            <table>
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td class="letter">
-                                                                            <p>
-                                                                                <input class="radio_answer_2" type="radio" name="answer[2189]" value="2" disabled="disabled" onclick="autonextquestion()">
-                                                                                <strong>B.</strong>
-                                                                            </p>
-                                                                        </td>
-                                                                        <td>
-                                                                            <span style=" ">Giai cấp thống trị</span>
-                                                                        </td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </label>
-                                                    </div>
-                                                    <div class="answer-item col-xs-24 col-sm-12 col-md-12">
-                                                        <label class="">
-                                                            <table>
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td class="letter">
-                                                                            <p>
-                                                                                <input class="radio_answer_2" type="radio" name="answer[2189]" value="3" disabled="disabled" onclick="autonextquestion()">
-                                                                                <strong>C.</strong>
-                                                                            </p>
-                                                                        </td>
-                                                                        <td>
-                                                                            <span style=" ">Giai cấp nắm quyền lực nhà nước</span>
-                                                                        </td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </label>
-                                                    </div>
-                                                    <div class="answer-item col-xs-24 col-sm-12 col-md-12">
-                                                        <label class="istrue">
-                                                            <table>
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td class="letter">
-                                                                            <p>
-                                                                                <input class="radio_answer_2" type="radio" name="answer[2189]" value="4" disabled="disabled" onclick="autonextquestion()">
-                                                                                <strong>D.</strong>
-                                                                            </p>
-                                                                        </td>
-                                                                        <td>
-                                                                            <span style=" ">B và C đều đúng</span>
-                                                                        </td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                }
                                 <div class="text-center clear">
                                     <button type="button" class="btn btn-danger item-prev" title="Trước đó" style="display:none">
                                         <span>Trước đó</span>
@@ -257,10 +136,14 @@
 
                         <div class="col-md-24">
                             <ul class="slides-vertical-pagination">
-                                <li class="question_number is_danger pagination-active" id="question_number_1" onclick="scrolltoQuestion(1),ser_process_bar(1, 40)"><span class="pagination-item-name" aria-hidden="true">Câu&nbsp;1</span></li>
-                                <li class="question_number is_danger" id="question_number_2" onclick="scrolltoQuestion(2),ser_process_bar(2, 40)"><span class="pagination-item-name" aria-hidden="true">Câu&nbsp;2</span></li>
-                                <li class="question_number is_danger" id="question_number_39" onclick="scrolltoQuestion(39),ser_process_bar(39, 40)"><span class="pagination-item-name" aria-hidden="true">Câu&nbsp;39</span></li>
-                                <li class="question_number is_danger" id="question_number_40" onclick="scrolltoQuestion(40),ser_process_bar(40, 40)"><span class="pagination-item-name" aria-hidden="true">Câu&nbsp;40</span></li>
+                                @for (int i = 1; i <= Model.TotalQuestions; i++)
+                                {
+                                    var answer = answers.SingleOrDefault(x => x.QuestionIndex == i);
+                                    <li class="question_number @(answer.IsCorrect == true ? "is_success" : "is_danger")" id="question_number_@i">
+                                        <span class="pagination-item-name" aria-hidden="true" data-value="@i">Câu&nbsp;@i</span>
+                                    </li>
+                                }
+                                
                             </ul>
                         </div>
                         <div class="text-center">
@@ -271,101 +154,12 @@
         </div>
     </div>
     <div class="col-md-3">
-        <div class="panel panel-primary-two">
-            <div class="panel-heading">
-                <div class="panel-heading-left clearfix">
-                    <div class="icon-menu-left fl">&nbsp;</div>
-                    <div class="icon-menu-right fr">&nbsp;</div>
-                    <div class="title-block">
-                        <span>Đăng nhập thành viên</span>
-                    </div>
-                </div>
-            </div>
-            <div class="panel-body">
-                <div class="content signed clearfix">
-                    <div class="nv-info" style="display:none"></div>
-                    <div class="userBlock">
-                        <h3 class="text-center margin-bottom-lg">
-                            <span class="lev-user text-normal margin-right">Tài khoản:</span>Tạ Đức Hoàn
-                        </h3>
-                        <div class="row margin-bottom-lg">
-                            <div style="display: flex; gap: 20px;">
-                                <div class="col-xs-8 text-center">
-                                    <a title="" href="#">
-                                        <img src="/assets/images/user.jpg"
-                                             alt="Tạ Đức Hoàn" class="img-thumbnail bg-gainsboro"
-                                             style="width: 50px; height: 50px; margin-top: 10px;">
-                                    </a>
-                                </div>
-                                <div class="col-xs-16">
-                                    <ul class="nv-list-item sm">
-                                        <li class="active">
-                                            <a href="/vi/users/">Thông tin thành viên</a>
-                                        </li>
-                                        <li>
-                                            <a href="/vi/users/editinfo/">Thiết lập tài khoản</a>
-                                        </li>
-                                        <li>
-                                            <a href="/vi/users/editinfo/openid/">OpenID</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div style="display: flex; gap: 130px;">
-                                <div class="col-xs-16 small">
-                                    <em class="fa fa-clock-o" title="Đăng nhập vào">&nbsp;</em>03/11, 00:36
-                                </div>
-                                <div class="col-xs-8 text-right">
-                                    <button type="button" class="btn btn-default btn-sm active">
-                                        <em class="fa fa-sign-out"></em>&nbsp;Thoát&nbsp;
-                                    </button>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="panel panel-primary-two">
-            <div class="panel-heading">
-                <div class="panel-heading-left clearfix">
-                    <div class="icon-menu-left fl">&nbsp;</div>
-                    <div class="icon-menu-right fr">&nbsp;</div>
-                    <div class="title-block">
-                        <span>Thống kê truy cập</span>
-                    </div>
-                </div>
-            </div>
-            <div class="panel-body">
-                <ul class="nv-list-item">
-                    <li>
-                        <em class="fa fa-bolt fa-lg">&nbsp;</em> Đang truy cập <span class="pull-right">78</span>
-                    </li>
-                    <li>
-                        <em class="fa fa-user fa-lg">&nbsp;</em> Thành viên online <span class="pull-right">9</span>
-                    </li>
-                    <li>
-                        <em class="fa fa-bullseye fa-lg">&nbsp;</em> Khách viếng thăm <span class="pull-right">69</span>
-                    </li>
-                </ul>
-                <div class="nv-hr">&nbsp;</div>
-                <ul class="nv-list-item">
-                    <li>
-                        <em class="fa fa-filter fa-lg">&nbsp;</em> Hôm nay <span class="pull-right">510</span>
-                    </li>
-                    <li>
-                        <em class="fa fa-calendar-o fa-lg">&nbsp;</em> Tháng hiện tại <span class="pull-right">31,911</span>
-                    </li>
-                    <li>
-                        <em class="fa fa-bars fa-lg">&nbsp;</em> Tổng lượt truy cập <span class="pull-right">17,275,125</span>
-                    </li>
-                </ul>
-
-            </div>
-        </div>
-
+        @await Component.InvokeAsync("UserInfo")
+        @await Component.InvokeAsync("RightPage", new { type = "access" })
     </div>
 </div>
+
+
+@section Scripts {
+    <script src="~/js/user/quiz_question.js"></script>
+}

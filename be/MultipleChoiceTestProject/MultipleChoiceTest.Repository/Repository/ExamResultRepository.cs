@@ -10,6 +10,7 @@ namespace MultipleChoiceTest.Repository.Repository
     {
         Task<List<ResultItem>> GetAll();
         Task<List<ExamResultItem>> GetDataByUserId(int userId);
+        Task<ExamResultItem> GetById(int id);
     }
     public class ExamResultRepository : GenericRepository<ExamResult>, IExamResultRepository
     {
@@ -22,6 +23,14 @@ namespace MultipleChoiceTest.Repository.Repository
                                                     .Include(x => x.Exam).Where(x => x.IsDeleted != true)
                                                     .ToListAsync();
             return _mapper.Map<List<ResultItem>>(list);
+        }
+
+        public async Task<ExamResultItem> GetById(int id)
+        {
+            var result = await _dbContext.ExamResults
+                .Include(x => x.Exam)
+                .SingleOrDefaultAsync(x => x.Id == id);
+            return _mapper.Map<ExamResultItem>(result);
         }
 
         public async Task<List<ExamResultItem>> GetDataByUserId(int userId)

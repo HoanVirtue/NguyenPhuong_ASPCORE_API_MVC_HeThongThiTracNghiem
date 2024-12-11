@@ -5,7 +5,6 @@ using MultipleChoiceTest.Domain.Constants;
 using MultipleChoiceTest.Domain.Models;
 using MultipleChoiceTest.Domain.ModelViews;
 using MultipleChoiceTest.Repository.Authorizations;
-using MultipleChoiceTest.Repository.Service;
 using System.Linq.Expressions;
 
 namespace MultipleChoiceTest.Repository.Repository
@@ -29,22 +28,22 @@ namespace MultipleChoiceTest.Repository.Repository
         Task<Pagination<ExamItem>> GetExamBySubjectGrid(int subjectId, int? pageIndex, int? pageSize);
         Task<List<ExamItem>> GetExamByLesson(int lessonId);
         Task<List<ExamItem>> GetExamBySubject(int subjectId);
-        Task<ApiResponse<ExamResultItem>> ExamFinish(int examId, List<CandidateAnswer> answers);
+        Task<ApiResponse<ExamResultResponse>> ExamFinish(int examId, List<CandidateAnswer> answers);
     }
     public class ExamRepository : GenericRepository<Exam>, IExamRepository
     {
-        private readonly IGPTService _gptService;
+        //private readonly IGPTService _gptService;
         private readonly IExamAttemptRepository _attemptRepository;
         private readonly IExamResultRepository _resultRepository;
         public ExamRepository(
-            IGPTService gptService,
+            //IGPTService gptService,
             IExamAttemptRepository attemptRepository,
             IExamResultRepository examResultRepository,
             MultipleChoiceTestDbContext dbContext,
             IUserContextService userContextService,
             IMapper mapper) : base(dbContext, userContextService, mapper)
         {
-            _gptService = gptService;
+            //_gptService = gptService;
             _attemptRepository = attemptRepository;
             _resultRepository = examResultRepository;
         }
@@ -163,7 +162,7 @@ namespace MultipleChoiceTest.Repository.Repository
             return _mapper.Map<List<ExamItem>>(exams);
         }
 
-        public async Task<ApiResponse<ExamResultItem>> ExamFinish(int examId, List<CandidateAnswer> answers)
+        public async Task<ApiResponse<ExamResultResponse>> ExamFinish(int examId, List<CandidateAnswer> answers)
         {
             // lấy question
             int correct = 0;
@@ -171,7 +170,7 @@ namespace MultipleChoiceTest.Repository.Repository
             int unanswered = 0;
             var examInfo = await _dbContext.Exams.FindAsync(examId);
             if (examInfo == null)
-                return ApiResponse<ExamResultItem>.ErrorResponse<ExamResultItem>("Bài thi không tồn tại");
+                return ApiResponse<ExamResultResponse>.ErrorResponse<ExamResultResponse>("Bài thi không tồn tại");
             foreach (var an in answers)
             {
                 var question = await _dbContext.Questions.FindAsync(an.QuestionId);
@@ -188,6 +187,7 @@ namespace MultipleChoiceTest.Repository.Repository
                         Answer = an.AnswerText,
                         IsCorrect = an.AnswerText == question.CorrectAnswer.Trim(),
                     };
+                    an.IsCorrect = result.IsCorrect ?? false;
                 }
                 else if (an.QuestionTypeId == (int)QuestionTypeConstant.Type.Essay)
                 {
@@ -197,8 +197,11 @@ namespace MultipleChoiceTest.Repository.Repository
                         ExamId = examId,
                         QuestionId = an.QuestionId,
                         Answer = an.AnswerText,
-                        IsCorrect = await _gptService.GradeEssay(question.QuestionText, question.AnswerExplanation, an.AnswerText),
+                        IsCorrect = false,
                     };
+
+                    //await _gptService.GradeEssay(question.QuestionText, question.AnswerExplanation, an.AnswerText)
+                    an.IsCorrect = result.IsCorrect ?? false;
                 }
 
                 if (result != null)
@@ -219,7 +222,7 @@ namespace MultipleChoiceTest.Repository.Repository
                 }
                 else
                 {
-                    return ApiResponse<ExamResultItem>.ErrorResponse<ExamResultItem>("Lỗi không tìm thấy loại câu hỏi");
+                    return ApiResponse<ExamResultResponse>.ErrorResponse<ExamResultResponse>("Lỗi không tìm thấy loại câu hỏi");
                 }
             }
 
@@ -242,12 +245,16 @@ namespace MultipleChoiceTest.Repository.Repository
             try
             {
                 await _resultRepository.AddAsync(examResult);
-                return ApiResponse<ExamResultItem>.SuccessWithData(_mapper.Map<ExamResultItem>(examResult));
+                return ApiResponse<ExamResultResponse>.SuccessWithData(new ExamResultResponse()
+                {
+                    ExamResult = _mapper.Map<ExamResultItem>(examResult),
+                    Answers = answers
+                });
             }
             catch (
             Exception ex)
             {
-                return ApiResponse<ExamResultItem>.ErrorResponse<ExamResultItem>(ex.Message);
+                return ApiResponse<ExamResultResponse>.ErrorResponse<ExamResultResponse>(ex.Message);
             }
         }
     }

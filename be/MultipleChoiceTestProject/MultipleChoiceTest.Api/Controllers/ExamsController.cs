@@ -5,6 +5,7 @@ using MultipleChoiceTest.Domain.ApiModel;
 using MultipleChoiceTest.Domain.Constants.Api;
 using MultipleChoiceTest.Domain.Models;
 using MultipleChoiceTest.Domain.ModelViews;
+using MultipleChoiceTest.Repository.Service;
 using MultipleChoiceTest.Repository.UnitOfWork;
 
 namespace MultipleChoiceTest.Api.Controllers
@@ -13,10 +14,23 @@ namespace MultipleChoiceTest.Api.Controllers
     [ApiController]
     public class ExamsController : BaseController
     {
-        public ExamsController(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration) : base(unitOfWork, mapper, configuration)
+        private readonly IGPTService _gptService;
+        public ExamsController(
+            IGPTService gptService,
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            IConfiguration configuration) : base(unitOfWork, mapper, configuration)
         {
+            _gptService = gptService;
         }
 
+        //[HttpGet("gpt")]
+        //public async Task<IActionResult> TestAsync()
+        //{
+        //    string apiKey = "";
+        //    return Ok(await _gptService.GradeEssay("điện lực là gì", "Điện lực hay điện năng là năng lượng cung cấp bởi dòng điện. Cụ thể, nó là công cơ học thực hiện bởi điện trường lên các điện tích di chuyển trong nó. Năng lượng được sinh ra bởi dòng điện trong một đơn vị thời gian được gọi là công suất điện.", "không biết"));
+        //    //return Ok("test");
+        //}
         // GET: api/Exams
         [HttpGet("GetAll")]
         //[HttpGet]
@@ -136,11 +150,11 @@ namespace MultipleChoiceTest.Api.Controllers
         {
             if (examId == 0 || examId == null)
             {
-                return Ok(ApiResponse<ExamResultItem>.ErrorResponse<ExamResultItem>("Mã bài thi không được bỏ trống"));
+                return Ok(ApiResponse<ExamResultResponse>.ErrorResponse<ExamResultResponse>("Mã bài thi không được bỏ trống"));
             }
             if (answers == null || !answers.Any())
             {
-                return Ok(ApiResponse<ExamResultItem>.ErrorResponse<ExamResultItem>("Không có câu trả lời"));
+                return Ok(ApiResponse<ExamResultResponse>.ErrorResponse<ExamResultResponse>("Không có câu trả lời"));
             }
 
             var examResult = await _unitOfWork.ExamRepository.ExamFinish(examId, answers);

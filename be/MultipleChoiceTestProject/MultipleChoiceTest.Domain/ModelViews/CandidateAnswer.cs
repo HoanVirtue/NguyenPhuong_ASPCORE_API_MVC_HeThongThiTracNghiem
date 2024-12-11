@@ -6,5 +6,6 @@
         public int QuestionIndex { get; set; }
         public int QuestionTypeId { get; set; }
         public string AnswerText { get; set; }
+        public bool IsCorrect { get; set; }
     }
 }

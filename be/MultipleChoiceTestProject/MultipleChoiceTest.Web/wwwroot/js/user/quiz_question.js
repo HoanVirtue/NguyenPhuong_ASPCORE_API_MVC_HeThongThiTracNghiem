@@ -1,5 +1,6 @@
 ﻿$(document).ready(function () {
     var countdown = $('#countdown').data('minute');
+    let isExamSubmitted = false;
 
     //loadQuestion(1);
     countdownTime(parseInt(countdown));
@@ -60,6 +61,26 @@ function sumitExam() {
         })
     });
 
+    $('.textarea-answer').each(function () {
+        var questionName = $(this).attr('name');
+        var questionType = $(this).data('questiontype');
+        var questionIndex = questionName.match(/\d+/)[0];
+        if (answers.some(a => a.questionIndex == questionIndex)) {
+            return;
+        }
+
+        var answer = $(`textarea[name="${questionName}"]`).val();
+        if (!answer) {
+            answer = "";
+        }
+        answers.push({
+            questionIndex: questionIndex,
+            answerText: answer,
+            questionTypeId: questionType
+        })
+    });
+
+
     $.ajax({
         url: '/Exams/SubmitExam',
         type: 'POST',
@@ -71,7 +92,8 @@ function sumitExam() {
         }),
         success: function (res) {
             if (res.success) {
-                alert('Nộp bài thi thành công');
+                isExamSubmitted = true;
+                window.location.replace("/ExamResults/ExamResult?id=" + res.data.examResult.id);
             } else {
                 alert(res.message);
             }
